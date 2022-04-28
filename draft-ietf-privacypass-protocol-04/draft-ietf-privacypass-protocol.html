@@ -1,0 +1,2412 @@
+<!DOCTYPE html>
+<html lang="en" class="Internet-Draft">
+<head>
+<meta charset="utf-8">
+<meta content="Common,Latin" name="scripts">
+<meta content="initial-scale=1.0" name="viewport">
+<title>Privacy Pass Issuance Protocol</title>
+<meta content="Sofía Celi" name="author">
+<meta content="Alex Davidson" name="author">
+<meta content="Armando Faz-Hernandez" name="author">
+<meta content="Steven Valdez" name="author">
+<meta content="Christopher A. Wood" name="author">
+<meta content="
+       This document specifies two variants of the the two-message issuance protocol
+for Privacy Pass tokens: one that produces tokens that are privately
+verifiable, and another that produces tokens that are publicly verifiable.
+The privately verifiable issuance protocol optionally supports public
+metadata during the issuance flow. 
+    " name="description">
+<meta content="xml2rfc 3.12.3" name="generator">
+<meta content="Internet-Draft" name="keyword">
+<meta content="draft-ietf-privacypass-protocol" name="ietf.draft">
+<!-- Generator version information:
+  xml2rfc 3.12.3
+    Python 3.9.7
+    appdirs 1.4.4
+    ConfigArgParse 1.3
+    google-i18n-address 2.5.0
+    html5lib 1.1
+    intervaltree 3.1.0
+    Jinja2 2.11.3
+    kitchen 1.2.6
+    lxml 4.6.5
+    MarkupSafe 2.0.1
+    pycountry 20.7.3
+    pyflakes 2.3.1
+    PyYAML 5.4.1
+    requests 2.26.0
+    setuptools 52.0.0
+    six 1.16.0
+-->
+<link href="draft-ietf-privacypass-protocol.xml" rel="alternate" type="application/rfc+xml">
+<link href="#copyright" rel="license">
+<style type="text/css">@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  color-scheme: light dark;
+  --background-color: #fff;
+  --text-color: #222;
+  --title-color: #191919;
+  --link-color: #2a6496;
+  --highlight-color: #f9f9f9;
+  --line-color: #eee;
+  --pilcrow-weak: #ddd;
+  --pilcrow-strong: #bbb;
+  --small-font-size: 14.5px;
+  --font-mono: 'Oxygen Mono', monospace;
+  scrollbar-color: #bbb #eee;
+}
+body {
+  max-width: 600px;
+  margin: 75px auto;
+  padding: 0 5px;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  font: 16px/22px "Lora", serif;
+  scroll-behavior: smooth;
+}
+
+.ears {
+  display: none;
+}
+
+/* headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Cabin Condensed", sans-serif;
+  font-weight: 600;
+  margin: 0.8em 0 0.3em;
+  font-size-adjust: 0.5;
+  color: var(--title-color);
+}
+h1#title {
+  font-size: 32px;
+  line-height: 40px;
+  clear: both;
+}
+h1#title, h1#rfcnum {
+  margin: 1.5em 0 0.2em;
+}
+h1#rfcnum + h1#title {
+  margin: 0.2em 0;
+}
+
+h1, h2, h3 {
+  font-size: 22px;
+  line-height: 27px;
+}
+h4, h5, h6 {
+  font-size: 20px;
+  line-height: 24px;
+}
+
+/* general structure */
+.author {
+  padding-bottom: 0.3em;
+}
+#abstract+p {
+  font-size: 18px;
+  line-height: 24px;
+}
+#abstract+p code, #abstract+p samp, #abstract+p tt {
+  font-size: 16px;
+  line-height: 0;
+}
+
+p {
+  padding: 0;
+  margin: 0.5em 0;
+  text-align: left;
+}
+div {
+  margin: 0;
+}
+.alignRight.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignRight.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignRight {
+  margin: 1em 0;
+}
+.alignRight > *:first-child {
+  border: none;
+  margin: 0;
+  float: right;
+  clear: both;
+}
+.alignRight > *:nth-child(2) {
+  clear: both;
+  display: block;
+  border: none;
+}
+svg {
+  display: block;
+}
+/* font-family isn't space-separated, but =~ will have to do */
+svg[font-family~="monospace" i], svg [font-family~="monospace" i] {
+  font-family: var(--font-mono);
+}
+.alignCenter.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignCenter.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignCenter {
+  margin: 1em 0;
+}
+.alignCenter > *:first-child {
+  border: none;
+  /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
+     support flexbox yet.
+  */
+  display: table;
+  margin: 0 auto;
+}
+
+/* lists */
+ol, ul {
+  padding: 0;
+  margin: 0 0 0.5em 2em;
+}
+ol ol, ul ul, ol ul, ul ol {
+  margin-left: 1em;
+}
+li {
+  margin: 0 0 0.25em 0;
+}
+.ulCompact li {
+  margin: 0;
+}
+ul.empty, .ulEmpty {
+  list-style-type: none;
+}
+ul.empty li, .ulEmpty li {
+  margin-top: 0.5em;
+}
+ul.compact, .ulCompact,
+ol.compact, .olCompact {
+  line-height: 100%;
+  margin: 0 0 0 2em;
+}
+
+/* definition lists */
+dl {
+}
+dl > dt {
+  float: left;
+  margin-right: 1em;
+}
+dl > dd {
+  margin-bottom: .8em;
+  min-height: 1.3em;
+}
+dl.compact > dd, .dlCompact > dd {
+  margin-bottom: 0em;
+}
+dl > dd > dl {
+  margin-top: 0.5em;
+  margin-bottom: 0em;
+}
+dd.break {
+  display: none;
+}
+
+/* links */
+a, a[href].selfRef:hover {
+  text-decoration: none;
+}
+a[href].selfRef {
+  color: var(--text-color);
+}
+a[href] {
+  color: var(--link-color);
+}
+a[href]:hover {
+  text-decoration: underline;
+}
+a[href].selfRef:hover {
+  background-color: var(--highlight-color);
+}
+a.xref {
+  white-space: nowrap;
+}
+
+/* Figures */
+tt, code, pre {
+  background-color: var(--highlight-color);
+  font: 14px/22px var(--font-mono);
+}
+tt, code {
+  /* changing the font for inline elements leads to different ascender
+     and descender heights; as we want to retain baseline alignment,
+     remove leading to avoid altering the final height of lines */
+  line-height: 0;
+}
+pre {
+  border: 1px solid var(--line-color);
+  font-size: 13.5px;
+  line-height: 16px;
+  letter-spacing: -0.2px;
+  margin: 5px;
+  padding: 5px;
+}
+img {
+  max-width: 100%;
+}
+figure {
+  margin: 0.5em 0;
+  padding: 0;
+}
+figure blockquote {
+  margin: 0.8em 0.4em 0.4em;
+}
+figcaption, caption {
+  font-style: italic;
+  margin: 0.5em 1.5em;
+  text-align: left;
+}
+@media screen {
+  pre, svg {
+    display: inline-block;
+    overflow-x: auto;
+  }
+  pre {
+    max-width: 100%;
+    width: calc(100% - 22px - 1em);
+  }
+  svg {
+    max-width: calc(100% - 22px - 1em);
+  }
+  figure pre {
+    display: block;
+    width: calc(100% - 25px);
+  }
+  pre + .pilcrow, svg + .pilcrow {
+    display: inline-block;
+    vertical-align: text-bottom;
+    padding-bottom: 8px;
+  }
+}
+
+/* aside, blockquote */
+aside, blockquote {
+  margin-left: 0;
+  padding: 0 2em;
+  font-style: italic;
+}
+blockquote {
+  margin: 1em 0;
+}
+cite {
+  display: block;
+  text-align: right;
+  font-style: italic;
+}
+
+/* tables */
+table {
+  max-width: 100%;
+  margin: 0 0 1em;
+  border-collapse: collapse;
+}
+table.right {
+  margin-left: auto;
+}
+table.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+table.left {
+  margin-right: auto;
+}
+thead, tbody {
+  border: 1px solid var(--line-color);
+}
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: 5px 10px;
+}
+th {
+  background-color: var(--line-color);
+}
+tr:nth-child(2n) > td {
+  background-color: var(--background-color);
+}
+tr:nth-child(2n+1) > td {
+  background-color: var(--highlight-color);
+}
+thead+tbody > tr:nth-child(2n) > td {
+  background-color: var(--highlight-color);
+}
+thead+tbody > tr:nth-child(2n+1) > td {
+  background-color: var(--background-color);
+}
+table caption {
+  margin: 0;
+  padding: 3px 0 3px 1em;
+}
+table p {
+  margin: 0;
+}
+
+/* pilcrow */
+a.pilcrow {
+  margin-left: 3px;
+  opacity: 0.2;
+  user-select: none;
+}
+a.pilcrow[href] { color: var(--pilcrow-weak); }
+a.pilcrow[href]:hover { text-decoration: none; }
+@media not print {
+  :hover > a.pilcrow {
+    opacity: 1;
+  }
+  a.pilcrow[href]:hover {
+    color: var(--pilcrow-strong);
+    background-color: transparent;
+  }
+}
+@media print {
+  a.pilcrow {
+    display: none;
+  }
+}
+
+/* misc */
+hr {
+  border: 0;
+  border-top: 1px solid var(--line-color);
+}
+.bcp14 {
+  font-variant: small-caps;
+}
+
+.role {
+  font-variant: all-small-caps;
+}
+
+/* info block */
+#identifiers {
+  margin: 0;
+  font-size: var(--small-font-size);
+  line-height: 18px;
+  --identifier-width: 8em;
+}
+#identifiers dt {
+  width: var(--identifier-width);
+  margin: 0;
+  clear: left;
+  float: left;
+  text-align: right;
+}
+#identifiers dd {
+  margin: 0 0 0 calc(1em + var(--identifier-width));
+  min-width: 5em;
+}
+#identifiers .authors .author {
+  display: inline-block;
+  margin-right: 1.5em;
+}
+#identifiers .authors .org {
+  font-style: italic;
+}
+
+/* The prepared/rendered info at the very bottom of the page */
+.docInfo {
+  color: #999;
+  font-size: 0.9em;
+  font-style: italic;
+  margin-top: 2em;
+}
+.docInfo .prepared {
+  float: left;
+}
+.docInfo .prepared {
+  float: right;
+}
+
+/* table of contents */
+#toc {
+  padding: 0.75em 0 2em 0;
+  margin-bottom: 1em;
+}
+#toc nav ul {
+  margin: 0 0.5em 0 0;
+  padding: 0;
+  list-style: none;
+}
+#toc nav li {
+  line-height: 1.3em;
+  margin: 0.75em 0;
+  padding-left: 1.2em;
+  text-indent: -1.2em;
+}
+#toc a.xref {
+  white-space: normal;
+}
+/* references */
+.references dt {
+  text-align: right;
+  font-weight: bold;
+  min-width: 7em;
+}
+.references dd {
+  margin-left: 8em;
+  overflow: auto;
+}
+
+.refInstance {
+  margin-bottom: 1.25em;
+}
+
+.references .ascii {
+  margin-bottom: 0.25em;
+}
+
+/* index */
+#rfc\.index\.index + ul {
+  margin-left: 0;
+}
+
+/* authors */
+address.vcard {
+  font-style: normal;
+  margin: 1em 0;
+}
+address.vcard .nameRole {
+  font-weight: 700;
+  margin-left: 0;
+}
+address.vcard .label {
+  margin: 0.5em 0;
+}
+address.vcard .type {
+  display: none;
+}
+.alternative-contact {
+  margin: 1.5em 0 1em;
+}
+hr.addr {
+  border-top: 1px dashed;
+  margin: 0;
+  color: #ddd;
+  max-width: calc(100% - 16px);
+}
+@media (min-width: 500px) {
+  #authors-addresses > section {
+    column-count: 2;
+    column-gap: 20px;
+  }
+  #authors-addresses > section > h2 {
+    column-span: all;
+  }
+  /* hack for break-inside: avoid-column */
+  #authors-addresses address {
+    display: inline-block;
+    break-inside: avoid-column;
+  }
+}
+
+.rfcEditorRemove p:first-of-type {
+  font-style: italic;
+}
+.cref {
+  background-color: rgba(249, 232, 105, 0.3);
+  padding: 2px 4px;
+}
+.crefSource {
+  font-style: italic;
+}
+/* alternative layout for smaller screens */
+@media screen and (max-width: 929px) {
+  #toc {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    padding: 0;
+    margin: 0;
+    border-bottom: 1px solid #ccc;
+    opacity: 0.6;
+  }
+  #toc.active {
+      opacity: 1;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 2px 0 2px 6px;
+    padding-right: 1em;
+    font-size: 18px;
+    line-height: 24px;
+    min-width: 190px;
+    text-align: right;
+    background-color: #444;
+    color: white;
+    cursor: pointer;
+  }
+  #toc h2::before { /* css hamburger */
+    float: right;
+    position: relative;
+    width: 1em;
+    height: 1px;
+    left: -164px;
+    margin: 8px 0 0 0;
+    background: white none repeat scroll 0 0;
+    box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+    content: "";
+  }
+  #toc nav {
+    display: none;
+    background-color: var(--background-color);
+    padding: 0.5em 1em 1em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    height: calc(100vh - 48px);
+    border-left: 1px solid #ddd;
+  }
+  #toc.active nav {
+    display: block;
+  }
+  /* Make the collapsed ToC header render white on gray also when it's a link */
+  #toc h2 a,
+  #toc h2 a:link,
+  #toc h2 a:focus,
+  #toc h2 a:hover,
+  #toc a.toplink,
+  #toc a.toplink:hover {
+    color: white;
+    background-color: #444;
+    text-decoration: none;
+  }
+  #toc a.toplink {
+    margin-top: 2px;
+  }
+}
+
+/* alternative layout for wide screens */
+@media screen and (min-width: 930px) {
+  body {
+    padding-right: 360px;
+    padding-right: calc(min(180px + 20%, 500px));
+  }
+  #toc {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    right: calc(50vw - 480px);
+    width: 312px;
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 0.25em 1em 1em 0;
+  }
+  #toc nav {
+    display: block;
+    height: calc(90vh - 84px);
+    bottom: 0;
+    padding: 0.5em 0 2em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+  #toc nav > ul  {
+    margin-bottom: 2em;
+  }
+  #toc ul {
+    margin: 0 0 0 4px;
+    font-size: var(--small-font-size);
+  }
+  #toc ul p, #toc ul li {
+    margin: 2px 0;
+    line-height: 22px;
+  }
+  img { /* future proofing */
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* pagination */
+@media print {
+  body {
+    width: 100%;
+  }
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+  #n-copyright-notice {
+    border-bottom: none;
+  }
+  #toc, #n-introduction {
+    page-break-before: always;
+  }
+  #toc {
+    border-top: none;
+    padding-top: 0;
+  }
+  figure, pre {
+    page-break-inside: avoid;
+  }
+  figure {
+    overflow: scroll;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  h2+*, h3+*, h4+*, h5+*, h6+* {
+    page-break-before: avoid;
+  }
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 10pt;
+  }
+  table {
+    border: 1px solid #ddd;
+  }
+  td {
+    border-top: 1px solid #ddd;
+  }
+}
+
+@page :first {
+  padding-top: 0;
+  @top-left {
+    content: normal;
+    border: none;
+  }
+  @top-center {
+    content: normal;
+    border: none;
+  }
+  @top-right {
+    content: normal;
+    border: none;
+  }
+}
+
+@page {
+  size: A4;
+  margin-bottom: 45mm;
+  padding-top: 20px;
+}
+
+/* Changes introduced to fix issues found during implementation */
+
+/* Separate body from document info even without intervening H1 */
+section {
+  clear: both;
+}
+
+/* Top align author divs, to avoid names without organization dropping level with org names */
+.author {
+  vertical-align: top;
+}
+
+/* Style section numbers with more space between number and title */
+.section-number {
+  padding-right: 0.5em;
+}
+
+/* Add styling for a link in the ToC that points to the top of the document */
+a.toplink {
+  float: right;
+  margin: 8px 0.5em 0;
+}
+
+/* Fix the dl styling to match the RFC 7992 attributes */
+dl > dt,
+dl.dlParallel > dt {
+  float: left;
+  margin-right: 1em;
+}
+dl.dlNewline > dt {
+  float: none;
+}
+
+/* Provide styling for table cell text alignment */
+table .text-left, table .text-left {
+  text-align: left;
+}
+table .text-center, table .text-center {
+  text-align: center;
+}
+table .text-right, table .text-right {
+  text-align: right;
+}
+
+/* Make the alternative author contact information look less like just another
+   author, and group it closer with the primary author contact information */
+.alternative-contact {
+  margin: 0.5em 0 0.25em 0;
+}
+address .non-ascii {
+  margin: 0 0 0 2em;
+}
+
+/* With it being possible to set tables with alignment
+  left, center, and right, { width: 100%; } does not make sense */
+table {
+  width: auto;
+}
+
+/* Avoid reference text that sits in a block with very wide left margin,
+   because of a long floating dt label.*/
+.references dd {
+  overflow: visible;
+}
+
+/* Control caption placement */
+caption {
+  caption-side: bottom;
+}
+
+/* Limit the width of the author address vcard, so names in right-to-left
+   script don't end up on the other side of the page. */
+
+address.vcard {
+  max-width: 20em;
+  margin-right: auto;
+}
+
+/* For address alignment dependent on LTR or RTL scripts */
+address div.left {
+  text-align: left;
+}
+address div.right {
+  text-align: right;
+}
+
+/* Give the table caption label the same styling as the figcaption */
+
+@media print {
+  .toplink {
+    display: none;
+  }
+
+  /* avoid overwriting the top border line with the ToC header */
+  #toc {
+    padding-top: 1px;
+  }
+
+  /* Avoid page breaks inside dl and author address entries */
+  dd {
+    page-break-before: avoid;
+  }
+  .vcard {
+    page-break-inside: avoid;
+  }
+
+}
+/* Tweak the bcp14 keyword presentation */
+.bcp14 {
+  font-variant: small-caps;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+/* Dark mode. */
+@media (prefers-color-scheme: dark) {
+:root {
+  --background-color: #121212;
+  --text-color: #f0f0f0;
+  --title-color: #fff;
+  --link-color: #4da4f0;
+  --highlight-color: #282828;
+  --line-color: #444;
+  --pilcrow-weak: #444;
+  --pilcrow-strong: #666;
+  scrollbar-color: #777 #333;
+}
+/* Trick: a prefix match works because only black and white are allowed */
+svg [stroke="black"], svg [stroke^="#000"] {
+  stroke: var(--text-color);
+}
+svg [stroke="white"], svg [stroke^="#fff"] {
+  stroke: var(--background-color);
+}
+svg [fill="black"], svg [fill^="#000"], svg :not([fill]) {
+  fill: var(--text-color);
+}
+svg [stroke="fill"], svg [fill^="#fff"] {
+  fill: var(--background-color);
+}
+}
+</style>
+
+</head>
+<body>
+<table class="ears">
+<thead><tr>
+<td class="left">Internet-Draft</td>
+<td class="center">Privacy Pass Issuance</td>
+<td class="right">April 2022</td>
+</tr></thead>
+<tfoot><tr>
+<td class="left">Celi, et al.</td>
+<td class="center">Expires 7 October 2022</td>
+<td class="right">[Page]</td>
+</tr></tfoot>
+</table>
+<div id="external-metadata" class="document-information"></div>
+<div id="internal-metadata" class="document-information">
+<dl id="identifiers">
+<dt class="label-workgroup">Workgroup:</dt>
+<dd class="workgroup">Network Working Group</dd>
+<dt class="label-internet-draft">Internet-Draft:</dt>
+<dd class="internet-draft">draft-ietf-privacypass-protocol</dd>
+<dt class="label-published">Published:</dt>
+<dd class="published">
+<time datetime="2022-04-05" class="published">5 April 2022</time>
+    </dd>
+<dt class="label-intended-status">Intended Status:</dt>
+<dd class="intended-status">Informational</dd>
+<dt class="label-expires">Expires:</dt>
+<dd class="expires"><time datetime="2022-10-07">7 October 2022</time></dd>
+<dt class="label-authors">Authors:</dt>
+<dd class="authors">
+<div class="author">
+      <div class="author-name">S. Celi</div>
+<div class="org">Cloudflare</div>
+</div>
+<div class="author">
+      <div class="author-name">A. Davidson</div>
+<div class="org">Brave Software</div>
+</div>
+<div class="author">
+      <div class="author-name">A. Faz-Hernandez</div>
+<div class="org">Cloudflare</div>
+</div>
+<div class="author">
+      <div class="author-name">S. Valdez</div>
+<div class="org">Google LLC</div>
+</div>
+<div class="author">
+      <div class="author-name">C. A. Wood</div>
+<div class="org">Cloudflare</div>
+</div>
+</dd>
+</dl>
+</div>
+<h1 id="title">Privacy Pass Issuance Protocol</h1>
+<section id="section-abstract">
+      <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
+<p id="section-abstract-1">This document specifies two variants of the the two-message issuance protocol
+for Privacy Pass tokens: one that produces tokens that are privately
+verifiable, and another that produces tokens that are publicly verifiable.
+The privately verifiable issuance protocol optionally supports public
+metadata during the issuance flow.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+</section>
+<div id="status-of-memo">
+<section id="section-boilerplate.1">
+        <h2 id="name-status-of-this-memo">
+<a href="#name-status-of-this-memo" class="section-name selfRef">Status of This Memo</a>
+        </h2>
+<p id="section-boilerplate.1-1">
+        This Internet-Draft is submitted in full conformance with the
+        provisions of BCP 78 and BCP 79.<a href="#section-boilerplate.1-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-2">
+        Internet-Drafts are working documents of the Internet Engineering Task
+        Force (IETF). Note that other groups may also distribute working
+        documents as Internet-Drafts. The list of current Internet-Drafts is
+        at <span><a href="https://datatracker.ietf.org/drafts/current/">https://datatracker.ietf.org/drafts/current/</a></span>.<a href="#section-boilerplate.1-2" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-3">
+        Internet-Drafts are draft documents valid for a maximum of six months
+        and may be updated, replaced, or obsoleted by other documents at any
+        time. It is inappropriate to use Internet-Drafts as reference
+        material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-4">
+        This Internet-Draft will expire on 7 October 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="copyright">
+<section id="section-boilerplate.2">
+        <h2 id="name-copyright-notice">
+<a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
+        </h2>
+<p id="section-boilerplate.2-1">
+            Copyright (c) 2022 IETF Trust and the persons identified as the
+            document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.2-2">
+            This document is subject to BCP 78 and the IETF Trust's Legal
+            Provisions Relating to IETF Documents
+            (<span><a href="https://trustee.ietf.org/license-info">https://trustee.ietf.org/license-info</a></span>) in effect on the date of
+            publication of this document. Please review these documents
+            carefully, as they describe your rights and restrictions with
+            respect to this document. Code Components extracted from this
+            document must include Revised BSD License text as described in
+            Section 4.e of the Trust Legal Provisions and are provided without
+            warranty as described in the Revised BSD License.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="toc">
+<section id="section-toc.1">
+        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
+<a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
+        </h2>
+<nav class="toc"><ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
+            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="xref">1</a>.  <a href="#name-introduction" class="xref">Introduction</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
+            <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="xref">2</a>.  <a href="#name-terminology" class="xref">Terminology</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
+            <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="xref">3</a>.  <a href="#name-configuration" class="xref">Configuration</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="xref">4</a>.  <a href="#name-token-challenge-requirement" class="xref">Token Challenge Requirements</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="xref">5</a>.  <a href="#name-issuance-protocol-for-priva" class="xref">Issuance Protocol for Privately Verifiable Tokens with Public Metadata</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="xref">5.1</a>.  <a href="#name-client-to-issuer-request" class="xref">Client-to-Issuer Request</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
+                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="xref">5.2</a>.  <a href="#name-issuer-to-client-response" class="xref">Issuer-to-Client Response</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3">
+                <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="xref">5.3</a>.  <a href="#name-finalization" class="xref">Finalization</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.4">
+                <p id="section-toc.1-1.5.2.4.1"><a href="#section-5.4" class="xref">5.4</a>.  <a href="#name-issuer-configuration" class="xref">Issuer Configuration</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="xref">6</a>.  <a href="#name-issuance-protocol-for-publi" class="xref">Issuance Protocol for Publicly Verifiable Tokens</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
+                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="xref">6.1</a>.  <a href="#name-client-to-issuer-request-2" class="xref">Client-to-Issuer Request</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
+                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="xref">6.2</a>.  <a href="#name-issuer-to-client-response-2" class="xref">Issuer-to-Client Response</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.3">
+                <p id="section-toc.1-1.6.2.3.1"><a href="#section-6.3" class="xref">6.3</a>.  <a href="#name-finalization-2" class="xref">Finalization</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.4">
+                <p id="section-toc.1-1.6.2.4.1"><a href="#section-6.4" class="xref">6.4</a>.  <a href="#name-issuer-configuration-2" class="xref">Issuer Configuration</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="xref">7</a>.  <a href="#name-security-considerations" class="xref">Security considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="xref">8</a>.  <a href="#name-iana-considerations" class="xref">IANA considerations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
+                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="xref">8.1</a>.  <a href="#name-token-type" class="xref">Token Type</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
+                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="xref">8.2</a>.  <a href="#name-media-types" class="xref">Media Types</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2.2.1">
+                    <p id="section-toc.1-1.8.2.2.2.1.1"><a href="#section-8.2.1" class="xref">8.2.1</a>.  <a href="#name-message-token-request-media" class="xref">"message/token-request" media type</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2.2.2">
+                    <p id="section-toc.1-1.8.2.2.2.2.1"><a href="#section-8.2.2" class="xref">8.2.2</a>.  <a href="#name-message-token-response-medi" class="xref">"message/token-response" media type</a></p>
+</li>
+                </ul>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="xref">9</a>.  <a href="#name-normative-references" class="xref">Normative References</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#appendix-A" class="xref">Appendix A</a>.  <a href="#name-acknowledgements" class="xref">Acknowledgements</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
+            <p id="section-toc.1-1.11.1"><a href="#appendix-B" class="xref">Appendix B</a>.  <a href="#name-test-vectors" class="xref">Test Vectors</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.1">
+                <p id="section-toc.1-1.11.2.1.1"><a href="#appendix-B.1" class="xref">B.1</a>.  <a href="#name-issuance-protocol-1-voprfp-" class="xref">Issuance Protocol 1 - VOPRF(P-384, SHA-384)</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.2">
+                <p id="section-toc.1-1.11.2.2.1"><a href="#appendix-B.2" class="xref">B.2</a>.  <a href="#name-issuance-protocol-2-blind-r" class="xref">Issuance Protocol 2 - Blind RSA, 4096</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
+            <p id="section-toc.1-1.12.1"><a href="#appendix-C" class="xref"></a><a href="#name-authors-addresses" class="xref">Authors' Addresses</a></p>
+</li>
+        </ul>
+</nav>
+</section>
+</div>
+<div id="introduction">
+<section id="section-1">
+      <h2 id="name-introduction">
+<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
+      </h2>
+<p id="section-1-1">The Privacy Pass protocol provides a privacy-preserving authorization
+mechanism. In essence, the protocol allows clients to provide
+cryptographic tokens that prove nothing other than that they have been
+created by a given server in the past <span>[<a href="#I-D.ietf-privacypass-architecture" class="xref">I-D.ietf-privacypass-architecture</a>]</span>.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">This document describes the issuance protocol for Privacy Pass. It specifies
+two variants: one that is privately verifiable based on the oblivious
+pseudorandom function from <span>[<a href="#OPRF" class="xref">OPRF</a>]</span>, and one that is
+publicly verifiable based on the blind RSA signature scheme
+<span>[<a href="#BLINDRSA" class="xref">BLINDRSA</a>]</span>.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">This document DOES NOT cover the architectural framework required for
+running and maintaining the Privacy Pass protocol in the Internet
+setting. In addition, it DOES NOT cover the choices that are necessary
+for ensuring that client privacy leaks do not occur. Both of these
+considerations are covered in <span>[<a href="#I-D.ietf-privacypass-architecture" class="xref">I-D.ietf-privacypass-architecture</a>]</span>.<a href="#section-1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="terminology">
+<section id="section-2">
+      <h2 id="name-terminology">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-terminology" class="section-name selfRef">Terminology</a>
+      </h2>
+<p id="section-2-1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
+NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
+"MAY", and "OPTIONAL" in this document are to be interpreted as
+described in BCP 14 <span>[<a href="#RFC2119" class="xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="xref">RFC8174</a>]</span> when, and only when, they
+appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<p id="section-2-2">The following terms are used throughout this document.<a href="#section-2-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2-3.1">Client: An entity that provides authorization tokens to services
+across the Internet, in return for authorization.<a href="#section-2-3.1" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-2-3.2">Issuer: A service produces Privacy Pass tokens to clients.<a href="#section-2-3.2" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-2-3.3">Private Key: The secret key used by the Issuer for issuing tokens.<a href="#section-2-3.3" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-2-3.4">Public Key: The public key used by the Issuer for issuing and verifying
+tokens.<a href="#section-2-3.4" class="pilcrow">¶</a>
+</li>
+      </ul>
+<p id="section-2-4">We assume that all protocol messages are encoded into raw byte format
+before being sent across the wire.<a href="#section-2-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="setup">
+<section id="section-3">
+      <h2 id="name-configuration">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-configuration" class="section-name selfRef">Configuration</a>
+      </h2>
+<p id="section-3-1">Issuers MUST provide one parameter for configuration:<a href="#section-3-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-3-2">
+<li id="section-3-2.1">Issuer Request URI: a token request URL for generating access tokens.
+For example, an Issuer URL might be https://issuer.example.net/example-token-request.
+This parameter uses resource media type "text/plain".<a href="#section-3-2.1" class="pilcrow">¶</a>
+</li>
+      </ol>
+<p id="section-3-3">The Issuer parameters can be obtained from an Issuer via a directory object, which is a JSON
+object whose field names and values are raw values and URLs for the parameters.<a href="#section-3-3" class="pilcrow">¶</a></p>
+<table class="center" id="table-1">
+        <caption><a href="#table-1" class="selfRef">Table 1</a></caption>
+<thead>
+          <tr>
+            <th class="text-left" rowspan="1" colspan="1">Field Name</th>
+            <th class="text-left" rowspan="1" colspan="1">Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">issuer-request-uri</td>
+            <td class="text-left" rowspan="1" colspan="1">Issuer Request URI resource URL as a JSON string</td>
+          </tr>
+        </tbody>
+      </table>
+<p id="section-3-5">As an example, the Issuer's JSON directory could look like:<a href="#section-3-5" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3-6">
+<pre>
+ {
+    "issuer-request-uri": "https://issuer.example.net/example-token-request"
+ }
+</pre><a href="#section-3-6" class="pilcrow">¶</a>
+</div>
+<p id="section-3-7">Issuer directory resources have the media type "application/json"
+and are located at the well-known location /.well-known/token-issuer-directory.<a href="#section-3-7" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="token-challenge-requirements">
+<section id="section-4">
+      <h2 id="name-token-challenge-requirement">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-token-challenge-requirement" class="section-name selfRef">Token Challenge Requirements</a>
+      </h2>
+<p id="section-4-1">Clients receive challenges for tokens, as described in <span>[<a href="#AUTHSCHEME" class="xref">AUTHSCHEME</a>]</span>.
+The basic token issuance protocols described in this document can be
+interactive or non-interactive, and per-origin or cross-origin.<a href="#section-4-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="private-flow">
+<section id="section-5">
+      <h2 id="name-issuance-protocol-for-priva">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-issuance-protocol-for-priva" class="section-name selfRef">Issuance Protocol for Privately Verifiable Tokens with Public Metadata</a>
+      </h2>
+<p id="section-5-1">The Privacy Pass issuance protocol is a two message protocol that takes
+as input a challenge from the redemption protocol and produces a token,
+as shown in the figure below.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5-2">
+<pre>
+   Origin          Client                   Issuer
+                    (pkI)                 (skI, pkI)
+                  +------------------------------------\
+  Challenge   ----&gt; TokenRequest -------------&gt;        |
+                  |                       (evaluate)   |
+    Token    &lt;----+     &lt;--------------- TokenResponse |
+                  \------------------------------------/
+</pre><a href="#section-5-2" class="pilcrow">¶</a>
+</div>
+<p id="section-5-3">Issuers provide a Private and Public Key, denoted skI and pkI, respectively,
+used to produce tokens as input to the protocol. See <a href="#issuer-configuration" class="xref">Section 5.4</a>
+for how this key pair is generated.<a href="#section-5-3" class="pilcrow">¶</a></p>
+<p id="section-5-4">Clients provide the following as input to the issuance protocol:<a href="#section-5-4" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5-5.1">Issuer name, identifying the Issuer. This is typically a host name that
+can be used to construct HTTP requests to the Issuer.<a href="#section-5-5.1" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-5-5.2">Issuer Public Key pkI, with a key identifier <code>key_id</code> computed as
+described in <a href="#issuer-configuration" class="xref">Section 5.4</a>.<a href="#section-5-5.2" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-5-5.3">Challenge value <code>challenge</code>, an opaque byte string. For example, this might
+be provided by the redemption protocol in <span>[<a href="#HTTP-Authentication" class="xref">HTTP-Authentication</a>]</span>.<a href="#section-5-5.3" class="pilcrow">¶</a>
+</li>
+      </ul>
+<p id="section-5-6">Given this configuration and these inputs, the two messages exchanged in
+this protocol are described below. This section uses notation described in
+<span>[<a href="#OPRF" class="xref">OPRF</a>], <a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-09#section-4" class="relref">Section 4</a></span>, including SerializeElement and DeserializeElement,
+SerializeScalar and DeserializeScalar, and DeriveKeyPair.<a href="#section-5-6" class="pilcrow">¶</a></p>
+<div id="private-request">
+<section id="section-5.1">
+        <h3 id="name-client-to-issuer-request">
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-client-to-issuer-request" class="section-name selfRef">Client-to-Issuer Request</a>
+        </h3>
+<p id="section-5.1-1">The Client first creates a context as follows:<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.1-2">
+<pre>
+client_context = SetupVOPRFClient(0x0004, pkI)
+</pre><a href="#section-5.1-2" class="pilcrow">¶</a>
+</div>
+<p id="section-5.1-3">Here, 0x0004 is the two-octet identifier corresponding to the
+OPRF(P-384, SHA-384) ciphersuite in <span>[<a href="#OPRF" class="xref">OPRF</a>]</span>. SetupVOPRFClient
+is defined in <span>[<a href="#OPRF" class="xref">OPRF</a>], <a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-09#section-3.2" class="relref">Section 3.2</a></span>.<a href="#section-5.1-3" class="pilcrow">¶</a></p>
+<p id="section-5.1-4">The Client then creates an issuance request message for a random value <code>nonce</code>
+using the input challenge and Issuer key identifier as follows:<a href="#section-5.1-4" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.1-5">
+<pre>
+nonce = random(32)
+context = SHA256(challenge)
+token_input = concat(0x0001, nonce, context, key_id)
+blind, blinded_element = client_context.Blind(token_input)
+</pre><a href="#section-5.1-5" class="pilcrow">¶</a>
+</div>
+<p id="section-5.1-6">The Blind function is defined in <span>[<a href="#OPRF" class="xref">OPRF</a>], <a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-09#section-3.3.2" class="relref">Section 3.3.2</a></span>.
+If the Blind function fails, the Client aborts the protocol. Otherwise,
+the Client then creates a TokenRequest structured as follows:<a href="#section-5.1-6" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.1-7">
+<pre>
+struct {
+   uint16_t token_type = 0x0001;
+   uint8_t token_key_id;
+   uint8_t blinded_msg[Ne];
+} TokenRequest;
+</pre><a href="#section-5.1-7" class="pilcrow">¶</a>
+</div>
+<p id="section-5.1-8">The structure fields are defined as follows:<a href="#section-5.1-8" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5.1-9.1">"token_type" is a 2-octet integer, which matches the type in the challenge.<a href="#section-5.1-9.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-5.1-9.2">"token_key_id" is the least significant byte of the <code>key_id</code>.<a href="#section-5.1-9.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-5.1-9.3">"blinded_msg" is the Ne-octet blinded message defined above, computed as
+<code>SerializeElement(blinded_element)</code>. Ne is as defined in <span>[<a href="#OPRF" class="xref">OPRF</a>], <a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-09#section-4" class="relref">Section 4</a></span>.<a href="#section-5.1-9.3" class="pilcrow">¶</a>
+</li>
+        </ul>
+<p id="section-5.1-10">The values <code>token_input</code> and <code>blinded_element</code> are stored locally and used later
+as described in <a href="#finalization" class="xref">Section 5.3</a>. The Client then generates an HTTP POST request
+to send to the Issuer, with the TokenRequest as the body. The media type for
+this request is "message/token-request". An example request is shown below.<a href="#section-5.1-10" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.1-11">
+<pre>
+:method = POST
+:scheme = https
+:authority = issuer.example.net
+:path = /example-token-request
+accept = message/token-response
+cache-control = no-cache, no-store
+content-type = message/token-request
+content-length = &lt;Length of TokenRequest&gt;
+
+&lt;Bytes containing the TokenRequest&gt;
+</pre><a href="#section-5.1-11" class="pilcrow">¶</a>
+</div>
+<p id="section-5.1-12">Upon receipt of the request, the Issuer validates the following conditions:<a href="#section-5.1-12" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5.1-13.1">The TokenRequest contains a supported token_type.<a href="#section-5.1-13.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-5.1-13.2">The TokenRequest.token_key_id corresponds to a key ID of a Public Key owned by the issuer.<a href="#section-5.1-13.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-5.1-13.3">The TokenRequest.blinded_request is of the correct size.<a href="#section-5.1-13.3" class="pilcrow">¶</a>
+</li>
+        </ul>
+<p id="section-5.1-14">If any of these conditions is not met, the Issuer MUST return an HTTP 400 error
+to the client.<a href="#section-5.1-14" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="private-response">
+<section id="section-5.2">
+        <h3 id="name-issuer-to-client-response">
+<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-issuer-to-client-response" class="section-name selfRef">Issuer-to-Client Response</a>
+        </h3>
+<p id="section-5.2-1">Upon receipt of a TokenRequest, the Issuer tries to deseralize TokenRequest.blinded_msg
+using DeserializeElement from <span><a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-09#section-2.1" class="relref">Section 2.1</a> of [<a href="#OPRF" class="xref">OPRF</a>]</span>, yielding <code>blinded_element</code>.
+If this fails, the Issuer MUST return an HTTP 400 error to the client. Otherwise, if the
+Issuer is willing to produce a token token to the Client, the Issuer completes the issuance
+flow by computing a blinded response as follows:<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.2-2">
+<pre>
+server_context = SetupVOPRFServer(0x0004, skI, pkI)
+evaluate_element, proof = server_context.Evaluate(skI, blinded_element)
+</pre><a href="#section-5.2-2" class="pilcrow">¶</a>
+</div>
+<p id="section-5.2-3">SetupVOPRFServer is in <span>[<a href="#OPRF" class="xref">OPRF</a>], <a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-09#section-3.2" class="relref">Section 3.2</a></span> and Evaluate is defined in
+<span>[<a href="#OPRF" class="xref">OPRF</a>], <a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-09#section-3.3.2" class="relref">Section 3.3.2</a></span>. The Issuer then creates a TokenResponse structured
+as follows:<a href="#section-5.2-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.2-4">
+<pre>
+struct {
+   uint8_t evaluate_msg[Nk];
+   uint8_t evaluate_proof[Ns+Ns];
+} TokenResponse;
+</pre><a href="#section-5.2-4" class="pilcrow">¶</a>
+</div>
+<p id="section-5.2-5">The structure fields are defined as follows:<a href="#section-5.2-5" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5.2-6.1">"evaluate_msg" is the Ne-octet evaluated messaged, computed as
+<code>SerializeElement(evaluate_element)</code>.<a href="#section-5.2-6.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-5.2-6.2">"evaluate_proof" is the (Ns+Ns)-octet serialized proof, which is a pair of Scalar values,
+computed as <code>concat(SerializeScalar(proof[0]), SerializeScalar(proof[1]))</code>,
+where Ns is as defined in <span>[<a href="#OPRF" class="xref">OPRF</a>], <a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-09#section-4" class="relref">Section 4</a></span>.<a href="#section-5.2-6.2" class="pilcrow">¶</a>
+</li>
+        </ul>
+<p id="section-5.2-7">The Issuer generates an HTTP response with status code 200 whose body consists
+of TokenResponse, with the content type set as "message/token-response".<a href="#section-5.2-7" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.2-8">
+<pre>
+:status = 200
+content-type = message/token-response
+content-length = &lt;Length of TokenResponse&gt;
+
+&lt;Bytes containing the TokenResponse&gt;
+</pre><a href="#section-5.2-8" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="finalization">
+<section id="section-5.3">
+        <h3 id="name-finalization">
+<a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-finalization" class="section-name selfRef">Finalization</a>
+        </h3>
+<p id="section-5.3-1">Upon receipt, the Client handles the response and, if successful, deserializes
+the body values TokenResponse.evaluate_response and TokenResponse.evaluate_proof,
+yielding <code>evaluated_element</code> and <code>proof</code>. If deserialization of either value fails,
+the Client aborts the protocol. Otherwise, the Client processes the response as
+follows:<a href="#section-5.3-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.3-2">
+<pre>
+authenticator = client_context.Finalize(token_input, blind, evaluated_element, blinded_element, proof)
+</pre><a href="#section-5.3-2" class="pilcrow">¶</a>
+</div>
+<p id="section-5.3-3">The Finalize function is defined in <span>[<a href="#OPRF" class="xref">OPRF</a>], <a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-09#section-3.3.2" class="relref">Section 3.3.2</a></span>. If this
+succeeds, the Client then constructs a Token as follows:<a href="#section-5.3-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.3-4">
+<pre>
+struct {
+    uint16_t token_type = 0x0001
+    uint8_t nonce[32];
+    uint8_t challenge_digest[32];
+    uint8_t token_key_id[32];
+    uint8_t authenticator[Nk];
+} Token;
+</pre><a href="#section-5.3-4" class="pilcrow">¶</a>
+</div>
+<p id="section-5.3-5">Otherwise, the Client aborts the protocol.<a href="#section-5.3-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="issuer-configuration">
+<section id="section-5.4">
+        <h3 id="name-issuer-configuration">
+<a href="#section-5.4" class="section-number selfRef">5.4. </a><a href="#name-issuer-configuration" class="section-name selfRef">Issuer Configuration</a>
+        </h3>
+<p id="section-5.4-1">Issuers are configured with Private and Public Key pairs, each denoted skI and
+pkI, respectively, used to produce tokens. Each key pair MUST be generated as
+follows:<a href="#section-5.4-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.4-2">
+<pre>
+seed = random(Ns)
+(skI, pkI) = DeriveKeyPair(seed, "PrivacyPass")
+</pre><a href="#section-5.4-2" class="pilcrow">¶</a>
+</div>
+<p id="section-5.4-3">The key identifier for this specific key pair, denoted <code>key_id</code>, is computed
+as follows:<a href="#section-5.4-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.4-4">
+<pre>
+key_id = SHA256(0x0001 || SerializeElement(pkI))
+</pre><a href="#section-5.4-4" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="public-flow">
+<section id="section-6">
+      <h2 id="name-issuance-protocol-for-publi">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-issuance-protocol-for-publi" class="section-name selfRef">Issuance Protocol for Publicly Verifiable Tokens</a>
+      </h2>
+<p id="section-6-1">This section describes a variant of the issuance protocol in <a href="#private-flow" class="xref">Section 5</a>
+for producing publicly verifiable tokens. It differs from the previous variant
+in two important ways:<a href="#section-6-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-6-2">
+<li id="section-6-2.1">The output tokens are publicly verifiable by anyone with the Issuer public
+key; and<a href="#section-6-2.1" class="pilcrow">¶</a>
+</li>
+        <li id="section-6-2.2">The issuance protocol does not admit public or private metadata to bind
+additional context to tokens.<a href="#section-6-2.2" class="pilcrow">¶</a>
+</li>
+      </ol>
+<p id="section-6-3">Otherwise, this variant is nearly identical. In particular, Issuers provide a
+Private and Public Key, denoted skI and pkI, respectively, used to produce tokens
+as input to the protocol. See <a href="#public-issuer-configuration" class="xref">Section 6.4</a> for how this key
+pair is generated.<a href="#section-6-3" class="pilcrow">¶</a></p>
+<p id="section-6-4">Clients provide the following as input to the issuance protocol:<a href="#section-6-4" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6-5.1">Issuer name, identifying the Issuer. This is typically a host name that
+can be used to construct HTTP requests to the Issuer.<a href="#section-6-5.1" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-6-5.2">Issuer Public Key pkI, with a key identifier <code>key_id</code> computed as
+described in <a href="#public-issuer-configuration" class="xref">Section 6.4</a>.<a href="#section-6-5.2" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-6-5.3">Challenge value <code>challenge</code>, an opaque byte string. For example, this might
+be provided by the redemption protocol in <span>[<a href="#HTTP-Authentication" class="xref">HTTP-Authentication</a>]</span>.<a href="#section-6-5.3" class="pilcrow">¶</a>
+</li>
+      </ul>
+<p id="section-6-6">Given this configuration and these inputs, the two messages exchanged in
+this protocol are described below.<a href="#section-6-6" class="pilcrow">¶</a></p>
+<div id="public-request">
+<section id="section-6.1">
+        <h3 id="name-client-to-issuer-request-2">
+<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-client-to-issuer-request-2" class="section-name selfRef">Client-to-Issuer Request</a>
+        </h3>
+<p id="section-6.1-1">The Client first creates an issuance request message for a random value
+<code>nonce</code> using the input challenge and Issuer key identifier as follows:<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-6.1-2">
+<pre>
+nonce = random(32)
+context = SHA256(challenge)
+token_input = concat(0x0002, nonce, context, key_id)
+blinded_msg, blind_inv = rsabssa_blind(pkI, token_input)
+</pre><a href="#section-6.1-2" class="pilcrow">¶</a>
+</div>
+<p id="section-6.1-3">The rsabssa_blind function is defined in <span>[<a href="#BLINDRSA" class="xref">BLINDRSA</a>], <a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-rsa-blind-signatures-03#section-5.1.1." class="relref">Section 5.1.1.</a></span>.
+The Client then creates a TokenRequest structured as follows:<a href="#section-6.1-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-6.1-4">
+<pre>
+struct {
+   uint16_t token_type = 0x0002
+   uint8_t token_key_id;
+   uint8_t blinded_msg[Nk];
+} TokenRequest;
+</pre><a href="#section-6.1-4" class="pilcrow">¶</a>
+</div>
+<p id="section-6.1-5">The structure fields are defined as follows:<a href="#section-6.1-5" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6.1-6.1">"token_type" is a 2-octet integer, which matches the type in the challenge.<a href="#section-6.1-6.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-6.1-6.2">"token_key_id" is the least significant byte of the <code>key_id</code>.<a href="#section-6.1-6.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-6.1-6.3">"blinded_msg" is the Nk-octet request defined above.<a href="#section-6.1-6.3" class="pilcrow">¶</a>
+</li>
+        </ul>
+<p id="section-6.1-7">The Client then generates an HTTP POST request to send to the Issuer,
+with the TokenRequest as the body. The media type for this request
+is "message/token-request". An example request is shown below, where
+Nk = 512.<a href="#section-6.1-7" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-6.1-8">
+<pre>
+:method = POST
+:scheme = https
+:authority = issuer.example.net
+:path = /example-token-request
+accept = message/token-response
+cache-control = no-cache, no-store
+content-type = message/token-request
+content-length = &lt;Length of TokenRequest&gt;
+
+&lt;Bytes containing the TokenRequest&gt;
+</pre><a href="#section-6.1-8" class="pilcrow">¶</a>
+</div>
+<p id="section-6.1-9">Upon receipt of the request, the Issuer validates the following conditions:<a href="#section-6.1-9" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6.1-10.1">The TokenRequest contains a supported token_type.<a href="#section-6.1-10.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-6.1-10.2">The TokenRequest.token_key_id corresponds to a key ID of a Public Key owned by the issuer.<a href="#section-6.1-10.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-6.1-10.3">The TokenRequest.blinded_msg is of the correct size.<a href="#section-6.1-10.3" class="pilcrow">¶</a>
+</li>
+        </ul>
+<p id="section-6.1-11">If any of these conditions is not met, the Issuer MUST return an HTTP 400 error
+to the Client, which will forward the error to the client.<a href="#section-6.1-11" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="public-response">
+<section id="section-6.2">
+        <h3 id="name-issuer-to-client-response-2">
+<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-issuer-to-client-response-2" class="section-name selfRef">Issuer-to-Client Response</a>
+        </h3>
+<p id="section-6.2-1">If the Issuer is willing to produce a token token to the Client, the Issuer
+completes the issuance flow by computing a blinded response as follows:<a href="#section-6.2-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-6.2-2">
+<pre>
+blind_sig = rsabssa_blind_sign(skI, TokenRequest.blinded_rmsg)
+</pre><a href="#section-6.2-2" class="pilcrow">¶</a>
+</div>
+<p id="section-6.2-3">This is encoded and transmitted to the client in the following TokenResponse structure:<a href="#section-6.2-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-6.2-4">
+<pre>
+struct {
+   uint8_t blind_sig[Nk];
+} TokenResponse;
+</pre><a href="#section-6.2-4" class="pilcrow">¶</a>
+</div>
+<p id="section-6.2-5">The rsabssa_blind_sign function is defined in <span>[<a href="#BLINDRSA" class="xref">BLINDRSA</a>], <a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-rsa-blind-signatures-03#section-5.1.2." class="relref">Section 5.1.2.</a></span>.
+The Issuer generates an HTTP response with status code 200 whose body consists
+of TokenResponse, with the content type set as "message/token-response".<a href="#section-6.2-5" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-6.2-6">
+<pre>
+:status = 200
+content-type = message/token-response
+content-length = &lt;Length of TokenResponse&gt;
+
+&lt;Bytes containing the TokenResponse&gt;
+</pre><a href="#section-6.2-6" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="finalization-1">
+<section id="section-6.3">
+        <h3 id="name-finalization-2">
+<a href="#section-6.3" class="section-number selfRef">6.3. </a><a href="#name-finalization-2" class="section-name selfRef">Finalization</a>
+        </h3>
+<p id="section-6.3-1">Upon receipt, the Client handles the response and, if successful, processes the
+body as follows:<a href="#section-6.3-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-6.3-2">
+<pre>
+authenticator = rsabssa_finalize(pkI, nonce, blind_sig, blind_inv)
+</pre><a href="#section-6.3-2" class="pilcrow">¶</a>
+</div>
+<p id="section-6.3-3">The rsabssa_finalize function is defined in <span>[<a href="#BLINDRSA" class="xref">BLINDRSA</a>], <a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-rsa-blind-signatures-03#section-5.1.3." class="relref">Section 5.1.3.</a></span>.
+If this succeeds, the Client then constructs a Token as described in
+<span>[<a href="#HTTP-Authentication" class="xref">HTTP-Authentication</a>]</span> as follows:<a href="#section-6.3-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-6.3-4">
+<pre>
+struct {
+    uint16_t token_type = 0x0002
+    uint8_t nonce[32];
+    uint8_t challenge_digest[32];
+    uint8_t token_key_id[32];
+    uint8_t authenticator[Nk];
+} Token;
+</pre><a href="#section-6.3-4" class="pilcrow">¶</a>
+</div>
+<p id="section-6.3-5">Otherwise, the Client aborts the protocol.<a href="#section-6.3-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="public-issuer-configuration">
+<section id="section-6.4">
+        <h3 id="name-issuer-configuration-2">
+<a href="#section-6.4" class="section-number selfRef">6.4. </a><a href="#name-issuer-configuration-2" class="section-name selfRef">Issuer Configuration</a>
+        </h3>
+<p id="section-6.4-1">Issuers are configured with Private and Public Key pairs, each denoted skI and
+pkI, respectively, used to produce tokens. Each key pair MUST be generated as
+as a valid 4096-bit RSA private key according to [TODO]. The key identifier
+for a keypair (skI, pkI), denoted <code>key_id</code>, is computed as SHA256(encoded_key),
+where encoded_key is a DER-encoded SubjectPublicKeyInfo object carrying pkI.<a href="#section-6.4-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="security-considerations">
+<section id="section-7">
+      <h2 id="name-security-considerations">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-security-considerations" class="section-name selfRef">Security considerations</a>
+      </h2>
+<p id="section-7-1">This document outlines how to instantiate the Issuance protocol
+based on the VOPRF defined in <span>[<a href="#OPRF" class="xref">OPRF</a>]</span> and blind RSA protocol defnied in
+<span>[<a href="#BLINDRSA" class="xref">BLINDRSA</a>]</span>. All security considerations described in the VOPRF document also
+apply in the Privacy Pass use-case. Considerations related to broader privacy
+and security concerns in a multi-Client and multi-Issuer setting are deferred
+to the Architecture document <span>[<a href="#I-D.ietf-privacypass-architecture" class="xref">I-D.ietf-privacypass-architecture</a>]</span>.<a href="#section-7-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="iana-considerations">
+<section id="section-8">
+      <h2 id="name-iana-considerations">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA considerations</a>
+      </h2>
+<div id="token-type">
+<section id="section-8.1">
+        <h3 id="name-token-type">
+<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-token-type" class="section-name selfRef">Token Type</a>
+        </h3>
+<p id="section-8.1-1">This document updates the "Token Type" Registry with the following values.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
+<span id="name-token-types"></span><div id="aeadid-values">
+<table class="center" id="table-2">
+          <caption>
+<a href="#table-2" class="selfRef">Table 2</a>:
+<a href="#name-token-types" class="selfRef">Token Types</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Value</th>
+              <th class="text-left" rowspan="1" colspan="1">Name</th>
+              <th class="text-left" rowspan="1" colspan="1">Publicly Verifiable</th>
+              <th class="text-left" rowspan="1" colspan="1">Public Metadata</th>
+              <th class="text-left" rowspan="1" colspan="1">Private Metadata</th>
+              <th class="text-left" rowspan="1" colspan="1">Nk</th>
+              <th class="text-left" rowspan="1" colspan="1">Reference</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0x0001</td>
+              <td class="text-left" rowspan="1" colspan="1">VOPRF(P-384, SHA-384)</td>
+              <td class="text-left" rowspan="1" colspan="1">N</td>
+              <td class="text-left" rowspan="1" colspan="1">N</td>
+              <td class="text-left" rowspan="1" colspan="1">N</td>
+              <td class="text-left" rowspan="1" colspan="1">48</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <a href="#private-flow" class="xref">Section 5</a>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0x0002</td>
+              <td class="text-left" rowspan="1" colspan="1">Blind RSA, 4096</td>
+              <td class="text-left" rowspan="1" colspan="1">Y</td>
+              <td class="text-left" rowspan="1" colspan="1">N</td>
+              <td class="text-left" rowspan="1" colspan="1">N</td>
+              <td class="text-left" rowspan="1" colspan="1">512</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <a href="#public-flow" class="xref">Section 6</a>
+</td>
+            </tr>
+          </tbody>
+        </table>
+</div>
+</section>
+</div>
+<div id="media-types">
+<section id="section-8.2">
+        <h3 id="name-media-types">
+<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-media-types" class="section-name selfRef">Media Types</a>
+        </h3>
+<p id="section-8.2-1">This specification defines the following protocol messages, along with their
+corresponding media types:<a href="#section-8.2-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-8.2-2.1">TokenRequest: "message/token-request"<a href="#section-8.2-2.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-8.2-2.2">TokenResponse: "message/token-response"<a href="#section-8.2-2.2" class="pilcrow">¶</a>
+</li>
+        </ul>
+<p id="section-8.2-3">The definition for each media type is in the following subsections.<a href="#section-8.2-3" class="pilcrow">¶</a></p>
+<div id="messagetoken-request-media-type">
+<section id="section-8.2.1">
+          <h4 id="name-message-token-request-media">
+<a href="#section-8.2.1" class="section-number selfRef">8.2.1. </a><a href="#name-message-token-request-media" class="section-name selfRef">"message/token-request" media type</a>
+          </h4>
+<span class="break"></span><dl class="dlParallel" id="section-8.2.1-1">
+            <dt id="section-8.2.1-1.1">Type name:</dt>
+            <dd style="margin-left: 1.5em" id="section-8.2.1-1.2">
+              <p id="section-8.2.1-1.2.1">message<a href="#section-8.2.1-1.2.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-8.2.1-1.3">Subtype name:</dt>
+            <dd style="margin-left: 1.5em" id="section-8.2.1-1.4">
+              <p id="section-8.2.1-1.4.1">token-request<a href="#section-8.2.1-1.4.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-8.2.1-1.5">Required parameters:</dt>
+            <dd style="margin-left: 1.5em" id="section-8.2.1-1.6">
+              <p id="section-8.2.1-1.6.1">N/A<a href="#section-8.2.1-1.6.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-8.2.1-1.7">Optional parameters:</dt>
+            <dd style="margin-left: 1.5em" id="section-8.2.1-1.8">
+              <p id="section-8.2.1-1.8.1">None<a href="#section-8.2.1-1.8.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-8.2.1-1.9">Encoding considerations:</dt>
+            <dd style="margin-left: 1.5em" id="section-8.2.1-1.10">
+              <p id="section-8.2.1-1.10.1">only "8bit" or "binary" is permitted<a href="#section-8.2.1-1.10.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-8.2.1-1.11">Security considerations:</dt>
+            <dd style="margin-left: 1.5em" id="section-8.2.1-1.12">
+              <p id="section-8.2.1-1.12.1">see <a href="#security-considerations" class="xref">Section 7</a><a href="#section-8.2.1-1.12.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-8.2.1-1.13">Interoperability considerations:</dt>
+            <dd style="margin-left: 1.5em" id="section-8.2.1-1.14">
+              <p id="section-8.2.1-1.14.1">N/A<a href="#section-8.2.1-1.14.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-8.2.1-1.15">Published specification:</dt>
+            <dd style="margin-left: 1.5em" id="section-8.2.1-1.16">
+              <p id="section-8.2.1-1.16.1">this specification<a href="#section-8.2.1-1.16.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-8.2.1-1.17">Applications that use this media type:</dt>
+            <dd style="margin-left: 1.5em" id="section-8.2.1-1.18">
+              <p id="section-8.2.1-1.18.1">N/A<a href="#section-8.2.1-1.18.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-8.2.1-1.19">Fragment identifier considerations:</dt>
+            <dd style="margin-left: 1.5em" id="section-8.2.1-1.20">
+              <p id="section-8.2.1-1.20.1">N/A<a href="#section-8.2.1-1.20.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-8.2.1-1.21">Additional information:</dt>
+            <dd style="margin-left: 1.5em" id="section-8.2.1-1.22">
+              <span class="break"></span><dl class="dlParallel" id="section-8.2.1-1.22.1">
+                <dt id="section-8.2.1-1.22.1.1">Magic number(s):</dt>
+                <dd style="margin-left: 1.5em" id="section-8.2.1-1.22.1.2">N/A<a href="#section-8.2.1-1.22.1.2" class="pilcrow">¶</a>
+</dd>
+                <dd class="break"></dd>
+<dt id="section-8.2.1-1.22.1.3">Deprecated alias names for this type:</dt>
+                <dd style="margin-left: 1.5em" id="section-8.2.1-1.22.1.4">N/A<a href="#section-8.2.1-1.22.1.4" class="pilcrow">¶</a>
+</dd>
+                <dd class="break"></dd>
+<dt id="section-8.2.1-1.22.1.5">File extension(s):</dt>
+                <dd style="margin-left: 1.5em" id="section-8.2.1-1.22.1.6">N/A<a href="#section-8.2.1-1.22.1.6" class="pilcrow">¶</a>
+</dd>
+                <dd class="break"></dd>
+<dt id="section-8.2.1-1.22.1.7">Macintosh file type code(s):</dt>
+                <dd style="margin-left: 1.5em" id="section-8.2.1-1.22.1.8">N/A<a href="#section-8.2.1-1.22.1.8" class="pilcrow">¶</a>
+</dd>
+              <dd class="break"></dd>
+</dl>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-8.2.1-1.23">Person and email address to contact for further information:</dt>
+            <dd style="margin-left: 1.5em" id="section-8.2.1-1.24">
+              <p id="section-8.2.1-1.24.1">see Authors' Addresses section<a href="#section-8.2.1-1.24.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-8.2.1-1.25">Intended usage:</dt>
+            <dd style="margin-left: 1.5em" id="section-8.2.1-1.26">
+              <p id="section-8.2.1-1.26.1">COMMON<a href="#section-8.2.1-1.26.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-8.2.1-1.27">Restrictions on usage:</dt>
+            <dd style="margin-left: 1.5em" id="section-8.2.1-1.28">
+              <p id="section-8.2.1-1.28.1">N/A<a href="#section-8.2.1-1.28.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-8.2.1-1.29">Author:</dt>
+            <dd style="margin-left: 1.5em" id="section-8.2.1-1.30">
+              <p id="section-8.2.1-1.30.1">see Authors' Addresses section<a href="#section-8.2.1-1.30.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-8.2.1-1.31">Change controller:</dt>
+            <dd style="margin-left: 1.5em" id="section-8.2.1-1.32">
+              <p id="section-8.2.1-1.32.1">IESG<a href="#section-8.2.1-1.32.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+</dl>
+</section>
+</div>
+<div id="messagetoken-response-media-type">
+<section id="section-8.2.2">
+          <h4 id="name-message-token-response-medi">
+<a href="#section-8.2.2" class="section-number selfRef">8.2.2. </a><a href="#name-message-token-response-medi" class="section-name selfRef">"message/token-response" media type</a>
+          </h4>
+<span class="break"></span><dl class="dlParallel" id="section-8.2.2-1">
+            <dt id="section-8.2.2-1.1">Type name:</dt>
+            <dd style="margin-left: 1.5em" id="section-8.2.2-1.2">
+              <p id="section-8.2.2-1.2.1">message<a href="#section-8.2.2-1.2.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-8.2.2-1.3">Subtype name:</dt>
+            <dd style="margin-left: 1.5em" id="section-8.2.2-1.4">
+              <p id="section-8.2.2-1.4.1">access-token-response<a href="#section-8.2.2-1.4.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-8.2.2-1.5">Required parameters:</dt>
+            <dd style="margin-left: 1.5em" id="section-8.2.2-1.6">
+              <p id="section-8.2.2-1.6.1">N/A<a href="#section-8.2.2-1.6.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-8.2.2-1.7">Optional parameters:</dt>
+            <dd style="margin-left: 1.5em" id="section-8.2.2-1.8">
+              <p id="section-8.2.2-1.8.1">None<a href="#section-8.2.2-1.8.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-8.2.2-1.9">Encoding considerations:</dt>
+            <dd style="margin-left: 1.5em" id="section-8.2.2-1.10">
+              <p id="section-8.2.2-1.10.1">only "8bit" or "binary" is permitted<a href="#section-8.2.2-1.10.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-8.2.2-1.11">Security considerations:</dt>
+            <dd style="margin-left: 1.5em" id="section-8.2.2-1.12">
+              <p id="section-8.2.2-1.12.1">see <a href="#security-considerations" class="xref">Section 7</a><a href="#section-8.2.2-1.12.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-8.2.2-1.13">Interoperability considerations:</dt>
+            <dd style="margin-left: 1.5em" id="section-8.2.2-1.14">
+              <p id="section-8.2.2-1.14.1">N/A<a href="#section-8.2.2-1.14.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-8.2.2-1.15">Published specification:</dt>
+            <dd style="margin-left: 1.5em" id="section-8.2.2-1.16">
+              <p id="section-8.2.2-1.16.1">this specification<a href="#section-8.2.2-1.16.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-8.2.2-1.17">Applications that use this media type:</dt>
+            <dd style="margin-left: 1.5em" id="section-8.2.2-1.18">
+              <p id="section-8.2.2-1.18.1">N/A<a href="#section-8.2.2-1.18.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-8.2.2-1.19">Fragment identifier considerations:</dt>
+            <dd style="margin-left: 1.5em" id="section-8.2.2-1.20">
+              <p id="section-8.2.2-1.20.1">N/A<a href="#section-8.2.2-1.20.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-8.2.2-1.21">Additional information:</dt>
+            <dd style="margin-left: 1.5em" id="section-8.2.2-1.22">
+              <span class="break"></span><dl class="dlParallel" id="section-8.2.2-1.22.1">
+                <dt id="section-8.2.2-1.22.1.1">Magic number(s):</dt>
+                <dd style="margin-left: 1.5em" id="section-8.2.2-1.22.1.2">N/A<a href="#section-8.2.2-1.22.1.2" class="pilcrow">¶</a>
+</dd>
+                <dd class="break"></dd>
+<dt id="section-8.2.2-1.22.1.3">Deprecated alias names for this type:</dt>
+                <dd style="margin-left: 1.5em" id="section-8.2.2-1.22.1.4">N/A<a href="#section-8.2.2-1.22.1.4" class="pilcrow">¶</a>
+</dd>
+                <dd class="break"></dd>
+<dt id="section-8.2.2-1.22.1.5">File extension(s):</dt>
+                <dd style="margin-left: 1.5em" id="section-8.2.2-1.22.1.6">N/A<a href="#section-8.2.2-1.22.1.6" class="pilcrow">¶</a>
+</dd>
+                <dd class="break"></dd>
+<dt id="section-8.2.2-1.22.1.7">Macintosh file type code(s):</dt>
+                <dd style="margin-left: 1.5em" id="section-8.2.2-1.22.1.8">N/A<a href="#section-8.2.2-1.22.1.8" class="pilcrow">¶</a>
+</dd>
+              <dd class="break"></dd>
+</dl>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-8.2.2-1.23">Person and email address to contact for further information:</dt>
+            <dd style="margin-left: 1.5em" id="section-8.2.2-1.24">
+              <p id="section-8.2.2-1.24.1">see Authors' Addresses section<a href="#section-8.2.2-1.24.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-8.2.2-1.25">Intended usage:</dt>
+            <dd style="margin-left: 1.5em" id="section-8.2.2-1.26">
+              <p id="section-8.2.2-1.26.1">COMMON<a href="#section-8.2.2-1.26.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-8.2.2-1.27">Restrictions on usage:</dt>
+            <dd style="margin-left: 1.5em" id="section-8.2.2-1.28">
+              <p id="section-8.2.2-1.28.1">N/A<a href="#section-8.2.2-1.28.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-8.2.2-1.29">Author:</dt>
+            <dd style="margin-left: 1.5em" id="section-8.2.2-1.30">
+              <p id="section-8.2.2-1.30.1">see Authors' Addresses section<a href="#section-8.2.2-1.30.1" class="pilcrow">¶</a></p>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-8.2.2-1.31">Change controller:</dt>
+            <dd style="margin-left: 1.5em" id="section-8.2.2-1.32">
+              <p id="section-8.2.2-1.32.1">IESG<a href="#section-8.2.2-1.32.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+</dl>
+</section>
+</div>
+</section>
+</div>
+</section>
+</div>
+<section id="section-9">
+      <h2 id="name-normative-references">
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+      </h2>
+<dl class="references">
+<dt id="AUTHSCHEME">[AUTHSCHEME]</dt>
+      <dd>
+<span class="refAuthor">Pauly, T.</span>, <span class="refAuthor">Valdez, S.</span>, and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"The Privacy Pass HTTP Authentication Scheme"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-pauly-privacypass-auth-scheme-00</span>, <time datetime="2022-01-31" class="refDate">31 January 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-pauly-privacypass-auth-scheme-00">https://datatracker.ietf.org/doc/html/draft-pauly-privacypass-auth-scheme-00</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="BLINDRSA">[BLINDRSA]</dt>
+      <dd>
+<span class="refAuthor">Denis, F.</span>, <span class="refAuthor">Jacobs, F.</span>, and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"RSA Blind Signatures"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-irtf-cfrg-rsa-blind-signatures-03</span>, <time datetime="2022-02-02" class="refDate">2 February 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-rsa-blind-signatures-03">https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-rsa-blind-signatures-03</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="HTTP-Authentication">[HTTP-Authentication]</dt>
+      <dd>
+<span class="refTitle">"The Privacy Pass HTTP Authentication Scheme"</span>, <span>n.d.</span>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-pauly-privacypass-auth-scheme-00">https://datatracker.ietf.org/doc/html/draft-pauly-privacypass-auth-scheme-00</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.ietf-privacypass-architecture">[I-D.ietf-privacypass-architecture]</dt>
+      <dd>
+<span class="refAuthor">Davidson, A.</span>, <span class="refAuthor">Iyengar, J.</span>, and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"Privacy Pass Architectural Framework"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-privacypass-architecture-03</span>, <time datetime="2022-03-07" class="refDate">7 March 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-privacypass-architecture-03">https://datatracker.ietf.org/doc/html/draft-ietf-privacypass-architecture-03</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="OPRF">[OPRF]</dt>
+      <dd>
+<span class="refAuthor">Davidson, A.</span>, <span class="refAuthor">Faz-Hernandez, A.</span>, <span class="refAuthor">Sullivan, N.</span>, and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"Oblivious Pseudorandom Functions (OPRFs) using Prime-Order Groups"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-irtf-cfrg-voprf-09</span>, <time datetime="2022-02-08" class="refDate">8 February 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-09">https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-09</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC2119">[RFC2119]</dt>
+      <dd>
+<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8174">[RFC8174]</dt>
+    <dd>
+<span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+<div id="acknowledgements">
+<section id="appendix-A">
+      <h2 id="name-acknowledgements">
+<a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-acknowledgements" class="section-name selfRef">Acknowledgements</a>
+      </h2>
+<p id="appendix-A-1">The authors of this document would like to acknowledge the helpful
+feedback and discussions from Benjamin Schwartz, Joseph Salowey, Sofia
+Celi, and Tara Whalen.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="test-vectors">
+<section id="appendix-B">
+      <h2 id="name-test-vectors">
+<a href="#appendix-B" class="section-number selfRef">Appendix B. </a><a href="#name-test-vectors" class="section-name selfRef">Test Vectors</a>
+      </h2>
+<p id="appendix-B-1">This section includes test vectors for the two basic issuance protocols
+specified in this document. <a href="#test-vectors-poprf" class="xref">Appendix B.1</a> contains test vectors
+for token issuance protocol 1 (0x0001), and <a href="#test-vectors-rsa" class="xref">Appendix B.2</a> contains
+test vectors for token issuance protocol 2 (0x0002).<a href="#appendix-B-1" class="pilcrow">¶</a></p>
+<div id="test-vectors-poprf">
+<section id="appendix-B.1">
+        <h3 id="name-issuance-protocol-1-voprfp-">
+<a href="#appendix-B.1" class="section-number selfRef">B.1. </a><a href="#name-issuance-protocol-1-voprfp-" class="section-name selfRef">Issuance Protocol 1 - VOPRF(P-384, SHA-384)</a>
+        </h3>
+<p id="appendix-B.1-1">The test vector below lists the following values:<a href="#appendix-B.1-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-B.1-2.1">skS: The encoded OPRF private key, serialized using SerializeScalar from <span><a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-09#section-2.1" class="relref">Section 2.1</a> of [<a href="#OPRF" class="xref">OPRF</a>]</span> and
+represented as a hexadecimal string.<a href="#appendix-B.1-2.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="appendix-B.1-2.2">pkS: The encoded OPRF public key, serialized using SerializeElement from <span><a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-09#section-2.1" class="relref">Section 2.1</a> of [<a href="#OPRF" class="xref">OPRF</a>]</span> and
+represented as a hexadecimal string.<a href="#appendix-B.1-2.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="appendix-B.1-2.3">challenge: A random challenge, represented as a hexadecimal string.<a href="#appendix-B.1-2.3" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="appendix-B.1-2.4">nonce: The 32-byte client nonce generated according to <a href="#private-request" class="xref">Section 5.1</a>, represented as a
+hexadecimal string.<a href="#appendix-B.1-2.4" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="appendix-B.1-2.5">blind: The blind used when computing the OPRF blinded message, serialized using SerializeScalar
+from <span><a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-09#section-2.1" class="relref">Section 2.1</a> of [<a href="#OPRF" class="xref">OPRF</a>]</span> and represented as a hexadecimal string.<a href="#appendix-B.1-2.5" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="appendix-B.1-2.6">token_request: The TokenRequest message constructed according to <a href="#private-request" class="xref">Section 5.1</a>, represented
+as a hexadecimal string.<a href="#appendix-B.1-2.6" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="appendix-B.1-2.7">token_request: The TokenResponse message constructed according to <a href="#private-response" class="xref">Section 5.2</a>, represented
+as a hexadecimal string.<a href="#appendix-B.1-2.7" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="appendix-B.1-2.8">token: The output Token from the protocol, represented as a hexadecimal string.<a href="#appendix-B.1-2.8" class="pilcrow">¶</a>
+</li>
+        </ul>
+<div class="alignLeft art-text artwork" id="appendix-B.1-3">
+<pre>
+skS: 0177781aeced893dccdf80713d318a801e2a0498240fdcf650304bbbfd0f8d3b5c0
+cf6cfee457aaa983ec02ff283b7a9
+pkS: 022c63f79ac59c0ba3d204245f676a2133bd6120c90d67afa05cd6f8614294b7366
+c252c6458300551b79a4911c2590a36
+challenge:
+a5d46383359ef34e3c4a7b8d1b3165778bffc9b70c9e6a60dd14143e4c9c9fbd
+nonce: 5d4799f8338ddc50a6685f83b8ecd264b2f157015229d12b3384c0f199efe7b8
+blind: 0322fec505230992256296063d989b59cc03e83184eb6187076d264137622d202
+48e4e525bdc007b80d1560e0a6f49d9
+token_request: 00011a02861fd50d14be873611cff0131d2c872c79d0260c6763498a2
+a3f14ca926009c0f247653406e1d52b68d61b7ed2bac9ea
+token_response: 038e3625b6a769668a99680e46cf9479f5dc1e86d57164ab3b4a569d
+dfc486bf1485d4916a5194fdc0518d3e8444968421ba36e8144aa7902705ff0f3cf40586
+3d69451a2a7ba210cc45760c2f1a6045134d877b39e8bcbbf920e5de4a3372557debf211
+765cd969976860bc039f9082d6a3e03f8e891246240173d2cf3d69a4613b0f8415979029
+22e74c7a1f2e4639e4
+token: 00015d4799f8338ddc50a6685f83b8ecd264b2f157015229d12b3384c0f199efe
+7b8742cdfb0ed756ea680868ef109a280a393e001d2fa56b1be46ecb31fa25e76731a5b1
+d698ea7ab843b8e8a71ed9b2fffa70457a43a8fc687939424b29a7554b40fde130ab7a82
+2715909cb73f99a45b640ca1c85180ba9ca1a40bab8b664406a34bcbc63b5e2e5c455cea
+00001a968f7
+</pre><a href="#appendix-B.1-3" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="test-vectors-rsa">
+<section id="appendix-B.2">
+        <h3 id="name-issuance-protocol-2-blind-r">
+<a href="#appendix-B.2" class="section-number selfRef">B.2. </a><a href="#name-issuance-protocol-2-blind-r" class="section-name selfRef">Issuance Protocol 2 - Blind RSA, 4096</a>
+        </h3>
+<p id="appendix-B.2-1">The test vector below lists the following values:<a href="#appendix-B.2-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-B.2-2.1">skS: The PEM-encoded PKCS#8 RSA private key used for signing tokens, represented
+as a hexadecimal string.<a href="#appendix-B.2-2.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="appendix-B.2-2.2">pkS: The DER-encoded SubjectPublicKeyInfo object carrying the public key corresponding
+to skS, as described in <a href="#public-issuer-configuration" class="xref">Section 6.4</a>, represented as a hexadecimal string.<a href="#appendix-B.2-2.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="appendix-B.2-2.3">challenge: A random challenge, represented as a hexadecimal string.<a href="#appendix-B.2-2.3" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="appendix-B.2-2.4">nonce: The 32-byte client nonce generated according to <a href="#public-request" class="xref">Section 6.1</a>, represented as a
+hexadecimal string.<a href="#appendix-B.2-2.4" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="appendix-B.2-2.5">blind: The blind used when computing the blind RSA blinded message, represented as a hexadecimal string.<a href="#appendix-B.2-2.5" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="appendix-B.2-2.6">salt: The randomly generated 48-byte salt used when encoding the blinded token request message,
+represented as a hexadecimal string.<a href="#appendix-B.2-2.6" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="appendix-B.2-2.7">token_request: The TokenRequest message constructed according to <a href="#public-request" class="xref">Section 6.1</a>, represented
+as a hexadecimal string.<a href="#appendix-B.2-2.7" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="appendix-B.2-2.8">token_request: The TokenResponse message constructed according to <a href="#public-response" class="xref">Section 6.2</a>, represented
+as a hexadecimal string.<a href="#appendix-B.2-2.8" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="appendix-B.2-2.9">token: The output Token from the protocol, represented as a hexadecimal string.<a href="#appendix-B.2-2.9" class="pilcrow">¶</a>
+</li>
+        </ul>
+<div class="alignLeft art-text artwork" id="appendix-B.2-3">
+<pre>
+skS: 2d2d2d2d2d424547494e2050524956415445204b45592d2d2d2d2d0a4d49494a517
+749424144414e42676b71686b69473977304241514546414153434353307767676b70416
+74541416f4943415144584d4d364c5073637a6130696b0a39596c315a4e683868324a796
+d504962704c383035354d52516f6463446c4c4672764d694c57666f59535241506b4e744
+1546272324162654e334d454a2f67550a392f424958717a704d4256484852546c627a676
+b364c7866766b54505a2b4a427832517177364f5555714b442f34426f5464765761536d6
+a63644165555037760a4836376e396a383836307463367375546e67616c574d4b6d764d2
+f5a6237644262543763345647386577706c6776444f6d616641353956354f78505545704
+9510a586c454f4771414f43436c316f54686d33363836436c48413352374c5a4d78567a4
+742386f594537583548396a70793532786a2f3242724a6861625033567a430a6f4c696c3
+54f6e36487158785363466d4956573742787956495979756d75537659544e52757652777
+3566c3775595446366f4d6d2b59722f5a506372594c7a510a4e666135634f747533532b6
+649594456716f6f58375541415671382f716c4945747a794a744f7261616756393039327
+0324f474c4f6d306a52384543666963520a3868363332572f76554d7739724c4c317a4d4
+e7554424f4b74316c546c307265644a677668626b66515a5a55303541336a69366c71754
+d2f47307250553030470a3369385253732f64694e625843505453746b616f45537350345
+946496d526269756c786a544e2b626c5859744868494261556774306e2b566b544a77554
+86e380a5367447534664e547142776567517265494e427732446b6e63576e676b5644416
+867577635383669727351644c345843723376765856647a51375134586978730a465a6b6
+d7763676d665142444f3469363078536c336337316954595362783359326e74584b4e6f5
+a4c31537a424f595051496a6c734749454250677157546e5a0a64655a7852464f6c4d384
+679794b6d30746471586271594b57716b663777494441514142416f4943414364314d707
+044773645424467763558654168777252710a32726c717042492f6a6a50304e6e7057755
+a302b6e787a53624a4361784d2f4f61436844676e654e586e573259655144524e7242505
+84d5331344e646f4e554e0a56516c36497166445567637169636741696e7542622f4a687
+a6c4d74466d5350466d2b667650726a4d2b6c4831544f384863354253633274414a52574
+36468770a794a7663446349656d74646378437877754b6746485251704a5071356368526
+56431535077766f50494c7831686959356c2f5175423478717a764149483873530a34673
+949705a2f766169443558573541335847734a4f2b696a78717250706756655236474e4f5
+33763515551716a44446967665a626a5864354a322b734d79460a4c435a6e514d6771577
+03731756437366a4f4a445571563537454154534e6b56472f52633279537a554b4d6e354
+c335a314a796d6d31694f584a5136535744760a6f5375426b435652436645635a746b546
+f436c76646f5456666b63414a394e51343839686b3050754e466f593675315671614c5a4
+a7764657a3931764f5966300a4b676f665a4a6e774976547733754b786f7559685033334
+43644574a4f31763265487658767a4c744f4a54477054446f726f4c7a2f475459316b682
+f484d50510a416c4f333758772f526b527752684b4d6f39545555347766642b2b5348325
+4346e6730584875355254764d5339496b4266724455337a75557675434b7270356b0a377
+942364473763433517932364f6367367151584a563650676b6c5770696164445778326f4
+73935746578436f3346563434764a6d49327a706d5748514257630a48395331336b6d7a3
+06873506274576a537535494c443061694f5630764d4c61353841685a767a32774562763
+750546a494d48364d77446736326d6450744d6b0a534969517548644a38326a69316e757
+8646f5678416f4942415144773431456757476e437644496239727a73704b6e61486a654
+3574650385737664a6b446c4c0a61786c724a6f574e614d654c33306b646873576569765
+7616730436f457656556631543455374936735a33705054675653685079374b6f4c645a4
+86f757a5a390a4d774679716d694652726e574135467138544b756f4354647a3836542f5
+37859753330625a476c6d6a4c432f6664453279556141486f6f5177375a2f34646b6d0a4
+1693031696a36484d654e39486e5a425737656c436c4173443242436d4b5279655554793
+7754b472b6b3732704630336e45694f7a42615565354d6c7a7436620a3867586b63715a5
+735495478454b41726b6d486a77454379765178346a7867324573326a7653654e3041554
+b624a63534a736e7a35434a65667a697561676f650a36482b3947676f62386e496a78546
+34e784c7a58316a676e5236772f41302f6e657837714e6b57357773485a46644c58416f4
+9424151446b734d6e75503452460a7558474a6e34316559696c43716b694e4e6b4a53753
+9637456556b7772364570744230506d34556e3770535238684866767a5a43782f6b65766
+b33553336546e0a67556c72416a4b72474a6a77437231457a7252726e417153466f61395
+04851395a69697264626336726f474932576f63795a585859664b784a56646a4f754c440
+a793947564d72575133665a3571696d7a6a394b4163304852455765784b6875514259465
+554542f44323169584b4b65497568647834796b795435323857714b310a66786f4c72584
+e6d5936726b77787778763334556779685a54564a75454879506e51422f54743242377a2
+b342f763033665a46347361635646337738514a306c0a692b466879555a34326b63674a3
+52b654c6d5558726b6d5a5959314a534332417a722f336449516a4b554655515935326a3
+65775667338392f576a72516669470a31732b6c51385a7a6d4a4370416f49424151432b3
+84c43686e764e574e4b37546b365431507943546b466758726351457950374a657453766
+6316c4b6f654a430a304d6337692b58387a5a4e6674473478353941636163716c43376c6
+96a5a55394351564f6d415159652f754d4679524371524c62453271426d79694f70357a7
+00a3538487562693261513034564e554f44767644555256346468364148556e52706f534
+f49356b59723079646137746f7070376a4662565165324b4c56535a742b0a746f4448384
+a6c7a2f5374345774427033465a4538354747573748586a70746f756f6855344c777a464
+7492f4c6d37486935783733357038716a385a6366642f0a384f756632626e6354382f674
+938676b35633034307451794b483177534d4e4e6d5a496c54535943635653725369346b4
+5567677684955354d726e75507647380a6256556b48584d694b7377316d63777739704d4
+6373634716f6d464337586f66594d30664d6a6c4a416f494241465079565632676354534
+b2b784e7976786b4c0a58577638522f2b57454569416256395674445572387a503079736
+f6b34333869412b57432f32367271515a676b36446d61486d673073367356622f7a495a6
+84f0a7769307a4e41446a41375751705179314f6961533333522b594b56333435656c345
+35454386a433543736a79536e306559504b71396679376636614e343770570a304267664
+4346d37584b454d4c66664a744d2b437a6e56536f41504c433449677257646e5a4141376
+c306d57416c52576832645275664a3377703751763943770a2b315659446178785235334
+e2b327930686e4b696d4b613745696970555952567834566f444a6c6d2f5a525a5769545
+335796253375279514f563645334e71560a2f592f6647366563446a33674732497a50674
+c4e664f3651646b556d7679364e4155386c645638754962707045446749497042684f684
+a394865486a664343490a75326b4367674542414d68686e6f69312b78454a365339636e5
+a327977527737433057544962662b54557230436e374f344a4d76637843544b484d62773
+76a680a574c6247392f314732595966354c5673326b572f34472b2f446d586b6d4b68715
+4746d6f324e50463666504b73694d64477877354149677039557a50543168550a2f6c777
+26a75474d322f2b77434b70316d3645374e4d4d5659684b5841534f673473652b3676586
+455356a56436f634343576162657a6c5835513262796c51480a2b2b624f6d4661504d535
+5683761616d6657357573614553627366612f45506932446d3545574f456339567577525
+671526143527552534632507043627279410a6b376e6b6b6746474b5a523777353053465
+5366f7a776667627a2b7a33637256315535766d3076346c63794b6d524b6c4b575a51554
+9624b782f5070583737640a395057536e3569594343704c432f316245372f566f4c70467
+7757631656a773d0a2d2d2d2d2d454e442050524956415445204b45592d2d2d2d2d0a
+pkS: 30820252303d06092a864886f70d01010a3030a00d300b060960864801650304020
+2a11a301806092a864886f70d010108300b0609608648016503040202a20302013003820
+20f003082020a0282020100d730ce8b3ec7336b48a4f5897564d87c87627298f21ba4bf3
+4e7931142875c0e52c5aef3222d67e86124403e436d0136ebd806de37730427f814f7f04
+85eace93015471d14e56f3824e8bc5fbe44cf67e241c7642ac3a39452a283ff80684ddbd
+66929a371d01e50feef1faee7f63f3ceb4b5ceacb939e06a558c2a6bccfd96fb7416d3ed
+ce151bc7b0a6582f0ce99a7c0e7d5793b13d41292105e510e1aa00e082975a13866dfaf3
+a0a51c0dd1ecb64cc55cc607ca1813b5f91fd8e9cb9db18ffd81ac985a6cfdd5cc2a0b8a
+5e4e9fa1ea5f149c1662155bb071c95218cae9ae4af613351baf470b1597bb984c5ea832
+6f98aff64f72b60bcd035f6b970eb6edd2f9f2180d5aa8a17ed400056af3faa5204b73c8
+9b4eada6a057dd3dda9d8e18b3a6d2347c1027e2711f21eb7d96fef50cc3dacb2f5ccc36
+e4c138ab75953974ade74982f85b91f419654d390378e2ea5aae33f1b4acf534d06de2f1
+14acfdd88d6d708f4d2b646a8112b0fe181489916e2ba5c634cdf9b95762d1e120169482
+dd27f959132705079fc4a00eee1f353a81c1e810ade20d070d839277169e09150c08605a
+fe7cea2aec41d2f85c2af7bef5d577343b4385e2c6c159926c1c8267d00433b88bad314a
+5ddcef58936126f1dd8da7b5728da192f54b304e60f4088e5b0620404f82a5939d975e67
+14453a533c172c8a9b4b5da976ea60a5aa91fef0203010001
+challenge:
+83ce743dcdadd5fc4aeb0357977bb8426635c390a15b88947f0b1c62e4a87c22
+nonce: 7e0da97bfdc4365a5f40e69262f78b81bcd2f92daf885358d9831874e3dd9d22
+blind: cd6d03e332386d0166eb76b8e78522510e5cbdcf49aaac83191ea948a7719e914
+0ccb6701f7301b7d445ede7adbc5e582b35edd9ac45bc4b8f794e150b2e3e407b7b7624b
+6f90b33845bc255174cee0c570aa781c203dce8563afe9f48e2b49c773bba1031987fb48
+d981d131876f53e264ec0609a3ea628cf2042005ed3071aeb6657472c7e7df947915b8cd
+333e3f5078e456e65e5edef8f892c4f21d25a18dcd80628ed6c7d55b0b9433bc67760be0
+8a4eacbdb16a4be4c5b8cab26b478fa6a36ea3c3dd1ffb420bf69feef52aab4892c9e60a
+df18347b4e8256b5a0e8cbf55fc97ac62af2e7349ba98ca7462cb6a41d70b0217814a06e
+1b257289c3b345be652b87d5820b06a80500880b40b8772140bf431f11497114b20fee7e
+5ffc1af5cf874cc293a0c8df65d52814bcd55ae6d3701f73d140ca82c6528627129ea389
+f3cbd6058f4f80b7df3818f36dd3489259b6b95df4511930ff02b5cbe643fea44306e7c4
+e3d9b02f1b0559aa238b8882a6e8791bfbfd366ef4fe433fd42e5c5db208c9fcebc74def
+11663ce5f793c7013116995b3fef392a8633b08179a9c8309fb69359fd8486a7a8febb42
+4d0726c2516b11e8b19a55fa54e9be606de6811059976473de8f9adb25af7e2862932bed
+c7764b4dc50bfc9d724a4aba356a7677b5aceef21876e56b4f1b65adef0fbf8bf1636815
+be01b372727e79aa6c47f41
+salt: d13a47fa6466a37203e51ac34f7319831b3f04202ff74c98ab18e78088b7ac3014
+06189783503227153871405c6a1da0
+token_request: 0002013a370077e8259098e741dcaac8184838b7c995cd82966419064
+90205bf28e6745396dd9ec1761c4676e9fec3272588194c48bc60fc77c3fff19219a6b65
+96523044d07d9d9e4dd88f2db9d9c369597363a12a65d244d69a1b743b365f8f5bdbf8d6
+52f2d2e249f417e9fd7da7db2626d6499d7d3856d8f9277385dfd776ffa4ffa74d7a7b17
+01d87f40e525bb258a7f5b4d6c134b3b242ef46d93b32f106c84c396b1fc2772796b2473
+64c48c364537708f3a8a87fb870a299ac08107a5dd3f467733d76c2359e346ee3ebcff68
+c3c7e10f0f01a2b9bbbdb26ffea14f81f036a71c47725b5c9f81e0320b85abfd77d5eb1c
+ccfdd8eb0cf2735ea297e2a07c82dfee9b0a4d21baa81a2cfb2a72983107555035386c33
+973d48f04257dd8298116d2c93298810cb6b82ad033f5b16f9f7a65d8f74b7bdcae000db
+1411b40f46cb373cb69c8ab58552f98904b78229b63838ab40e833fab4ec47acf00a00db
+3290c9c74ed982c64ddbcae16fd73976ffe7da7b3b1a8e0190e95b7ce7900295f3c8c94f
+2d3d85cd1825fe27073aad63fa4c530907402dc4e3a748edb300f05ce7ac5b8c1d9aeb2f
+d6002b05dee582aeaefa4f503f13bae1a51be9420e3cdcb685169bdc5ae2ebca7713ec16
+666b55b097e56e5719d1b0324ecaca613af76b9f367775a90dba5e7fdd21a8da73bd80b1
+31e6531117ef709ad8c7b2b3182255235acea
+token_response: 061780e09bc9b851fe81e7022ee2d55b043198bcb1aa33f761d213a9
+8d831abaef5417d30904a7c9d7ec531278cd9655c4b7d72f3a4e66e26565b73e5f1b9271
+b541f28556543d2473c363e104a11c6ba1a1d8f99b32d3cd8f74ae07b465afdaabd21977
+d6f114ea9484cd592f461e5dc4a97b86fe1463b1c69171cf734f49c240760dc2555d7cc8
+9d7f882d3e1b99388bc3b561d418a7fc5770ccc66e3dd41f4a74e8267492f48e8b6aabce
+592c8dc83826b1f4528f2497902a0ce4baacd4216623274057592e77091102452de115bb
+d0c98ee22b14fe30fb371277ab17bc948b62b8adb56b67e44dce74860647718c8f4bd10e
+7b022ad35e2996dd49fb4a6c765689931fc11b56b06cca921fb1205e8b230254054a48da
+38ed7a5e20f7aa80b55f1de9f5a6c9589f4f2c3b6ed2c53ad2a6a64abb8fba67aef86e6f
+f77647aa05ce96527e2d1199b7553a3b900ec510f5b765211c14d0fc6cbe82f28be4d8ac
+8110f13d7aee3741fc68f4abf3ca33444f790a72ef4ddec72c1d92938ee5d303f914ff12
+8d9a73e867d9aa5d327934d4b2b299d7ffa32350d72d35103c027ac76c5417823e6790ee
+174b9761e086bfa445f1725b20cff6a94d51abdfcfe46ff7c0f69685fd38639bdbd3917f
+424949027b5a322fc217364748e544257d11f0cdcab9aa1d3282f6ac2811dfc8db5b2f99
+c1ba00c366057748cabe6975fc73ed60
+token: 00027e0da97bfdc4365a5f40e69262f78b81bcd2f92daf885358d9831874e3dd9
+d22895c9d3ff72e71d22cdbc11706d350ab772b0820be9f33a02e003652cb00a31501000
+000000000000000000000000000000000000000000000000000000000004c9e19f2a624e
+e7d44ac35846749b29b1d3a784f13ea1005a2c87b9d3f939f795877d5fded823f45fd399
+dc0b8730cb46c66102740c679338b7093c47e8f586e48a8b042cb0ea2b901f6981e797c4
+a614f52f02ffe3ae7f83fa4f9a243e8b59621975abffb94f82b3fadfb4cb305cc1c1b677
+42a673204e5a0aa0c25423c604430597d0332e30dddab8855de42bcf49668410df38bb3b
+fa4370df28ec59316bc1c6f3c9afc8ccfdb93f4ca60365683988f649201e1c6d6bb73d14
+d0dc9a0f596a9f76502ebadc0b248985f9bb66d9d99a5aca08527aa11d555b26489299ba
+5b400157a9fd47b6b4fa74315eade2b22624b29d53eb84126f64b98ea5ba45914d1fa14b
+1525e2327856565054a1db9b0d778871fa6ed4d0d4c26641bf3f4faa33efaa0f5b8cec80
+8d52ed3f1378273d5b7b0b0b812bfc128ef5e4924a60aebd124659d31661e9ec89f8bcb9
+a51bab6a5711187639c24fdd31f14abf7d80827df91f31bfe7c4916ec4d1927ca138c5ba
+9a595a9e83b5055148d19ad005c523eda76ea94006ce6315e20ed0d637fb1211b541e9ea
+12c9b641d48fd2cc5f0c7f479672a4e2bf7469267c8526d734df41f2c30fb62c2aea4033
+214df44a53353dc683cf72dee7b1ba39ef668478958935a0e8c9a880ae85712c401d7f09
+b66fbad05cfd69d615b229bce8818c6a6472e07a8793456f19f4f4015c507ab5c1357881
+68b
+</pre><a href="#appendix-B.2-3" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="authors-addresses">
+<section id="appendix-C">
+      <h2 id="name-authors-addresses">
+<a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
+      </h2>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Sofía Celi</span></div>
+<div dir="auto" class="left"><span class="org">Cloudflare</span></div>
+<div dir="auto" class="left"><span class="locality">Lisbon</span></div>
+<div dir="auto" class="left"><span class="country-name">Portugal</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:sceli@cloudflare.com" class="email">sceli@cloudflare.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Alex Davidson</span></div>
+<div dir="auto" class="left"><span class="org">Brave Software</span></div>
+<div dir="auto" class="left"><span class="locality">Lisbon</span></div>
+<div dir="auto" class="left"><span class="country-name">Portugal</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:alex.davidson92@gmail.com" class="email">alex.davidson92@gmail.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Armando Faz-Hernandez</span></div>
+<div dir="auto" class="left"><span class="org">Cloudflare</span></div>
+<div dir="auto" class="left"><span class="street-address">101 Townsend St</span></div>
+<div dir="auto" class="left">
+<span class="locality">San Francisco</span>,  </div>
+<div dir="auto" class="left"><span class="country-name">United States of America</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:armfazh@cloudflare.com" class="email">armfazh@cloudflare.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Steven Valdez</span></div>
+<div dir="auto" class="left"><span class="org">Google LLC</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:svaldez@chromium.org" class="email">svaldez@chromium.org</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Christopher A. Wood</span></div>
+<div dir="auto" class="left"><span class="org">Cloudflare</span></div>
+<div dir="auto" class="left"><span class="street-address">101 Townsend St</span></div>
+<div dir="auto" class="left">
+<span class="locality">San Francisco</span>,  </div>
+<div dir="auto" class="left"><span class="country-name">United States of America</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:caw@heapingbits.net" class="email">caw@heapingbits.net</a>
+</div>
+</address>
+</section>
+</div>
+<script>const toc = document.getElementById("toc");
+toc.querySelector("h2").addEventListener("click", e => {
+  toc.classList.toggle("active");
+});
+toc.querySelector("nav").addEventListener("click", e => {
+  toc.classList.remove("active");
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1789 @@
+<!DOCTYPE html>
+<html lang="en" class="Internet-Draft">
+<head>
+<meta charset="utf-8">
+<meta content="Common,Latin" name="scripts">
+<meta content="initial-scale=1.0" name="viewport">
+<title>The Privacy Pass HTTP Authentication Scheme</title>
+<meta content="Tommy Pauly" name="author">
+<meta content="Steven Valdez" name="author">
+<meta content="Christopher A. Wood" name="author">
+<meta content="
+       This document defines an HTTP authentication scheme that can be used by clients
+to redeem Privacy Pass tokens with an origin. It can also be used by origins to
+challenge clients to present an acceptable Privacy Pass token. 
+    " name="description">
+<meta content="xml2rfc 3.12.3" name="generator">
+<meta content="Internet-Draft" name="keyword">
+<meta content="draft-ietf-privacypass-auth-scheme" name="ietf.draft">
+<!-- Generator version information:
+  xml2rfc 3.12.3
+    Python 3.9.7
+    appdirs 1.4.4
+    ConfigArgParse 1.3
+    google-i18n-address 2.5.0
+    html5lib 1.1
+    intervaltree 3.1.0
+    Jinja2 2.11.3
+    kitchen 1.2.6
+    lxml 4.6.5
+    MarkupSafe 2.0.1
+    pycountry 20.7.3
+    pyflakes 2.3.1
+    PyYAML 5.4.1
+    requests 2.26.0
+    setuptools 52.0.0
+    six 1.16.0
+-->
+<link href="draft-ietf-privacypass-auth-scheme.xml" rel="alternate" type="application/rfc+xml">
+<link href="#copyright" rel="license">
+<style type="text/css">@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  color-scheme: light dark;
+  --background-color: #fff;
+  --text-color: #222;
+  --title-color: #191919;
+  --link-color: #2a6496;
+  --highlight-color: #f9f9f9;
+  --line-color: #eee;
+  --pilcrow-weak: #ddd;
+  --pilcrow-strong: #bbb;
+  --small-font-size: 14.5px;
+  --font-mono: 'Oxygen Mono', monospace;
+  scrollbar-color: #bbb #eee;
+}
+body {
+  max-width: 600px;
+  margin: 75px auto;
+  padding: 0 5px;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  font: 16px/22px "Lora", serif;
+  scroll-behavior: smooth;
+}
+
+.ears {
+  display: none;
+}
+
+/* headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Cabin Condensed", sans-serif;
+  font-weight: 600;
+  margin: 0.8em 0 0.3em;
+  font-size-adjust: 0.5;
+  color: var(--title-color);
+}
+h1#title {
+  font-size: 32px;
+  line-height: 40px;
+  clear: both;
+}
+h1#title, h1#rfcnum {
+  margin: 1.5em 0 0.2em;
+}
+h1#rfcnum + h1#title {
+  margin: 0.2em 0;
+}
+
+h1, h2, h3 {
+  font-size: 22px;
+  line-height: 27px;
+}
+h4, h5, h6 {
+  font-size: 20px;
+  line-height: 24px;
+}
+
+/* general structure */
+.author {
+  padding-bottom: 0.3em;
+}
+#abstract+p {
+  font-size: 18px;
+  line-height: 24px;
+}
+#abstract+p code, #abstract+p samp, #abstract+p tt {
+  font-size: 16px;
+  line-height: 0;
+}
+
+p {
+  padding: 0;
+  margin: 0.5em 0;
+  text-align: left;
+}
+div {
+  margin: 0;
+}
+.alignRight.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignRight.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignRight {
+  margin: 1em 0;
+}
+.alignRight > *:first-child {
+  border: none;
+  margin: 0;
+  float: right;
+  clear: both;
+}
+.alignRight > *:nth-child(2) {
+  clear: both;
+  display: block;
+  border: none;
+}
+svg {
+  display: block;
+}
+/* font-family isn't space-separated, but =~ will have to do */
+svg[font-family~="monospace" i], svg [font-family~="monospace" i] {
+  font-family: var(--font-mono);
+}
+.alignCenter.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignCenter.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignCenter {
+  margin: 1em 0;
+}
+.alignCenter > *:first-child {
+  border: none;
+  /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
+     support flexbox yet.
+  */
+  display: table;
+  margin: 0 auto;
+}
+
+/* lists */
+ol, ul {
+  padding: 0;
+  margin: 0 0 0.5em 2em;
+}
+ol ol, ul ul, ol ul, ul ol {
+  margin-left: 1em;
+}
+li {
+  margin: 0 0 0.25em 0;
+}
+.ulCompact li {
+  margin: 0;
+}
+ul.empty, .ulEmpty {
+  list-style-type: none;
+}
+ul.empty li, .ulEmpty li {
+  margin-top: 0.5em;
+}
+ul.compact, .ulCompact,
+ol.compact, .olCompact {
+  line-height: 100%;
+  margin: 0 0 0 2em;
+}
+
+/* definition lists */
+dl {
+}
+dl > dt {
+  float: left;
+  margin-right: 1em;
+}
+dl > dd {
+  margin-bottom: .8em;
+  min-height: 1.3em;
+}
+dl.compact > dd, .dlCompact > dd {
+  margin-bottom: 0em;
+}
+dl > dd > dl {
+  margin-top: 0.5em;
+  margin-bottom: 0em;
+}
+dd.break {
+  display: none;
+}
+
+/* links */
+a, a[href].selfRef:hover {
+  text-decoration: none;
+}
+a[href].selfRef {
+  color: var(--text-color);
+}
+a[href] {
+  color: var(--link-color);
+}
+a[href]:hover {
+  text-decoration: underline;
+}
+a[href].selfRef:hover {
+  background-color: var(--highlight-color);
+}
+a.xref {
+  white-space: nowrap;
+}
+
+/* Figures */
+tt, code, pre {
+  background-color: var(--highlight-color);
+  font: 14px/22px var(--font-mono);
+}
+tt, code {
+  /* changing the font for inline elements leads to different ascender
+     and descender heights; as we want to retain baseline alignment,
+     remove leading to avoid altering the final height of lines */
+  line-height: 0;
+}
+pre {
+  border: 1px solid var(--line-color);
+  font-size: 13.5px;
+  line-height: 16px;
+  letter-spacing: -0.2px;
+  margin: 5px;
+  padding: 5px;
+}
+img {
+  max-width: 100%;
+}
+figure {
+  margin: 0.5em 0;
+  padding: 0;
+}
+figure blockquote {
+  margin: 0.8em 0.4em 0.4em;
+}
+figcaption, caption {
+  font-style: italic;
+  margin: 0.5em 1.5em;
+  text-align: left;
+}
+@media screen {
+  pre, svg {
+    display: inline-block;
+    overflow-x: auto;
+  }
+  pre {
+    max-width: 100%;
+    width: calc(100% - 22px - 1em);
+  }
+  svg {
+    max-width: calc(100% - 22px - 1em);
+  }
+  figure pre {
+    display: block;
+    width: calc(100% - 25px);
+  }
+  pre + .pilcrow, svg + .pilcrow {
+    display: inline-block;
+    vertical-align: text-bottom;
+    padding-bottom: 8px;
+  }
+}
+
+/* aside, blockquote */
+aside, blockquote {
+  margin-left: 0;
+  padding: 0 2em;
+  font-style: italic;
+}
+blockquote {
+  margin: 1em 0;
+}
+cite {
+  display: block;
+  text-align: right;
+  font-style: italic;
+}
+
+/* tables */
+table {
+  max-width: 100%;
+  margin: 0 0 1em;
+  border-collapse: collapse;
+}
+table.right {
+  margin-left: auto;
+}
+table.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+table.left {
+  margin-right: auto;
+}
+thead, tbody {
+  border: 1px solid var(--line-color);
+}
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: 5px 10px;
+}
+th {
+  background-color: var(--line-color);
+}
+tr:nth-child(2n) > td {
+  background-color: var(--background-color);
+}
+tr:nth-child(2n+1) > td {
+  background-color: var(--highlight-color);
+}
+thead+tbody > tr:nth-child(2n) > td {
+  background-color: var(--highlight-color);
+}
+thead+tbody > tr:nth-child(2n+1) > td {
+  background-color: var(--background-color);
+}
+table caption {
+  margin: 0;
+  padding: 3px 0 3px 1em;
+}
+table p {
+  margin: 0;
+}
+
+/* pilcrow */
+a.pilcrow {
+  margin-left: 3px;
+  opacity: 0.2;
+  user-select: none;
+}
+a.pilcrow[href] { color: var(--pilcrow-weak); }
+a.pilcrow[href]:hover { text-decoration: none; }
+@media not print {
+  :hover > a.pilcrow {
+    opacity: 1;
+  }
+  a.pilcrow[href]:hover {
+    color: var(--pilcrow-strong);
+    background-color: transparent;
+  }
+}
+@media print {
+  a.pilcrow {
+    display: none;
+  }
+}
+
+/* misc */
+hr {
+  border: 0;
+  border-top: 1px solid var(--line-color);
+}
+.bcp14 {
+  font-variant: small-caps;
+}
+
+.role {
+  font-variant: all-small-caps;
+}
+
+/* info block */
+#identifiers {
+  margin: 0;
+  font-size: var(--small-font-size);
+  line-height: 18px;
+  --identifier-width: 8em;
+}
+#identifiers dt {
+  width: var(--identifier-width);
+  margin: 0;
+  clear: left;
+  float: left;
+  text-align: right;
+}
+#identifiers dd {
+  margin: 0 0 0 calc(1em + var(--identifier-width));
+  min-width: 5em;
+}
+#identifiers .authors .author {
+  display: inline-block;
+  margin-right: 1.5em;
+}
+#identifiers .authors .org {
+  font-style: italic;
+}
+
+/* The prepared/rendered info at the very bottom of the page */
+.docInfo {
+  color: #999;
+  font-size: 0.9em;
+  font-style: italic;
+  margin-top: 2em;
+}
+.docInfo .prepared {
+  float: left;
+}
+.docInfo .prepared {
+  float: right;
+}
+
+/* table of contents */
+#toc {
+  padding: 0.75em 0 2em 0;
+  margin-bottom: 1em;
+}
+#toc nav ul {
+  margin: 0 0.5em 0 0;
+  padding: 0;
+  list-style: none;
+}
+#toc nav li {
+  line-height: 1.3em;
+  margin: 0.75em 0;
+  padding-left: 1.2em;
+  text-indent: -1.2em;
+}
+#toc a.xref {
+  white-space: normal;
+}
+/* references */
+.references dt {
+  text-align: right;
+  font-weight: bold;
+  min-width: 7em;
+}
+.references dd {
+  margin-left: 8em;
+  overflow: auto;
+}
+
+.refInstance {
+  margin-bottom: 1.25em;
+}
+
+.references .ascii {
+  margin-bottom: 0.25em;
+}
+
+/* index */
+#rfc\.index\.index + ul {
+  margin-left: 0;
+}
+
+/* authors */
+address.vcard {
+  font-style: normal;
+  margin: 1em 0;
+}
+address.vcard .nameRole {
+  font-weight: 700;
+  margin-left: 0;
+}
+address.vcard .label {
+  margin: 0.5em 0;
+}
+address.vcard .type {
+  display: none;
+}
+.alternative-contact {
+  margin: 1.5em 0 1em;
+}
+hr.addr {
+  border-top: 1px dashed;
+  margin: 0;
+  color: #ddd;
+  max-width: calc(100% - 16px);
+}
+@media (min-width: 500px) {
+  #authors-addresses > section {
+    column-count: 2;
+    column-gap: 20px;
+  }
+  #authors-addresses > section > h2 {
+    column-span: all;
+  }
+  /* hack for break-inside: avoid-column */
+  #authors-addresses address {
+    display: inline-block;
+    break-inside: avoid-column;
+  }
+}
+
+.rfcEditorRemove p:first-of-type {
+  font-style: italic;
+}
+.cref {
+  background-color: rgba(249, 232, 105, 0.3);
+  padding: 2px 4px;
+}
+.crefSource {
+  font-style: italic;
+}
+/* alternative layout for smaller screens */
+@media screen and (max-width: 929px) {
+  #toc {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    padding: 0;
+    margin: 0;
+    border-bottom: 1px solid #ccc;
+    opacity: 0.6;
+  }
+  #toc.active {
+      opacity: 1;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 2px 0 2px 6px;
+    padding-right: 1em;
+    font-size: 18px;
+    line-height: 24px;
+    min-width: 190px;
+    text-align: right;
+    background-color: #444;
+    color: white;
+    cursor: pointer;
+  }
+  #toc h2::before { /* css hamburger */
+    float: right;
+    position: relative;
+    width: 1em;
+    height: 1px;
+    left: -164px;
+    margin: 8px 0 0 0;
+    background: white none repeat scroll 0 0;
+    box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+    content: "";
+  }
+  #toc nav {
+    display: none;
+    background-color: var(--background-color);
+    padding: 0.5em 1em 1em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    height: calc(100vh - 48px);
+    border-left: 1px solid #ddd;
+  }
+  #toc.active nav {
+    display: block;
+  }
+  /* Make the collapsed ToC header render white on gray also when it's a link */
+  #toc h2 a,
+  #toc h2 a:link,
+  #toc h2 a:focus,
+  #toc h2 a:hover,
+  #toc a.toplink,
+  #toc a.toplink:hover {
+    color: white;
+    background-color: #444;
+    text-decoration: none;
+  }
+  #toc a.toplink {
+    margin-top: 2px;
+  }
+}
+
+/* alternative layout for wide screens */
+@media screen and (min-width: 930px) {
+  body {
+    padding-right: 360px;
+    padding-right: calc(min(180px + 20%, 500px));
+  }
+  #toc {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    right: calc(50vw - 480px);
+    width: 312px;
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 0.25em 1em 1em 0;
+  }
+  #toc nav {
+    display: block;
+    height: calc(90vh - 84px);
+    bottom: 0;
+    padding: 0.5em 0 2em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+  #toc nav > ul  {
+    margin-bottom: 2em;
+  }
+  #toc ul {
+    margin: 0 0 0 4px;
+    font-size: var(--small-font-size);
+  }
+  #toc ul p, #toc ul li {
+    margin: 2px 0;
+    line-height: 22px;
+  }
+  img { /* future proofing */
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* pagination */
+@media print {
+  body {
+    width: 100%;
+  }
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+  #n-copyright-notice {
+    border-bottom: none;
+  }
+  #toc, #n-introduction {
+    page-break-before: always;
+  }
+  #toc {
+    border-top: none;
+    padding-top: 0;
+  }
+  figure, pre {
+    page-break-inside: avoid;
+  }
+  figure {
+    overflow: scroll;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  h2+*, h3+*, h4+*, h5+*, h6+* {
+    page-break-before: avoid;
+  }
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 10pt;
+  }
+  table {
+    border: 1px solid #ddd;
+  }
+  td {
+    border-top: 1px solid #ddd;
+  }
+}
+
+@page :first {
+  padding-top: 0;
+  @top-left {
+    content: normal;
+    border: none;
+  }
+  @top-center {
+    content: normal;
+    border: none;
+  }
+  @top-right {
+    content: normal;
+    border: none;
+  }
+}
+
+@page {
+  size: A4;
+  margin-bottom: 45mm;
+  padding-top: 20px;
+}
+
+/* Changes introduced to fix issues found during implementation */
+
+/* Separate body from document info even without intervening H1 */
+section {
+  clear: both;
+}
+
+/* Top align author divs, to avoid names without organization dropping level with org names */
+.author {
+  vertical-align: top;
+}
+
+/* Style section numbers with more space between number and title */
+.section-number {
+  padding-right: 0.5em;
+}
+
+/* Add styling for a link in the ToC that points to the top of the document */
+a.toplink {
+  float: right;
+  margin: 8px 0.5em 0;
+}
+
+/* Fix the dl styling to match the RFC 7992 attributes */
+dl > dt,
+dl.dlParallel > dt {
+  float: left;
+  margin-right: 1em;
+}
+dl.dlNewline > dt {
+  float: none;
+}
+
+/* Provide styling for table cell text alignment */
+table .text-left, table .text-left {
+  text-align: left;
+}
+table .text-center, table .text-center {
+  text-align: center;
+}
+table .text-right, table .text-right {
+  text-align: right;
+}
+
+/* Make the alternative author contact information look less like just another
+   author, and group it closer with the primary author contact information */
+.alternative-contact {
+  margin: 0.5em 0 0.25em 0;
+}
+address .non-ascii {
+  margin: 0 0 0 2em;
+}
+
+/* With it being possible to set tables with alignment
+  left, center, and right, { width: 100%; } does not make sense */
+table {
+  width: auto;
+}
+
+/* Avoid reference text that sits in a block with very wide left margin,
+   because of a long floating dt label.*/
+.references dd {
+  overflow: visible;
+}
+
+/* Control caption placement */
+caption {
+  caption-side: bottom;
+}
+
+/* Limit the width of the author address vcard, so names in right-to-left
+   script don't end up on the other side of the page. */
+
+address.vcard {
+  max-width: 20em;
+  margin-right: auto;
+}
+
+/* For address alignment dependent on LTR or RTL scripts */
+address div.left {
+  text-align: left;
+}
+address div.right {
+  text-align: right;
+}
+
+/* Give the table caption label the same styling as the figcaption */
+
+@media print {
+  .toplink {
+    display: none;
+  }
+
+  /* avoid overwriting the top border line with the ToC header */
+  #toc {
+    padding-top: 1px;
+  }
+
+  /* Avoid page breaks inside dl and author address entries */
+  dd {
+    page-break-before: avoid;
+  }
+  .vcard {
+    page-break-inside: avoid;
+  }
+
+}
+/* Tweak the bcp14 keyword presentation */
+.bcp14 {
+  font-variant: small-caps;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+/* Dark mode. */
+@media (prefers-color-scheme: dark) {
+:root {
+  --background-color: #121212;
+  --text-color: #f0f0f0;
+  --title-color: #fff;
+  --link-color: #4da4f0;
+  --highlight-color: #282828;
+  --line-color: #444;
+  --pilcrow-weak: #444;
+  --pilcrow-strong: #666;
+  scrollbar-color: #777 #333;
+}
+/* Trick: a prefix match works because only black and white are allowed */
+svg [stroke="black"], svg [stroke^="#000"] {
+  stroke: var(--text-color);
+}
+svg [stroke="white"], svg [stroke^="#fff"] {
+  stroke: var(--background-color);
+}
+svg [fill="black"], svg [fill^="#000"], svg :not([fill]) {
+  fill: var(--text-color);
+}
+svg [stroke="fill"], svg [fill^="#fff"] {
+  fill: var(--background-color);
+}
+}
+</style>
+
+</head>
+<body>
+<table class="ears">
+<thead><tr>
+<td class="left">Internet-Draft</td>
+<td class="center">Privacy Pass Authentication</td>
+<td class="right">April 2022</td>
+</tr></thead>
+<tfoot><tr>
+<td class="left">Pauly, et al.</td>
+<td class="center">Expires 7 October 2022</td>
+<td class="right">[Page]</td>
+</tr></tfoot>
+</table>
+<div id="external-metadata" class="document-information"></div>
+<div id="internal-metadata" class="document-information">
+<dl id="identifiers">
+<dt class="label-workgroup">Workgroup:</dt>
+<dd class="workgroup">Network Working Group</dd>
+<dt class="label-internet-draft">Internet-Draft:</dt>
+<dd class="internet-draft">draft-ietf-privacypass-auth-scheme</dd>
+<dt class="label-published">Published:</dt>
+<dd class="published">
+<time datetime="2022-04-05" class="published">5 April 2022</time>
+    </dd>
+<dt class="label-intended-status">Intended Status:</dt>
+<dd class="intended-status">Standards Track</dd>
+<dt class="label-expires">Expires:</dt>
+<dd class="expires"><time datetime="2022-10-07">7 October 2022</time></dd>
+<dt class="label-authors">Authors:</dt>
+<dd class="authors">
+<div class="author">
+      <div class="author-name">T. Pauly</div>
+<div class="org">Apple Inc.</div>
+</div>
+<div class="author">
+      <div class="author-name">S. Valdez</div>
+<div class="org">Google LLC</div>
+</div>
+<div class="author">
+      <div class="author-name">C. A. Wood</div>
+<div class="org">Cloudflare</div>
+</div>
+</dd>
+</dl>
+</div>
+<h1 id="title">The Privacy Pass HTTP Authentication Scheme</h1>
+<section id="section-abstract">
+      <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
+<p id="section-abstract-1">This document defines an HTTP authentication scheme that can be used by clients
+to redeem Privacy Pass tokens with an origin. It can also be used by origins to
+challenge clients to present an acceptable Privacy Pass token.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+</section>
+<div id="status-of-memo">
+<section id="section-boilerplate.1">
+        <h2 id="name-status-of-this-memo">
+<a href="#name-status-of-this-memo" class="section-name selfRef">Status of This Memo</a>
+        </h2>
+<p id="section-boilerplate.1-1">
+        This Internet-Draft is submitted in full conformance with the
+        provisions of BCP 78 and BCP 79.<a href="#section-boilerplate.1-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-2">
+        Internet-Drafts are working documents of the Internet Engineering Task
+        Force (IETF). Note that other groups may also distribute working
+        documents as Internet-Drafts. The list of current Internet-Drafts is
+        at <span><a href="https://datatracker.ietf.org/drafts/current/">https://datatracker.ietf.org/drafts/current/</a></span>.<a href="#section-boilerplate.1-2" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-3">
+        Internet-Drafts are draft documents valid for a maximum of six months
+        and may be updated, replaced, or obsoleted by other documents at any
+        time. It is inappropriate to use Internet-Drafts as reference
+        material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-4">
+        This Internet-Draft will expire on 7 October 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="copyright">
+<section id="section-boilerplate.2">
+        <h2 id="name-copyright-notice">
+<a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
+        </h2>
+<p id="section-boilerplate.2-1">
+            Copyright (c) 2022 IETF Trust and the persons identified as the
+            document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.2-2">
+            This document is subject to BCP 78 and the IETF Trust's Legal
+            Provisions Relating to IETF Documents
+            (<span><a href="https://trustee.ietf.org/license-info">https://trustee.ietf.org/license-info</a></span>) in effect on the date of
+            publication of this document. Please review these documents
+            carefully, as they describe your rights and restrictions with
+            respect to this document. Code Components extracted from this
+            document must include Revised BSD License text as described in
+            Section 4.e of the Trust Legal Provisions and are provided without
+            warranty as described in the Revised BSD License.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="toc">
+<section id="section-toc.1">
+        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
+<a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
+        </h2>
+<nav class="toc"><ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
+            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="xref">1</a>.  <a href="#name-introduction" class="xref">Introduction</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.1">
+                <p id="section-toc.1-1.1.2.1.1" class="keepWithNext"><a href="#section-1.1" class="xref">1.1</a>.  <a href="#name-terminology" class="xref">Terminology</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
+            <p id="section-toc.1-1.2.1"><a href="#section-2" class="xref">2</a>.  <a href="#name-http-authentication-scheme" class="xref">HTTP Authentication Scheme</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.1">
+                <p id="section-toc.1-1.2.2.1.1"><a href="#section-2.1" class="xref">2.1</a>.  <a href="#name-token-challenge" class="xref">Token Challenge</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.1.2.1">
+                    <p id="section-toc.1-1.2.2.1.2.1.1" class="keepWithNext"><a href="#section-2.1.1" class="xref">2.1.1</a>.  <a href="#name-redemption-context-construc" class="xref">Redemption Context Construction</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.1.2.2">
+                    <p id="section-toc.1-1.2.2.1.2.2.1"><a href="#section-2.1.2" class="xref">2.1.2</a>.  <a href="#name-token-caching" class="xref">Token Caching</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.2">
+                <p id="section-toc.1-1.2.2.2.1"><a href="#section-2.2" class="xref">2.2</a>.  <a href="#name-token-redemption" class="xref">Token Redemption</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="xref">3</a>.  <a href="#name-issuance-protocol-requireme" class="xref">Issuance Protocol Requirements</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="xref">4</a>.  <a href="#name-user-interaction" class="xref">User Interaction</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="xref">5</a>.  <a href="#name-security-considerations" class="xref">Security Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="xref">6</a>.  <a href="#name-iana-considerations" class="xref">IANA Considerations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
+                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="xref">6.1</a>.  <a href="#name-authentication-scheme" class="xref">Authentication Scheme</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
+                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="xref">6.2</a>.  <a href="#name-token-type-registry" class="xref">Token Type Registry</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="xref">7</a>.  <a href="#name-references" class="xref">References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="xref">7.1</a>.  <a href="#name-normative-references" class="xref">Normative References</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="xref">7.2</a>.  <a href="#name-informative-references" class="xref">Informative References</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#appendix-A" class="xref"></a><a href="#name-authors-addresses" class="xref">Authors' Addresses</a></p>
+</li>
+        </ul>
+</nav>
+</section>
+</div>
+<div id="introduction">
+<section id="section-1">
+      <h2 id="name-introduction">
+<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
+      </h2>
+<p id="section-1-1">Privacy Pass tokens are unlinkable authenticators that can be used to
+anonymously authorize a client (see <span>[<a href="#I-D.ietf-privacypass-architecture" class="xref">I-D.ietf-privacypass-architecture</a>]</span>). A
+client possessing such a token is able to prove that it was able to get a token
+issued by a token issuer -- based on some check from a token issuer, such as
+authentication or solving a CAPTCHA -- without allowing the relying party
+redeeming the client's token (the origin) to link it with issuance flow.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">Different types of authenticators, using different token issuance protocols, can
+be used as Privacy Pass tokens.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">This document defines a common HTTP authentication scheme (<span>[<a href="#RFC7235" class="xref">RFC7235</a>]</span>),
+PrivateToken, that allows clients to redeem various kinds of Privacy Pass
+tokens.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">Clients and relying parties interact using this scheme to perform the token challenge
+and token redemption flow. Clients use a token issuance protocol to actually fetch
+tokens to redeem.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<span id="name-token-architectural-compone"></span><div id="fig-overview">
+<figure id="figure-1">
+        <div class="alignLeft art-text artwork" id="section-1-5.1">
+<pre>
+ Client                             Relying Party (Origin)
+
+    &lt;------------------------------ Challenge \
+                                              |
++----------------------------------\          |
+|                                  |          |
+|  Issuance Protocol               |          |
+|                                  |          |
++----------------------------------/          |
+                                              |
+     Redemption -------------------------- &gt;  /
+</pre>
+</div>
+<figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
+<a href="#name-token-architectural-compone" class="selfRef">Token Architectural Components</a>
+        </figcaption></figure>
+</div>
+<p id="section-1-6">In addition to working with different token issuance protocols, this scheme
+supports optionally associating tokens with origin-chosen contexts and
+specific origin names. Relying parties that request and redeem tokens can choose
+a specific kind of token, as appropriate for its use case. These options allow
+for different deployment models to prevent double-spending, and allow for both
+interactive (online challenges) and non-interactive (pre-fetched) tokens.<a href="#section-1-6" class="pilcrow">¶</a></p>
+<div id="terminology">
+<section id="section-1.1">
+        <h3 id="name-terminology">
+<a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-terminology" class="section-name selfRef">Terminology</a>
+        </h3>
+<p id="section-1.1-1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
+NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
+"MAY", and "OPTIONAL" in this document are to be interpreted as
+described in BCP 14 <span>[<a href="#RFC2119" class="xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="xref">RFC8174</a>]</span> when, and only when, they
+appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">¶</a></p>
+<p id="section-1.1-2">Unless otherwise specified, this document encodes protocol messages in TLS
+notation from <span>[<a href="#TLS13" class="xref">TLS13</a>]</span>, Section 3.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
+<p id="section-1.1-3">This document uses the terms "Client", "Origin", "Issuer", "Issuance Protocol",
+and "Token" as defined in <span>[<a href="#I-D.ietf-privacypass-architecture" class="xref">I-D.ietf-privacypass-architecture</a>]</span>. It additionally
+uses the following terms in more specific ways:<a href="#section-1.1-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-1.1-4.1">Issuer key: Keying material that can be used with an issuance protocol
+to create a signed token.<a href="#section-1.1-4.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-1.1-4.2">Token challenge: A requirement for tokens sent from an origin to a client, using
+the "WWW-Authenticate" HTTP header. This challenge is bound to a specific token
+issuer and issuance protocol, and may be additionally bound to a specific context or origin name.<a href="#section-1.1-4.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-1.1-4.3">Token redemption: An action by which a client presents a token to an origin,
+using the "Authorization" HTTP header.<a href="#section-1.1-4.3" class="pilcrow">¶</a>
+</li>
+        </ul>
+</section>
+</div>
+</section>
+</div>
+<div id="challenge-redemption">
+<section id="section-2">
+      <h2 id="name-http-authentication-scheme">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-http-authentication-scheme" class="section-name selfRef">HTTP Authentication Scheme</a>
+      </h2>
+<p id="section-2-1">Token redemption is performed using HTTP Authentication (<span>[<a href="#RFC7235" class="xref">RFC7235</a>]</span>), with
+the scheme "PrivateToken". Origins challenge clients to present a token
+from a specific issuer (<a href="#challenge" class="xref">Section 2.1</a>). Once a client has received a token
+from that issuer, or already has a valid token available, it presents the
+token to the origin (<a href="#redemption" class="xref">Section 2.2</a>).<a href="#section-2-1" class="pilcrow">¶</a></p>
+<div id="challenge">
+<section id="section-2.1">
+        <h3 id="name-token-challenge">
+<a href="#section-2.1" class="section-number selfRef">2.1. </a><a href="#name-token-challenge" class="section-name selfRef">Token Challenge</a>
+        </h3>
+<p id="section-2.1-1">Origins send a token challenge to clients in an "WWW-Authenticate" header with
+the "PrivateToken" scheme. This challenge includes a TokenChallenge message,
+along with information about what keys to use when requesting a token from
+the issuer.<a href="#section-2.1-1" class="pilcrow">¶</a></p>
+<p id="section-2.1-2">Origins that support this authentication scheme need to handle the following
+tasks:<a href="#section-2.1-2" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-2.1-3">
+<li id="section-2.1-3.1">Select which issuer to use, and configure the issuer name and token-key to
+include in WWW-Authenticate challenges.<a href="#section-2.1-3.1" class="pilcrow">¶</a>
+</li>
+          <li id="section-2.1-3.2">Determine a redemption context construction to include in the TokenChallenge, as
+discussed in <a href="#context-construction" class="xref">Section 2.1.1</a>.<a href="#section-2.1-3.2" class="pilcrow">¶</a>
+</li>
+          <li id="section-2.1-3.3">Select the origin information to include in the TokenChallenge. This can
+be empty to allow fully cross-origin tokens, a single origin name that
+matches the origin itself, or a list of origin names containing the origin.<a href="#section-2.1-3.3" class="pilcrow">¶</a>
+</li>
+        </ol>
+<p id="section-2.1-4">The TokenChallenge message has the following structure:<a href="#section-2.1-4" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.1-5">
+<pre>
+struct {
+    uint16_t token_type;
+    opaque issuer_name&lt;1..2^16-1&gt;;
+    opaque redemption_context&lt;0..32&gt;;
+    opaque origin_info&lt;0..2^16-1&gt;;
+} TokenChallenge;
+</pre><a href="#section-2.1-5" class="pilcrow">¶</a>
+</div>
+<p id="section-2.1-6">The structure fields are defined as follows:<a href="#section-2.1-6" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.1-7.1">"token_type" is a 2-octet integer, in network byte order. This type indicates
+the issuance protocol used to generate the token. Values are registered
+in an IANA registry, <a href="#token-types" class="xref">Section 6.2</a>. Challenges with unsupported token_type
+values MUST be ignored.<a href="#section-2.1-7.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-2.1-7.2">"issuer_name" is a string containing the name of the issuer. This is a
+hostname that is used to identify the issuer that is allowed to issue
+tokens that can be redeemed by this origin. The string is prefixed with a
+2-octet integer indicating the length, in network byte order.<a href="#section-2.1-7.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-2.1-7.3">"redemption_context" is an optional field. If present, it allows the origin
+to require that clients fetch tokens bound to a specific context, as opposed
+to reusing tokens that were fetched for other contexts. See <a href="#context-construction" class="xref">Section 2.1.1</a>
+for example contexts that might be useful in practice. When present, this value
+is a 32-byte context generated by the origin. Valid lengths for this field are
+either 0 or 32 bytes. The field is prefixed with a single octet indicating the
+length. Challenges with redemption_context values of invalid lengths MUST be
+ignored.<a href="#section-2.1-7.3" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-2.1-7.4">"origin_info" is an optional string containing one or more origin names, which
+allows a token to be scoped to a specific set of origins. The string is prefixed
+with a 2-octet integer indicating the length, in network byte order. If empty, any
+non-origin-specific token can be redeemed. If the string contains multiple
+origin names, they are delimited with commas "," without any whitespace.<a href="#section-2.1-7.4" class="pilcrow">¶</a>
+</li>
+        </ul>
+<p id="section-2.1-8">When used in an authentication challenge, the "PrivateToken" scheme uses the
+following attributes:<a href="#section-2.1-8" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.1-9.1">"challenge", which contains a base64url-encoded <span>[<a href="#RFC4648" class="xref">RFC4648</a>]</span> TokenChallenge
+value. Since the length of the challenge is not fixed, the base64url data MUST
+include padding. This MUST be unique for every 401 HTTP response to prevent
+replay attacks. This attribute is required for all challenges.<a href="#section-2.1-9.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-2.1-9.2">"token-key", which contains a base64url encoding of the public key for
+use with the issuance protocol indicated by the challenge. Since the length of
+the key is not fixed, the base64url data MUST include padding. This attribute MAY
+be omitted in deployments where clients are able to retrieve the issuer key using
+an out-of-band mechanism.<a href="#section-2.1-9.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-2.1-9.3">"max-age", an optional attribute that consists of the number of seconds for which
+the challenge will be accepted by the origin.<a href="#section-2.1-9.3" class="pilcrow">¶</a>
+</li>
+        </ul>
+<p id="section-2.1-10">Clients can ignore the challenge if the token-key is invalid or otherwise untrusted.<a href="#section-2.1-10" class="pilcrow">¶</a></p>
+<p id="section-2.1-11">The header MAY also include the standard "realm" attribute, if desired. Issuance protocols
+MAY require other attributes.<a href="#section-2.1-11" class="pilcrow">¶</a></p>
+<p id="section-2.1-12">As an example, the WWW-Authenticate header could look like this:<a href="#section-2.1-12" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.1-13">
+<pre>
+WWW-Authenticate: PrivateToken challenge=abc..., token-key=123...
+</pre><a href="#section-2.1-13" class="pilcrow">¶</a>
+</div>
+<p id="section-2.1-14">Upon receipt of this challenge, a client uses the message and keys in the
+issuance protocol indicated by the token_type. If the TokenChallenge has a
+token_type the client does not recognize or support, it MUST NOT parse or
+respond to the challenge. If the TokenChallenge contains a non-empty
+origin_info field, the client MUST validate that the name of the origin
+that issued the authentication challenge is included in the list of origin
+names. Clients MAY have further restrictions and requirements around
+validating when a challenge is considered acceptable or valid. For example,
+clients can choose to reject challenges that list origin names for which
+current connection is not authoritative (according to the TLS certificate).<a href="#section-2.1-14" class="pilcrow">¶</a></p>
+<p id="section-2.1-15">Caching and pre-fetching of tokens is discussed in <a href="#caching" class="xref">Section 2.1.2</a>.<a href="#section-2.1-15" class="pilcrow">¶</a></p>
+<p id="section-2.1-16">Note that it is possible for the WWW-Authenticate header to include multiple
+challenges. This allows the origin to indicate support for different token
+types, issuers, or to include multiple redemption contexts. For example,
+the WWW-Authenticate header could look like this:<a href="#section-2.1-16" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.1-17">
+<pre>
+WWW-Authenticate: PrivateToken challenge=abc..., token-key=123...,
+PrivateToken challenge=def..., token-key=234...
+</pre><a href="#section-2.1-17" class="pilcrow">¶</a>
+</div>
+<div id="context-construction">
+<section id="section-2.1.1">
+          <h4 id="name-redemption-context-construc">
+<a href="#section-2.1.1" class="section-number selfRef">2.1.1. </a><a href="#name-redemption-context-construc" class="section-name selfRef">Redemption Context Construction</a>
+          </h4>
+<p id="section-2.1.1-1">The TokenChallenge redemption context allows the origin to determine the context
+in which a given token can be redeemed. This value can be a unique per-request
+nonce, constructed from 32 freshly generated random bytes. It can also represent
+state or properties of the client session. Some example properties and methods
+for constructing the corresponding context are below. This list is not exhaustive.<a href="#section-2.1.1-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.1.1-2.1">Context bound to a given time window: Construct redemption context as
+SHA256(current time window).<a href="#section-2.1.1-2.1" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-2.1.1-2.2">Context bound to a client location: Construct redemption context as
+SHA256(client IP address prefix).<a href="#section-2.1.1-2.2" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-2.1.1-2.3">Context bound to a given time window and location: Construct redemption
+context as SHA256(current time window, client IP address prefix).<a href="#section-2.1.1-2.3" class="pilcrow">¶</a>
+</li>
+          </ul>
+<p id="section-2.1.1-3">An empty redemption context is not bound to any property of the client session.
+Preventing double spending on tokens requires the origin to keep state associated
+with the redemption context. The size of this state varies based on the size of the
+redemption context. For example, double spend state for unique, per-request redemption
+contexts does only needs to exist within the scope of the request connection or session.
+In contrast, double spend state for empty redemption contexts must be stored and shared
+across all requests until token-key expiration or rotation.<a href="#section-2.1.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="caching">
+<section id="section-2.1.2">
+          <h4 id="name-token-caching">
+<a href="#section-2.1.2" class="section-number selfRef">2.1.2. </a><a href="#name-token-caching" class="section-name selfRef">Token Caching</a>
+          </h4>
+<p id="section-2.1.2-1">Clients can generate multiple tokens from a single TokenChallenge, and cache
+them for future use. This improves privacy by separating the time of token
+issuance from the time of token redemption, and also allows clients to avoid
+any overhead of receiving new tokens via the issuance protocol.<a href="#section-2.1.2-1" class="pilcrow">¶</a></p>
+<p id="section-2.1.2-2">Cached tokens can only be redeemed when they match all of the fields in the
+TokenChallenge: token_type, issuer_name, redemption_context, and origin_info.
+Clients ought to store cached tokens based on all of these fields, to
+avoid trying to redeem a token that does not match. Note that each token
+has a unique client nonce, which is sent in token redemption (<a href="#redemption" class="xref">Section 2.2</a>).<a href="#section-2.1.2-2" class="pilcrow">¶</a></p>
+<p id="section-2.1.2-3">If a client fetches a batch of multiple tokens for future use that are bound
+to a specific redemption context (the redemption_context in the TokenChallenge
+was not empty), clients SHOULD discard these tokens upon flushing state such as
+HTTP cookies <span>[<a href="#COOKIES" class="xref">COOKIES</a>]</span>, or changing networks.
+Using these tokens in a context that otherwise would not be linkable to the
+original context could allow the origin to recognize a client.<a href="#section-2.1.2-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="redemption">
+<section id="section-2.2">
+        <h3 id="name-token-redemption">
+<a href="#section-2.2" class="section-number selfRef">2.2. </a><a href="#name-token-redemption" class="section-name selfRef">Token Redemption</a>
+        </h3>
+<p id="section-2.2-1">The output of the issuance protocol is a token that corresponds to the origin's
+challenge (see <a href="#challenge" class="xref">Section 2.1</a>). A token is a structure that begins with a two-octet
+field that indicates a token type, which MUST match the token_type in the TokenChallenge
+structure.<a href="#section-2.2-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.2-2">
+<pre>
+struct {
+    uint16_t token_type;
+    uint8_t nonce[32];
+    uint8_t challenge_digest[32];
+    uint8_t token_key_id[Nid];
+    uint8_t authenticator[Nk];
+} Token;
+</pre><a href="#section-2.2-2" class="pilcrow">¶</a>
+</div>
+<p id="section-2.2-3">The structure fields are defined as follows:<a href="#section-2.2-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.2-4.1">"token_type" is a 2-octet integer, in network byte order. This value must
+match the value in the challenge (<a href="#challenge" class="xref">Section 2.1</a>).<a href="#section-2.2-4.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-2.2-4.2">"nonce" is a 32-octet message containing a client-generated random
+nonce.<a href="#section-2.2-4.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-2.2-4.3">"challenge_digest" is a 32-octet message containing the hash of the
+original TokenChallenge, SHA256(TokenChallenge).<a href="#section-2.2-4.3" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-2.2-4.4">"token_key_id" is an Nid-octet identifier for the the token authentication
+key. The value of this field is defined by the token_type and corresponding
+issuance protocol.<a href="#section-2.2-4.4" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-2.2-4.5">"authenticator" is a Nk-octet authenticator that covers the preceding fields in
+the token. The value of this field is defined by the token_type and corresponding
+issuance protocol.<a href="#section-2.2-4.5" class="pilcrow">¶</a>
+</li>
+        </ul>
+<p id="section-2.2-5">The authenticator value in the Token structure is computed over the token_type,
+nonce, context, and token_key_id fields.<a href="#section-2.2-5" class="pilcrow">¶</a></p>
+<p id="section-2.2-6">When used for client authorization, the "PrivateToken" authentication
+scheme defines one parameter, "token", which contains the base64url-encoded
+Token struct. Since the length of the Token struct is not fixed, the base64url
+data MUST include padding. All unknown or unsupported parameters to "PrivateToken"
+authentication credentials MUST be ignored.<a href="#section-2.2-6" class="pilcrow">¶</a></p>
+<p id="section-2.2-7">Clients present this Token structure to origins in a new HTTP request using
+the Authorization header as follows:<a href="#section-2.2-7" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.2-8">
+<pre>
+Authorization: PrivateToken token=abc...
+</pre><a href="#section-2.2-8" class="pilcrow">¶</a>
+</div>
+<p id="section-2.2-9">For token types that support public verifiability, origins verify the token
+authenticator using the public key of the issuer, and validate that the signed
+message matches the concatenation of the client nonce and the hash of a
+valid TokenChallenge. For context-bound tokens, origins store or reconstruct the
+contexts of previous TokenChallenge structures in order to validate the token.
+A TokenChallenge MAY be bound to a specific HTTP session with client, but
+origins can also accept tokens for valid challenges in new sessions.
+Origins SHOULD implement some form of double-spend prevention that prevents
+a token with the same nonce from being redeemed twice. This prevents clients
+from "replaying" tokens for previous challenges. For context-bound tokens,
+this double-spend prevention can require no state or minimal state, since
+the context can be used to verify token uniqueness.<a href="#section-2.2-9" class="pilcrow">¶</a></p>
+<p id="section-2.2-10">If a client is unable to fetch a token, it MUST react to the challenge as
+if it could not produce a valid Authorization response.<a href="#section-2.2-10" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="issuance-protocol-requirements">
+<section id="section-3">
+      <h2 id="name-issuance-protocol-requireme">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-issuance-protocol-requireme" class="section-name selfRef">Issuance Protocol Requirements</a>
+      </h2>
+<p id="section-3-1">Clients initiate the issuance protocol using a challenge, a randomly
+generated nonce, and a public key for the issuer. The issuance protocol
+itself can be any interactive protocol between client, issuer, or other
+parties that produces a valid authenticator over the client's input, subject
+to the following security requirements.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-3-2">
+<li id="section-3-2.1">Unconditional input secrecy. The issuance protocol MUST NOT reveal anything
+about the client's private input, including the challenge and nonce. The issuance
+protocol can reveal the issuer public key for the purposes of determining which
+private key to use in producing the issuance protocol. A result of this property
+is that the redemption flow is unlinkable from the issuance flow.<a href="#section-3-2.1" class="pilcrow">¶</a>
+</li>
+        <li id="section-3-2.2">One-more forgery security. The issuance protocol MUST NOT allow malicious
+clients to forge tokens without interacting with the issuer directly.<a href="#section-3-2.2" class="pilcrow">¶</a>
+</li>
+        <li id="section-3-2.3">Concurrent security. The issuance protocol MUST be safe to run concurrently
+with arbitrarily many clients.<a href="#section-3-2.3" class="pilcrow">¶</a>
+</li>
+      </ol>
+</section>
+</div>
+<div id="user-interaction">
+<section id="section-4">
+      <h2 id="name-user-interaction">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-user-interaction" class="section-name selfRef">User Interaction</a>
+      </h2>
+<p id="section-4-1">When used in contexts like websites, origins that challenge clients for
+tokens need to consider how to optimize their interaction model to ensure a
+good user experience.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<p id="section-4-2">Tokens challenges can be performed without explicit user involvement, depending
+on the issuance protocol. If tokens are scoped to a specific origin,
+there is no need for per-challenge user interaction. Note that the issuance
+protocol may separately involve user interaction if the client needs to be newly
+validated.<a href="#section-4-2" class="pilcrow">¶</a></p>
+<p id="section-4-3">If a client cannot use cached tokens to respond to a challenge (either because
+it has run out of cached tokens or the associated context is unique), the token
+issuance process can add user-perceivable latency. Origins need not block useful
+work on token authentication. Instead, token authentication can be used in similar
+ways to CAPTCHA validation today, but without the need for user interaction. If issuance
+is taking a long time, a website could show an indicator that it is waiting,
+or fall back to another method of user validation.<a href="#section-4-3" class="pilcrow">¶</a></p>
+<p id="section-4-4">An origin MUST NOT use more than one redemption context value for a given token type
+and issuer per client request. If an origin issues a large number of challenges with
+unique contexts, such as more than once for each request, this can indicate that the
+origin is either not functioning correctly or is trying to attack or overload the client
+or issuance server. In such cases, a client MUST ignore redundant token challenges for
+the same request and SHOULD alert the user if possible.<a href="#section-4-4" class="pilcrow">¶</a></p>
+<p id="section-4-5">Origins MAY include multiple challenges, where each challenge refers to a different issuer
+or a different token type, to allow clients to choose a preferred issuer or type.<a href="#section-4-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="sec-considerations">
+<section id="section-5">
+      <h2 id="name-security-considerations">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      </h2>
+<p id="section-5-1">The security properties of token challenges vary depending on whether the challenge
+contains a redemption context or not, as well as whether the challenge is per-origin
+or not. For example, cross-origin tokens with empty contexts can be replayed from one
+party by another, as shown below.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<span id="name-token-architectural-componen"></span><div id="fig-replay">
+<figure id="figure-2">
+        <div class="alignLeft art-text artwork" id="section-5-2.1">
+<pre>
+ Client          Attacker                  Origin
+
+                       &lt;----------- Challenge \
+                                              |
+   &lt;--------- Challenge                       |
+                                              |
+   Redemption ----&gt;                           |
+                                              |
+                       Redemption ----------&gt; /
+</pre>
+</div>
+<figcaption><a href="#figure-2" class="selfRef">Figure 2</a>:
+<a href="#name-token-architectural-componen" class="selfRef">Token Architectural Components</a>
+        </figcaption></figure>
+</div>
+<p id="section-5-3">Token challenges that include non-empty origin_info bind tokens to one or more specific
+origins. As described in <a href="#challenge" class="xref">Section 2.1</a>, clients only accept such challenges from
+origin names listed in the origin_info string. Even if multiple origins are listed, a
+token can only be redeemed for an origin if the challenge has an exact match for
+the origin_info. For example, if "a.example.com" issues a challenge with an origin_info
+string of "a.example.com,b.example.com", a client could redeem a token fetched for this
+challenge if and only if "b.example.com" also included an origin_info string of
+"a.example.com,b.example.com". On the other hand, if "b.example.com" had an origin_info
+string of "b.example.com" or "b.example.com,a.example.com" or
+"a.example.com,b.example.com,c.example.com", the string would not match and the client
+would need to use a different token.<a href="#section-5-3" class="pilcrow">¶</a></p>
+<p id="section-5-4">Context-bound token challenges require clients to obtain matching tokens when challenged,
+rather than presenting a token that was obtained from a different context in the past. This
+can make it more likely that issuance and redemption events will occur at approximately the
+same time. For example, if a client is challenged for a token with a unique context at
+time T1 and then subsequently obtains a token at time T2, a colluding issuer and origin can
+link this to the same client if T2 is unique to the client. This linkability is less
+feasible as the number of issuance events at time T2 increases. Depending on the "max-age"
+token challenge attribute, clients MAY try to augment the time between getting challenged
+then redeeming a token so as to make this sort of linkability more difficult. For more
+discussion on correlation risks between token issuance and redemption, see
+<span>[<a href="#I-D.ietf-privacypass-architecture" class="xref">I-D.ietf-privacypass-architecture</a>]</span>.<a href="#section-5-4" class="pilcrow">¶</a></p>
+<p id="section-5-5">As discussed in <a href="#challenge" class="xref">Section 2.1</a>, clients SHOULD discard any context-bound tokens upon flushing
+cookies or changing networks, to prevent an origin using the redemption context state as
+a cookie to recognize clients.<a href="#section-5-5" class="pilcrow">¶</a></p>
+<p id="section-5-6">Applications SHOULD constrain tokens to a single origin unless the use case can
+accommodate such replay attacks.<a href="#section-5-6" class="pilcrow">¶</a></p>
+<p id="section-5-7">All random values in the challenge and token MUST be generated using a cryptographically
+secure source of randomness.<a href="#section-5-7" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="iana">
+<section id="section-6">
+      <h2 id="name-iana-considerations">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+      </h2>
+<div id="authentication-scheme">
+<section id="section-6.1">
+        <h3 id="name-authentication-scheme">
+<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-authentication-scheme" class="section-name selfRef">Authentication Scheme</a>
+        </h3>
+<p id="section-6.1-1">This document registers the "PrivateToken" authentication scheme in the "Hypertext
+Transfer Protocol (HTTP) Authentication Scheme Registry" established by <span>[<a href="#RFC7235" class="xref">RFC7235</a>]</span>.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.1-2">Authentication Scheme Name: PrivateToken<a href="#section-6.1-2" class="pilcrow">¶</a></p>
+<p id="section-6.1-3">Pointer to specification text: <a href="#challenge-redemption" class="xref">Section 2</a> of this document<a href="#section-6.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="token-types">
+<section id="section-6.2">
+        <h3 id="name-token-type-registry">
+<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-token-type-registry" class="section-name selfRef">Token Type Registry</a>
+        </h3>
+<p id="section-6.2-1">The "Token Type" registry lists identifiers for issuance protocols defined for use
+with the Privacy Pass token authentication scheme. These identifiers are two-byte values,
+so the maximum possible value is 0xFFFF = 65535.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.2-2">Template:<a href="#section-6.2-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6.2-3.1">Value: The two-byte identifier for the algorithm<a href="#section-6.2-3.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-6.2-3.2">Name: Name of the issuance protocol<a href="#section-6.2-3.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-6.2-3.3">Publicly Verifiable: A Y/N value indicating if the output tokens are publicly verifiable<a href="#section-6.2-3.3" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-6.2-3.4">Public Metadata: A Y/N value indicating if the output tokens can contain public metadata.<a href="#section-6.2-3.4" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-6.2-3.5">Private Metadata: A Y/N value indicating if the output tokens can contain private metadata.<a href="#section-6.2-3.5" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-6.2-3.6">Nk: The length in bytes of an output authenticator<a href="#section-6.2-3.6" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-6.2-3.7">Nid: The length of the token key identifier<a href="#section-6.2-3.7" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-6.2-3.8">Reference: Where this algorithm is defined<a href="#section-6.2-3.8" class="pilcrow">¶</a>
+</li>
+        </ul>
+<p id="section-6.2-4">The initial contents for this registry are defined in the table below.<a href="#section-6.2-4" class="pilcrow">¶</a></p>
+<span id="name-token-types"></span><div id="aeadid-values">
+<table class="center" id="table-1">
+          <caption>
+<a href="#table-1" class="selfRef">Table 1</a>:
+<a href="#name-token-types" class="selfRef">Token Types</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Value</th>
+              <th class="text-left" rowspan="1" colspan="1">Name</th>
+              <th class="text-left" rowspan="1" colspan="1">Publicly Verifiable</th>
+              <th class="text-left" rowspan="1" colspan="1">Public Metadata</th>
+              <th class="text-left" rowspan="1" colspan="1">Private Metadata</th>
+              <th class="text-left" rowspan="1" colspan="1">Nk</th>
+              <th class="text-left" rowspan="1" colspan="1">Nid</th>
+              <th class="text-left" rowspan="1" colspan="1">Reference</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0x0000</td>
+              <td class="text-left" rowspan="1" colspan="1">(reserved)</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+            </tr>
+          </tbody>
+        </table>
+</div>
+</section>
+</div>
+</section>
+</div>
+<section id="section-7">
+      <h2 id="name-references">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-references" class="section-name selfRef">References</a>
+      </h2>
+<section id="section-7.1">
+        <h3 id="name-normative-references">
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+        </h3>
+<dl class="references">
+<dt id="RFC2119">[RFC2119]</dt>
+        <dd>
+<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC4648">[RFC4648]</dt>
+        <dd>
+<span class="refAuthor">Josefsson, S.</span>, <span class="refTitle">"The Base16, Base32, and Base64 Data Encodings"</span>, <span class="seriesInfo">RFC 4648</span>, <span class="seriesInfo">DOI 10.17487/RFC4648</span>, <time datetime="2006-10" class="refDate">October 2006</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4648">https://www.rfc-editor.org/rfc/rfc4648</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7235">[RFC7235]</dt>
+        <dd>
+<span class="refAuthor">Fielding, R., Ed.</span> and <span class="refAuthor">J. Reschke, Ed.</span>, <span class="refTitle">"Hypertext Transfer Protocol (HTTP/1.1): Authentication"</span>, <span class="seriesInfo">RFC 7235</span>, <span class="seriesInfo">DOI 10.17487/RFC7235</span>, <time datetime="2014-06" class="refDate">June 2014</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7235">https://www.rfc-editor.org/rfc/rfc7235</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8174">[RFC8174]</dt>
+        <dd>
+<span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="TLS13">[TLS13]</dt>
+      <dd>
+<span class="refAuthor">Rescorla, E.</span>, <span class="refTitle">"The Transport Layer Security (TLS) Protocol Version 1.3"</span>, <span class="seriesInfo">RFC 8446</span>, <span class="seriesInfo">DOI 10.17487/RFC8446</span>, <time datetime="2018-08" class="refDate">August 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8446">https://www.rfc-editor.org/rfc/rfc8446</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+<section id="section-7.2">
+        <h3 id="name-informative-references">
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+        </h3>
+<dl class="references">
+<dt id="COOKIES">[COOKIES]</dt>
+        <dd>
+<span class="refAuthor">Chen, L.</span>, <span class="refAuthor">Englehardt, S.</span>, <span class="refAuthor">West, M.</span>, and <span class="refAuthor">J. Wilander</span>, <span class="refTitle">"Cookies: HTTP State Management Mechanism"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-httpbis-rfc6265bis-09</span>, <time datetime="2021-10-19" class="refDate">19 October 2021</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-rfc6265bis-09">https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-rfc6265bis-09</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.ietf-privacypass-architecture">[I-D.ietf-privacypass-architecture]</dt>
+      <dd>
+<span class="refAuthor">Davidson, A.</span>, <span class="refAuthor">Iyengar, J.</span>, and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"Privacy Pass Architectural Framework"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-privacypass-architecture-03</span>, <time datetime="2022-03-07" class="refDate">7 March 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-privacypass-architecture-03">https://datatracker.ietf.org/doc/html/draft-ietf-privacypass-architecture-03</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+</section>
+<div id="authors-addresses">
+<section id="appendix-A">
+      <h2 id="name-authors-addresses">
+<a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
+      </h2>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Tommy Pauly</span></div>
+<div dir="auto" class="left"><span class="org">Apple Inc.</span></div>
+<div dir="auto" class="left"><span class="street-address">One Apple Park Way</span></div>
+<div dir="auto" class="left">
+<span class="locality">Cupertino, California 95014</span>,  </div>
+<div dir="auto" class="left"><span class="country-name">United States of America</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:tpauly@apple.com" class="email">tpauly@apple.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Steven Valdez</span></div>
+<div dir="auto" class="left"><span class="org">Google LLC</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:svaldez@chromium.org" class="email">svaldez@chromium.org</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Christopher A. Wood</span></div>
+<div dir="auto" class="left"><span class="org">Cloudflare</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:caw@heapingbits.net" class="email">caw@heapingbits.net</a>
+</div>
+</address>
+</section>
+</div>
+<script>const toc = document.getElementById("toc");
+toc.querySelector("h2").addEventListener("click", e => {
+  toc.classList.toggle("active");
+});
+toc.querySelector("nav").addEventListener("click", e => {
+  toc.classList.remove("active");
+});
+</script>
+</body>
+</html>
