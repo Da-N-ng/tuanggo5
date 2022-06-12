@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-04-28T02:03:57.221164+00:00",
+  "timestamp": "2022-06-12T01:44:57.694211+00:00",
   "repo": "ietf-wg-privacypass/base-drafts",
   "labels": [
     {
@@ -1514,7 +1514,7 @@
       "labels": [],
       "body": "I would like to challenge the following snippet in the RFC, especially the use of the word **MUST**.\r\n> \"challenge\", which contains a base64url-encoded {{!RFC4648}} TokenChallenge value. **Since the length of the challenge is not fixed, the base64url data MUST include padding.**\r\n\r\nBase 64 decoding does not require the padding to get the *exact* encoded value, bit-for-bit.\r\n\r\nFrom what I understand, issues arise when it's impossible to know the length of the encoded base64 payload, due to lack of delimiters. eg, if we encode `hello` and `world`, then concat them (without padding), this gives us:\r\n`aGVsbG8=` + `d29ybGQ=` == `aGVsbG8d29ybGQ` ==> `hello.\u00db\u00dc..`\r\n\r\nWhen the base64 length is fully known (thanks to delimiters like space or line breaks), this is a non-issue.\r\n\r\n\r\nMay I recommend that clients instead **MUST support** base64url encoding with and without padding?",
       "createdAt": "2022-04-11T16:05:57Z",
-      "updatedAt": "2022-04-18T22:14:41Z",
+      "updatedAt": "2022-06-09T18:52:41Z",
       "closedAt": null,
       "comments": [
         {
@@ -1530,6 +1530,20 @@
           "body": "There's also a desire amongst the authors to keep the supported cases be stricter and more limited to avoid interop problems.\r\n\r\nThe question I have is who benefits by allowing the specification to be loose here in allowing both forms in both directions?",
           "createdAt": "2022-04-18T22:14:41Z",
           "updatedAt": "2022-04-18T22:14:41Z"
+        },
+        {
+          "author": "punkeel",
+          "authorAssociation": "NONE",
+          "body": "The demo sitekey provided by Fastly ([here](https://www.fastly.com/blog/private-access-tokens-stepping-into-the-privacy-respecting-captcha-less)) doesn't include padding symbols \u2013 so origins/clients should already support both padding ON and OFF\r\n\r\n```\r\nMIICUjA9BgkqhkiG9w0BAQowMKANMAsGCWCGSAFlAwQCAqEaMBgGCSqGSIb3DQEBCDALBglghkgBZQMEAgKiAwIBMAOCAg8AMIICCgKCAgEAubzND7lvK-u5aIFHSt_NHIzsUFuHCiwVm88kvUvbvJbjj4be_IdNwpfdfXz-vq6NeEwlKEDLtD9oMVop_kEf5HEBkiipBrcn10h17XvYPuc6lA7Z4Y8IjvSjLVydXmcabmslwreMysD1ZINjzadjlJxiIKWCeS_3OJ4dxMTirt8HMUl8cRQafTjSOBJIZNtoNiT5rr5_5SYfEQW8v25RZcitkL0Lrg1mkSutRR00EE3zMelQBGR0sf8jDgBRiPQ1-sSgaIicIciZ2ysiPdkQZBIDpIFnvqed4yKY9gZCn-ASztoe1JhJvzWUwO7Nyz1Mb6pxAV0aQNfb0rDMTPNtyF4z7kgtFcsr5SXiJUa13bm0G2QvEdhl177poghh2RDaT5tcEmiRRvdQWBTeVgFyjrX3-29TZCT4z8VyvDxPPIUIi2rN8-9lN6mmsF0KhlyKe4jUuDwK7dc6Q0gZyjKiE3n-ygErrlbOYU16MGQiJQRV6Z8j38OSD4Lf5-SzsgkAa6Zbv95Zf8TZRS-fuagiXGZcmfdO9zXkuNlRlGguEUpx520SANRciPIBZxFBDXga6kcT9Hfha0n97Mhq57kFRe2Cox7qpq79x9TjUvHOZkWMSv2KmZpoF0wbI2NvlZngbW6Z1hC-X4C3evilX7O498r45Ct7PNjq11Qjso82DwMCAwEAAQ\r\n```\r\n\r\nLength is 798, and `798 % 4 = 2`. It should end with `==`.\r\n\r\n(Sorry for not coming back to this earlier, no strong opinions \u2013 it's almost a personal preference at this point)",
+          "createdAt": "2022-06-09T16:47:35Z",
+          "updatedAt": "2022-06-09T16:48:22Z"
+        },
+        {
+          "author": "jfoote",
+          "authorAssociation": "NONE",
+          "body": "The lack of padding was an oversight and has been fixed FWIW. \r\n\r\n```\r\nMIICUjA9BgkqhkiG9w0BAQowMKANMAsGCWCGSAFlAwQCAqEaMBgGCSqGSIb3DQEBCDALBglghkgBZQMEAgKiAwIBMAOCAg8AMIICCgKCAgEAubzND7lvK-u5aIFHSt_NHIzsUFuHCiwVm88kvUvbvJbjj4be_IdNwpfdfXz-vq6NeEwlKEDLtD9oMVop_kEf5HEBkiipBrcn10h17XvYPuc6lA7Z4Y8IjvSjLVydXmcabmslwreMysD1ZINjzadjlJxiIKWCeS_3OJ4dxMTirt8HMUl8cRQafTjSOBJIZNtoNiT5rr5_5SYfEQW8v25RZcitkL0Lrg1mkSutRR00EE3zMelQBGR0sf8jDgBRiPQ1-sSgaIicIciZ2ysiPdkQZBIDpIFnvqed4yKY9gZCn-ASztoe1JhJvzWUwO7Nyz1Mb6pxAV0aQNfb0rDMTPNtyF4z7kgtFcsr5SXiJUa13bm0G2QvEdhl177poghh2RDaT5tcEmiRRvdQWBTeVgFyjrX3-29TZCT4z8VyvDxPPIUIi2rN8-9lN6mmsF0KhlyKe4jUuDwK7dc6Q0gZyjKiE3n-ygErrlbOYU16MGQiJQRV6Z8j38OSD4Lf5-SzsgkAa6Zbv95Zf8TZRS-fuagiXGZcmfdO9zXkuNlRlGguEUpx520SANRciPIBZxFBDXga6kcT9Hfha0n97Mhq57kFRe2Cox7qpq79x9TjUvHOZkWMSv2KmZpoF0wbI2NvlZngbW6Z1hC-X4C3evilX7O498r45Ct7PNjq11Qjso82DwMCAwEAAQ==\r\n```",
+          "createdAt": "2022-06-09T18:52:41Z",
+          "updatedAt": "2022-06-09T18:52:41Z"
         }
       ]
     },
@@ -1616,6 +1630,22 @@
       "createdAt": "2022-04-22T01:22:15Z",
       "updatedAt": "2022-04-26T02:47:20Z",
       "closedAt": "2022-04-26T02:47:20Z",
+      "comments": []
+    },
+    {
+      "number": 124,
+      "id": "I_kwDODeTEy85LjASQ",
+      "title": "Question on issuer public key retrieval ",
+      "url": "https://github.com/ietf-wg-privacypass/base-drafts/issues/124",
+      "state": "OPEN",
+      "author": "mirjak",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "draft-ietf-privacypass-architecture says in section 3.2:\r\n\r\n> The mechanism by which clients obtain the Issuer public key is not specified.\r\n\r\nIs that correct? Isn't the 'token-key' in draft-ietf-privacypass-auth-scheme providing the pub key? Or do I misunderstand something here?",
+      "createdAt": "2022-06-10T12:18:45Z",
+      "updatedAt": "2022-06-10T12:18:45Z",
+      "closedAt": null,
       "comments": []
     }
   ],
