@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-06-12T01:44:57.694211+00:00",
+  "timestamp": "2022-06-14T01:51:24.304890+00:00",
   "repo": "ietf-wg-privacypass/base-drafts",
   "labels": [
     {
@@ -1416,9 +1416,17 @@
       ],
       "body": "Origins currently choose whether their challenges are per-origin or cross-origin. For cross-origin, double-spend prevention is only as good as the coordination between origins and the Issuer. Per-origin allows double-spend prevention to be isolated to a single origin; also prevents the cache of tokens being take up by some other origin.",
       "createdAt": "2022-03-11T21:44:52Z",
-      "updatedAt": "2022-03-14T18:08:29Z",
+      "updatedAt": "2022-06-13T19:12:54Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Write this as \"any origins that share a redemption context must also share double spend state for that context.\"",
+          "createdAt": "2022-06-13T19:12:54Z",
+          "updatedAt": "2022-06-13T19:12:54Z"
+        }
+      ]
     },
     {
       "number": 108,
@@ -1484,13 +1492,15 @@
       "state": "OPEN",
       "author": "tfpauly",
       "authorAssociation": "COLLABORATOR",
-      "assignees": [],
+      "assignees": [
+        "tfpauly"
+      ],
       "labels": [
         "auth-scheme"
       ],
       "body": "Origins can issue challenges for greased token types, etc, to ensure client can handle new types in the future.",
       "createdAt": "2022-04-04T19:44:20Z",
-      "updatedAt": "2022-04-11T19:20:06Z",
+      "updatedAt": "2022-06-13T19:11:34Z",
       "closedAt": null,
       "comments": [
         {
@@ -1499,6 +1509,13 @@
           "body": "One type of greasing might be adding random authentication credentials to the `Authorization` header, e.g., `Authorization: PrivacyToken foo=bar token=blah bar=baz`.",
           "createdAt": "2022-04-11T19:20:06Z",
           "updatedAt": "2022-04-11T19:20:06Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "We should recommend servers to send greased token types + parameters, as well as clients to send greased credentials.",
+          "createdAt": "2022-06-13T19:11:31Z",
+          "updatedAt": "2022-06-13T19:11:31Z"
         }
       ]
     },
@@ -1507,15 +1524,15 @@
       "id": "I_kwDODeTEy85HiYWM",
       "title": "Don't require padding for base64url?",
       "url": "https://github.com/ietf-wg-privacypass/base-drafts/issues/117",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "punkeel",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "I would like to challenge the following snippet in the RFC, especially the use of the word **MUST**.\r\n> \"challenge\", which contains a base64url-encoded {{!RFC4648}} TokenChallenge value. **Since the length of the challenge is not fixed, the base64url data MUST include padding.**\r\n\r\nBase 64 decoding does not require the padding to get the *exact* encoded value, bit-for-bit.\r\n\r\nFrom what I understand, issues arise when it's impossible to know the length of the encoded base64 payload, due to lack of delimiters. eg, if we encode `hello` and `world`, then concat them (without padding), this gives us:\r\n`aGVsbG8=` + `d29ybGQ=` == `aGVsbG8d29ybGQ` ==> `hello.\u00db\u00dc..`\r\n\r\nWhen the base64 length is fully known (thanks to delimiters like space or line breaks), this is a non-issue.\r\n\r\n\r\nMay I recommend that clients instead **MUST support** base64url encoding with and without padding?",
       "createdAt": "2022-04-11T16:05:57Z",
-      "updatedAt": "2022-06-09T18:52:41Z",
-      "closedAt": null,
+      "updatedAt": "2022-06-13T19:08:47Z",
+      "closedAt": "2022-06-13T19:08:47Z",
       "comments": [
         {
           "author": "chris-wood",
@@ -1544,6 +1561,13 @@
           "body": "The lack of padding was an oversight and has been fixed FWIW. \r\n\r\n```\r\nMIICUjA9BgkqhkiG9w0BAQowMKANMAsGCWCGSAFlAwQCAqEaMBgGCSqGSIb3DQEBCDALBglghkgBZQMEAgKiAwIBMAOCAg8AMIICCgKCAgEAubzND7lvK-u5aIFHSt_NHIzsUFuHCiwVm88kvUvbvJbjj4be_IdNwpfdfXz-vq6NeEwlKEDLtD9oMVop_kEf5HEBkiipBrcn10h17XvYPuc6lA7Z4Y8IjvSjLVydXmcabmslwreMysD1ZINjzadjlJxiIKWCeS_3OJ4dxMTirt8HMUl8cRQafTjSOBJIZNtoNiT5rr5_5SYfEQW8v25RZcitkL0Lrg1mkSutRR00EE3zMelQBGR0sf8jDgBRiPQ1-sSgaIicIciZ2ysiPdkQZBIDpIFnvqed4yKY9gZCn-ASztoe1JhJvzWUwO7Nyz1Mb6pxAV0aQNfb0rDMTPNtyF4z7kgtFcsr5SXiJUa13bm0G2QvEdhl177poghh2RDaT5tcEmiRRvdQWBTeVgFyjrX3-29TZCT4z8VyvDxPPIUIi2rN8-9lN6mmsF0KhlyKe4jUuDwK7dc6Q0gZyjKiE3n-ygErrlbOYU16MGQiJQRV6Z8j38OSD4Lf5-SzsgkAa6Zbv95Zf8TZRS-fuagiXGZcmfdO9zXkuNlRlGguEUpx520SANRciPIBZxFBDXga6kcT9Hfha0n97Mhq57kFRe2Cox7qpq79x9TjUvHOZkWMSv2KmZpoF0wbI2NvlZngbW6Z1hC-X4C3evilX7O498r45Ct7PNjq11Qjso82DwMCAwEAAQ==\r\n```",
           "createdAt": "2022-06-09T18:52:41Z",
           "updatedAt": "2022-06-09T18:52:41Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Based on this, I think we'll stick with requiring padding. Thanks!",
+          "createdAt": "2022-06-13T19:08:47Z",
+          "updatedAt": "2022-06-13T19:08:47Z"
         }
       ]
     },
@@ -1555,13 +1579,15 @@
       "state": "OPEN",
       "author": "tfpauly",
       "authorAssociation": "COLLABORATOR",
-      "assignees": [],
+      "assignees": [
+        "chris-wood"
+      ],
       "labels": [
         "protocol"
       ],
       "body": "The publicly verifiable basic token issuance protocol doesn't include an origin name that the issuer can see, so it does allow origins to be able to use that issuer (as long as the know the key) without explicit coordination or permission from the issuer. This isn't necessarily a problem, but we should likely mention it.",
       "createdAt": "2022-04-11T19:16:46Z",
-      "updatedAt": "2022-04-11T19:16:46Z",
+      "updatedAt": "2022-06-13T19:09:12Z",
       "closedAt": null,
       "comments": []
     },
@@ -1573,13 +1599,15 @@
       "state": "OPEN",
       "author": "chris-wood",
       "authorAssociation": "COLLABORATOR",
-      "assignees": [],
+      "assignees": [
+        "chris-wood"
+      ],
       "labels": [
         "architecture"
       ],
       "body": "We current state this as the requirement:\r\n\r\n> One-more forgery security. The issuance protocol MUST NOT allow malicious Clients or Attesters (acting as Clients) to forge tokens without interacting with the Issuer directly.\r\n\r\nThis could be misread in that we do allow forgeries when interacting with the Issuer directly. Clearly that's not the intent, so let's fix this.",
       "createdAt": "2022-04-19T22:01:29Z",
-      "updatedAt": "2022-04-19T22:01:42Z",
+      "updatedAt": "2022-06-13T19:07:51Z",
       "closedAt": null,
       "comments": []
     },
@@ -1640,13 +1668,25 @@
       "state": "OPEN",
       "author": "mirjak",
       "authorAssociation": "NONE",
-      "assignees": [],
-      "labels": [],
+      "assignees": [
+        "chris-wood"
+      ],
+      "labels": [
+        "architecture"
+      ],
       "body": "draft-ietf-privacypass-architecture says in section 3.2:\r\n\r\n> The mechanism by which clients obtain the Issuer public key is not specified.\r\n\r\nIs that correct? Isn't the 'token-key' in draft-ietf-privacypass-auth-scheme providing the pub key? Or do I misunderstand something here?",
       "createdAt": "2022-06-10T12:18:45Z",
-      "updatedAt": "2022-06-10T12:18:45Z",
+      "updatedAt": "2022-06-13T19:07:27Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Oops, yep, good catch! We'll fix this.",
+          "createdAt": "2022-06-13T19:06:59Z",
+          "updatedAt": "2022-06-13T19:06:59Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -8310,6 +8350,58 @@
               "updatedAt": "2022-04-26T02:46:36Z"
             }
           ]
+        }
+      ]
+    },
+    {
+      "number": 125,
+      "id": "PR_kwDODeTEy845lhY1",
+      "title": "Define reserved greasing values",
+      "url": "https://github.com/ietf-wg-privacypass/base-drafts/pull/125",
+      "state": "OPEN",
+      "author": "tfpauly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "tfpauly"
+      ],
+      "labels": [
+        "auth-scheme"
+      ],
+      "body": "Closes #113",
+      "createdAt": "2022-06-13T20:05:44Z",
+      "updatedAt": "2022-06-13T20:34:56Z",
+      "baseRepository": "ietf-wg-privacypass/base-drafts",
+      "baseRefName": "master",
+      "baseRefOid": "e9e0efca4533c4d0ac7f8d7063a68f467b437d94",
+      "headRepository": "ietf-wg-privacypass/base-drafts",
+      "headRefName": "tfpauly-patch-3",
+      "headRefOid": "68e6bafdee33b352773deaec91bc993d77fd1b19",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Updated to use random values",
+          "createdAt": "2022-06-13T20:34:56Z",
+          "updatedAt": "2022-06-13T20:34:56Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDODeTEy8475Rwq",
+          "commit": {
+            "abbreviatedOid": "3e7d0c9"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Thanks! This seems good, though I'd likely make the reserved allocations a bit more random (and not the `0xXAXA` pattern).",
+          "createdAt": "2022-06-13T20:07:21Z",
+          "updatedAt": "2022-06-13T20:07:21Z",
+          "comments": []
         }
       ]
     }
