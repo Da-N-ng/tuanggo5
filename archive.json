@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-06-14T01:51:24.304890+00:00",
+  "timestamp": "2022-06-16T01:37:57.546077+00:00",
   "repo": "ietf-wg-privacypass/base-drafts",
   "labels": [
     {
@@ -8369,7 +8369,7 @@
       ],
       "body": "Closes #113",
       "createdAt": "2022-06-13T20:05:44Z",
-      "updatedAt": "2022-06-13T20:34:56Z",
+      "updatedAt": "2022-06-14T10:46:16Z",
       "baseRepository": "ietf-wg-privacypass/base-drafts",
       "baseRefName": "master",
       "baseRefOid": "e9e0efca4533c4d0ac7f8d7063a68f467b437d94",
@@ -8387,6 +8387,13 @@
           "body": "Updated to use random values",
           "createdAt": "2022-06-13T20:34:56Z",
           "updatedAt": "2022-06-13T20:34:56Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@dvorak42 please take a look!",
+          "createdAt": "2022-06-14T10:46:16Z",
+          "updatedAt": "2022-06-14T10:46:16Z"
         }
       ],
       "reviews": [
@@ -8402,6 +8409,198 @@
           "createdAt": "2022-06-13T20:07:21Z",
           "updatedAt": "2022-06-13T20:07:21Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDODeTEy8478N_F",
+          "commit": {
+            "abbreviatedOid": "68e6baf"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-06-14T10:46:09Z",
+          "updatedAt": "2022-06-14T10:46:09Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 126,
+      "id": "PR_kwDODeTEy845mreB",
+      "title": "change protocol to token",
+      "url": "https://github.com/ietf-wg-privacypass/base-drafts/pull/126",
+      "state": "MERGED",
+      "author": "jsalowey",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The wording seems wrong, I think you meant token.",
+      "createdAt": "2022-06-14T04:45:01Z",
+      "updatedAt": "2022-06-14T10:45:58Z",
+      "baseRepository": "ietf-wg-privacypass/base-drafts",
+      "baseRefName": "master",
+      "baseRefOid": "e9e0efca4533c4d0ac7f8d7063a68f467b437d94",
+      "headRepository": "ietf-wg-privacypass/base-drafts",
+      "headRefName": "jsalowey-patch-1",
+      "headRefOid": "dbab69b533b293819a17abb6c8d7b3601bed0d1a",
+      "closedAt": "2022-06-14T10:45:58Z",
+      "mergedAt": "2022-06-14T10:45:58Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "4efc90719bab26d98af00ca3f552202d599a2b2b"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDODeTEy8478B-2",
+          "commit": {
+            "abbreviatedOid": "e1e77c7"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-06-14T10:07:39Z",
+          "updatedAt": "2022-06-14T10:07:39Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDODeTEy8478NCg",
+          "commit": {
+            "abbreviatedOid": "e1e77c7"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-06-14T10:42:47Z",
+          "updatedAt": "2022-06-14T10:42:48Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "```suggestion\r\nthe purposes of determining which private key to use in producing the token.\r\n```",
+              "createdAt": "2022-06-14T10:42:47Z",
+              "updatedAt": "2022-06-14T10:42:48Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 127,
+      "id": "PR_kwDODeTEy845pGmV",
+      "title": "Advertise token-key values in the issuer configuration dictionary",
+      "url": "https://github.com/ietf-wg-privacypass/base-drafts/pull/127",
+      "state": "OPEN",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [
+        "protocol"
+      ],
+      "body": "This is both a convenience for origins, as well as a way to support key rotation.",
+      "createdAt": "2022-06-14T15:18:54Z",
+      "updatedAt": "2022-06-15T23:55:44Z",
+      "baseRepository": "ietf-wg-privacypass/base-drafts",
+      "baseRefName": "master",
+      "baseRefOid": "4efc90719bab26d98af00ca3f552202d599a2b2b",
+      "headRepository": "ietf-wg-privacypass/base-drafts",
+      "headRefName": "caw/token-key-in-config",
+      "headRefOid": "5be0451d8ffa5421f4efcc081eb70cd1e59d6ac8",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "jfoote",
+          "authorAssociation": "NONE",
+          "body": "Thanks for this.\r\n\r\nIIUC the key rotation interval for non-rate-limited token issuance may be ambiguous. Since there is not necessarily a policy window defined in that case. Is that right?\r\n\r\nThis would be manageable be convention; and trivial when a single entity controls both the issuer and origin.",
+          "createdAt": "2022-06-15T13:40:26Z",
+          "updatedAt": "2022-06-15T13:40:26Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> IIUC the key rotation interval for non-rate-limited token issuance may be ambiguous. Since there is not necessarily a policy window defined in that case. Is that right?\r\n\r\nCorrect. The rotation window is currently not specified. Omitting that seems reasonable for this case. Origins can simply check in with issuers at some regular cadence as they deem fit. ",
+          "createdAt": "2022-06-15T13:51:22Z",
+          "updatedAt": "2022-06-15T13:51:22Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDODeTEy847926h",
+          "commit": {
+            "abbreviatedOid": "a01f0b0"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-06-14T15:20:27Z",
+          "updatedAt": "2022-06-14T15:20:28Z",
+          "comments": [
+            {
+              "originalPosition": 45,
+              "body": "What's the version field?",
+              "createdAt": "2022-06-14T15:20:27Z",
+              "updatedAt": "2022-06-14T15:20:28Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDODeTEy84794yc",
+          "commit": {
+            "abbreviatedOid": "a01f0b0"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-06-14T15:25:16Z",
+          "updatedAt": "2022-06-14T15:25:17Z",
+          "comments": [
+            {
+              "originalPosition": 45,
+              "body": "Moved to order-based preference.",
+              "createdAt": "2022-06-14T15:25:17Z",
+              "updatedAt": "2022-06-14T15:25:17Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDODeTEy84795D9",
+          "commit": {
+            "abbreviatedOid": "5be0451"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-06-14T15:25:59Z",
+          "updatedAt": "2022-06-14T15:25:59Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDODeTEy848GeKB",
+          "commit": {
+            "abbreviatedOid": "5be0451"
+          },
+          "author": "armfazh",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-06-15T23:54:59Z",
+          "updatedAt": "2022-06-15T23:55:44Z",
+          "comments": [
+            {
+              "originalPosition": 52,
+              "body": "```suggestion\r\n    \"issuance-keys\": [\r\n      {\r\n        \"token-type\": 2,\r\n        \"token-keys\": [ \"MI...AB\", \"MI...AQ\" ],\r\n      },\r\n      {\r\n        \"token-type\": 3,\r\n        \"token-keys\": [\"MI...AW\"],\r\n      }\r\n    ]\r\n```\r\n\r\nMay I suggest to group keys by token-type? The advantages are at parsing this information.",
+              "createdAt": "2022-06-15T23:54:59Z",
+              "updatedAt": "2022-06-15T23:55:44Z"
+            }
+          ]
         }
       ]
     }
