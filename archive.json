@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-06-16T01:37:57.546077+00:00",
+  "timestamp": "2022-06-19T01:43:44.608460+00:00",
   "repo": "ietf-wg-privacypass/base-drafts",
   "labels": [
     {
@@ -8501,7 +8501,7 @@
       ],
       "body": "This is both a convenience for origins, as well as a way to support key rotation.",
       "createdAt": "2022-06-14T15:18:54Z",
-      "updatedAt": "2022-06-15T23:55:44Z",
+      "updatedAt": "2022-06-16T21:34:27Z",
       "baseRepository": "ietf-wg-privacypass/base-drafts",
       "baseRefName": "master",
       "baseRefOid": "4efc90719bab26d98af00ca3f552202d599a2b2b",
@@ -8599,6 +8599,66 @@
               "body": "```suggestion\r\n    \"issuance-keys\": [\r\n      {\r\n        \"token-type\": 2,\r\n        \"token-keys\": [ \"MI...AB\", \"MI...AQ\" ],\r\n      },\r\n      {\r\n        \"token-type\": 3,\r\n        \"token-keys\": [\"MI...AW\"],\r\n      }\r\n    ]\r\n```\r\n\r\nMay I suggest to group keys by token-type? The advantages are at parsing this information.",
               "createdAt": "2022-06-15T23:54:59Z",
               "updatedAt": "2022-06-15T23:55:44Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDODeTEy848JAKz",
+          "commit": {
+            "abbreviatedOid": "5be0451"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-06-16T12:52:40Z",
+          "updatedAt": "2022-06-16T12:52:40Z",
+          "comments": [
+            {
+              "originalPosition": 52,
+              "body": "Hmm, how does this help with parsing? With the current scheme, one can implement a function like `CreateTokenKeyFromJSON(...)` using each token-key object. With the proposal, that would be something like `CreateTokenKeyListFromJSON(...)`, returning a list of items. The former seems like it'd yield simpler implementations. \r\n\r\n@jfoote, thoughts?",
+              "createdAt": "2022-06-16T12:52:40Z",
+              "updatedAt": "2022-06-16T12:52:40Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDODeTEy848LfWe",
+          "commit": {
+            "abbreviatedOid": "5be0451"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-06-16T20:19:01Z",
+          "updatedAt": "2022-06-16T20:19:01Z",
+          "comments": [
+            {
+              "originalPosition": 52,
+              "body": "Also, for the origin consuming this, they should look for the first config using the token type they support, and use that key. So that seems like a simple heuristic?",
+              "createdAt": "2022-06-16T20:19:01Z",
+              "updatedAt": "2022-06-16T20:19:01Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDODeTEy848Ly6U",
+          "commit": {
+            "abbreviatedOid": "5be0451"
+          },
+          "author": "jfoote",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-06-16T21:34:26Z",
+          "updatedAt": "2022-06-16T21:34:27Z",
+          "comments": [
+            {
+              "originalPosition": 52,
+              "body": "I agree with @chris-wood.",
+              "createdAt": "2022-06-16T21:34:27Z",
+              "updatedAt": "2022-06-16T21:34:27Z"
             }
           ]
         }
