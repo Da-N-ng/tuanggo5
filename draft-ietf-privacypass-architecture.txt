@@ -5,10 +5,10 @@
 Network Working Group                                        A. Davidson
 Internet-Draft                                                       LIP
 Intended status: Informational                                J. Iyengar
-Expires: 16 December 2022                                         Fastly
+Expires: 22 December 2022                                         Fastly
                                                               C. A. Wood
                                                               Cloudflare
-                                                            14 June 2022
+                                                            20 June 2022
 
 
                   Privacy Pass Architectural Framework
@@ -37,7 +37,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 16 December 2022.
+   This Internet-Draft will expire on 22 December 2022.
 
 Copyright Notice
 

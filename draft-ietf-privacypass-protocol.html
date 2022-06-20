@@ -1038,7 +1038,7 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Celi, et al.</td>
-<td class="center">Expires 16 December 2022</td>
+<td class="center">Expires 22 December 2022</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1051,12 +1051,12 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-privacypass-protocol-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2022-06-14" class="published">14 June 2022</time>
+<time datetime="2022-06-20" class="published">20 June 2022</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2022-12-16">16 December 2022</time></dd>
+<dd class="expires"><time datetime="2022-12-22">22 December 2022</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1110,7 +1110,7 @@ metadata during the issuance flow.<a href="#section-abstract-1" class="pilcrow">
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 16 December 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 22 December 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1292,15 +1292,17 @@ before being sent across the wire.<a href="#section-2-4" class="pilcrow">¶</a><
       <h2 id="name-configuration">
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-configuration" class="section-name selfRef">Configuration</a>
       </h2>
-<p id="section-3-1">Issuers MUST provide one parameter for configuration:<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-1">Issuers MUST provide two parameters for configuration:<a href="#section-3-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-3-2">
 <li id="section-3-2.1">Issuer Request URI: a token request URL for generating access tokens.
 For example, an Issuer URL might be https://issuer.example.net/example-token-request.
 This parameter uses resource media type "text/plain".<a href="#section-3-2.1" class="pilcrow">¶</a>
 </li>
+        <li id="section-3-2.2">Issuer Public Key values: an Issuer Public Key for an issuance protocol.<a href="#section-3-2.2" class="pilcrow">¶</a>
+</li>
       </ol>
 <p id="section-3-3">The Issuer parameters can be obtained from an Issuer via a directory object, which is a JSON
-object whose field names and values are raw values and URLs for the parameters.<a href="#section-3-3" class="pilcrow">¶</a></p>
+object whose values are other JSON objects and URLs for the parameters.<a href="#section-3-3" class="pilcrow">¶</a></p>
 <table class="center" id="table-1">
         <caption><a href="#table-1" class="selfRef">Table 1</a></caption>
 <thead>
@@ -1314,18 +1316,56 @@ object whose field names and values are raw values and URLs for the parameters.<
             <td class="text-left" rowspan="1" colspan="1">issuer-request-uri</td>
             <td class="text-left" rowspan="1" colspan="1">Issuer Request URI resource URL as a JSON string</td>
           </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">token-keys</td>
+            <td class="text-left" rowspan="1" colspan="1">List of Issuer Public Key values, each as JSON objects</td>
+          </tr>
         </tbody>
       </table>
-<p id="section-3-5">As an example, the Issuer's JSON directory could look like:<a href="#section-3-5" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3-6">
+<p id="section-3-5">Each "token-keys" JSON object contains the following fields and corresponding raw values.<a href="#section-3-5" class="pilcrow">¶</a></p>
+<table class="center" id="table-2">
+        <caption><a href="#table-2" class="selfRef">Table 2</a></caption>
+<thead>
+          <tr>
+            <th class="text-left" rowspan="1" colspan="1">Field Name</th>
+            <th class="text-left" rowspan="1" colspan="1">Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">token-type</td>
+            <td class="text-left" rowspan="1" colspan="1">Integer value of the Token Type, as defined in <a href="#token-type" class="xref">Section 8.1</a>, as a JSON number</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">token-key</td>
+            <td class="text-left" rowspan="1" colspan="1">The base64url encoding of the public key for use with the issuance protocol, including padding, as a JSON string</td>
+          </tr>
+        </tbody>
+      </table>
+<p id="section-3-7">Issuers MAY advertise multiple token-keys for the same token-type to
+support key rotation. In this case, Issuers indicate preference for which
+token key to use based on the order of keys in the list, with preference
+given to keys earlier in the list.<a href="#section-3-7" class="pilcrow">¶</a></p>
+<p id="section-3-8">Altogether, the Issuer's JSON directory could look like:<a href="#section-3-8" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3-9">
 <pre>
  {
-    "issuer-request-uri": "https://issuer.example.net/example-token-request"
+    "issuer-request-uri": "https://issuer.example.net/example-token-request",
+    "token-keys": [
+      {
+        "token-type": 2,
+        "token-key": "MI...AB",
+      },
+      {
+        "token-type": 2,
+        "token-key": "MI...AQ",
+      }
+    ]
  }
-</pre><a href="#section-3-6" class="pilcrow">¶</a>
+</pre><a href="#section-3-9" class="pilcrow">¶</a>
 </div>
-<p id="section-3-7">Issuer directory resources have the media type "application/json"
-and are located at the well-known location /.well-known/token-issuer-directory.<a href="#section-3-7" class="pilcrow">¶</a></p>
+<p id="section-3-10">Issuer directory resources have the media type "application/json"
+and are located at the well-known location /.well-known/token-issuer-directory.<a href="#section-3-10" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="token-challenge-requirements">
@@ -1764,9 +1804,9 @@ to the Architecture document <span>[<a href="#I-D.ietf-privacypass-architecture"
         </h3>
 <p id="section-8.1-1">This document updates the "Token Type" Registry with the following values.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
 <span id="name-token-types"></span><div id="aeadid-values">
-<table class="center" id="table-2">
+<table class="center" id="table-3">
           <caption>
-<a href="#table-2" class="selfRef">Table 2</a>:
+<a href="#table-3" class="selfRef">Table 3</a>:
 <a href="#name-token-types" class="selfRef">Token Types</a>
           </caption>
 <thead>
