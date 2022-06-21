@@ -1034,7 +1034,7 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Pauly, et al.</td>
-<td class="center">Expires 22 December 2022</td>
+<td class="center">Expires 23 December 2022</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1047,12 +1047,12 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-privacypass-auth-scheme-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2022-06-20" class="published">20 June 2022</time>
+<time datetime="2022-06-21" class="published">21 June 2022</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2022-12-22">22 December 2022</time></dd>
+<dd class="expires"><time datetime="2022-12-23">23 December 2022</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1096,7 +1096,7 @@ challenge clients to present an acceptable Privacy Pass token.<a href="#section-
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 22 December 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 23 December 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1645,7 +1645,16 @@ so the maximum possible value is 0xFFFF = 65535.<a href="#section-5.2-1" class="
           <li class="normal" id="section-5.2-3.8">Reference: Where this algorithm is defined<a href="#section-5.2-3.8" class="pilcrow">¶</a>
 </li>
         </ul>
-<p id="section-5.2-4">The initial contents for this registry are defined in the table below.<a href="#section-5.2-4" class="pilcrow">¶</a></p>
+<p id="section-5.2-4">This document defines several Reserved values, which can be used by clients and servers
+to send "greased" values in token challenges and responses to ensure that implementations
+remain able to handle unknown token types gracefully (this technique is inspired by
+<span>[<a href="#RFC8701" class="xref">RFC8701</a>]</span>). Implemenations SHOULD select reserved values at random when including
+them in greased messages. Servers can include these in TokenChallenge structures, either
+as the only challenge when no real token type is desired, or as one challenge in a list
+of challenges that include real values. Clients can include these in Token structures
+when they are not able to present a real token response. The contents of the Token
+structure SHOULD be filled with random bytes when using greased values.<a href="#section-5.2-4" class="pilcrow">¶</a></p>
+<p id="section-5.2-5">The initial contents for this registry are defined in the table below.<a href="#section-5.2-5" class="pilcrow">¶</a></p>
 <span id="name-token-types"></span><div id="aeadid-values">
 <table class="center" id="table-1">
           <caption>
@@ -1667,13 +1676,173 @@ so the maximum possible value is 0xFFFF = 65535.<a href="#section-5.2-1" class="
           <tbody>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">0x0000</td>
-              <td class="text-left" rowspan="1" colspan="1">(reserved)</td>
+              <td class="text-left" rowspan="1" colspan="1">RESERVED</td>
               <td class="text-left" rowspan="1" colspan="1">N/A</td>
               <td class="text-left" rowspan="1" colspan="1">N/A</td>
               <td class="text-left" rowspan="1" colspan="1">N/A</td>
               <td class="text-left" rowspan="1" colspan="1">N/A</td>
               <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">This document</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0x02AA</td>
+              <td class="text-left" rowspan="1" colspan="1">RESERVED</td>
               <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">This document</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0x1132</td>
+              <td class="text-left" rowspan="1" colspan="1">RESERVED</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">This document</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0x2E96</td>
+              <td class="text-left" rowspan="1" colspan="1">RESERVED</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">This document</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0x3CD3</td>
+              <td class="text-left" rowspan="1" colspan="1">RESERVED</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">This document</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0x4473</td>
+              <td class="text-left" rowspan="1" colspan="1">RESERVED</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">This document</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0x5A63</td>
+              <td class="text-left" rowspan="1" colspan="1">RESERVED</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">This document</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0x6D32</td>
+              <td class="text-left" rowspan="1" colspan="1">RESERVED</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">This document</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0x7F3F</td>
+              <td class="text-left" rowspan="1" colspan="1">RESERVED</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">This document</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0x8D07</td>
+              <td class="text-left" rowspan="1" colspan="1">RESERVED</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">This document</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0x916B</td>
+              <td class="text-left" rowspan="1" colspan="1">RESERVED</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">This document</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0xA6A4</td>
+              <td class="text-left" rowspan="1" colspan="1">RESERVED</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">This document</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0xBEAB</td>
+              <td class="text-left" rowspan="1" colspan="1">RESERVED</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">This document</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0xC3F3</td>
+              <td class="text-left" rowspan="1" colspan="1">RESERVED</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">This document</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0xDA42</td>
+              <td class="text-left" rowspan="1" colspan="1">RESERVED</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">This document</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0xE944</td>
+              <td class="text-left" rowspan="1" colspan="1">RESERVED</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">This document</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0xF057</td>
+              <td class="text-left" rowspan="1" colspan="1">RESERVED</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">N/A</td>
+              <td class="text-left" rowspan="1" colspan="1">This document</td>
             </tr>
           </tbody>
         </table>
@@ -1731,8 +1900,12 @@ so the maximum possible value is 0xFFFF = 65535.<a href="#section-5.2-1" class="
 <span class="refAuthor">Davidson, A.</span>, <span class="refAuthor">Iyengar, J.</span>, and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"Privacy Pass Architectural Framework"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-privacypass-architecture-03</span>, <time datetime="2022-03-07" class="refDate">7 March 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-privacypass-architecture-03">https://datatracker.ietf.org/doc/html/draft-ietf-privacypass-architecture-03</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="ISSUANCE">[ISSUANCE]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Celi, S.</span>, <span class="refAuthor">Davidson, A.</span>, <span class="refAuthor">Faz-Hernandez, A.</span>, <span class="refAuthor">Valdez, S.</span>, and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"Privacy Pass Issuance Protocol"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-privacypass-protocol-04</span>, <time datetime="2022-04-05" class="refDate">5 April 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-privacypass-protocol-04">https://datatracker.ietf.org/doc/html/draft-ietf-privacypass-protocol-04</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8701">[RFC8701]</dt>
+      <dd>
+<span class="refAuthor">Benjamin, D.</span>, <span class="refTitle">"Applying Generate Random Extensions And Sustain Extensibility (GREASE) to TLS Extensibility"</span>, <span class="seriesInfo">RFC 8701</span>, <span class="seriesInfo">DOI 10.17487/RFC8701</span>, <time datetime="2020-01" class="refDate">January 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8701">https://www.rfc-editor.org/rfc/rfc8701</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>

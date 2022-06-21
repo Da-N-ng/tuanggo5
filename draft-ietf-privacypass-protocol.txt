@@ -5,14 +5,14 @@
 Network Working Group                                            S. Celi
 Internet-Draft                                                Cloudflare
 Intended status: Informational                               A. Davidson
-Expires: 22 December 2022                                 Brave Software
+Expires: 23 December 2022                                 Brave Software
                                                         A. Faz-Hernandez
                                                               Cloudflare
                                                                S. Valdez
                                                               Google LLC
                                                               C. A. Wood
                                                               Cloudflare
-                                                            20 June 2022
+                                                            21 June 2022
 
 
                      Privacy Pass Issuance Protocol
@@ -41,7 +41,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 22 December 2022.
+   This Internet-Draft will expire on 23 December 2022.
 
 Copyright Notice
 
