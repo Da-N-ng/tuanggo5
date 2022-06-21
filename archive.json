@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-06-19T01:43:44.608460+00:00",
+  "timestamp": "2022-06-21T01:46:27.265385+00:00",
   "repo": "ietf-wg-privacypass/base-drafts",
   "labels": [
     {
@@ -8492,7 +8492,7 @@
       "id": "PR_kwDODeTEy845pGmV",
       "title": "Advertise token-key values in the issuer configuration dictionary",
       "url": "https://github.com/ietf-wg-privacypass/base-drafts/pull/127",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "chris-wood",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
@@ -8501,17 +8501,19 @@
       ],
       "body": "This is both a convenience for origins, as well as a way to support key rotation.",
       "createdAt": "2022-06-14T15:18:54Z",
-      "updatedAt": "2022-06-16T21:34:27Z",
+      "updatedAt": "2022-06-20T12:10:03Z",
       "baseRepository": "ietf-wg-privacypass/base-drafts",
       "baseRefName": "master",
       "baseRefOid": "4efc90719bab26d98af00ca3f552202d599a2b2b",
       "headRepository": "ietf-wg-privacypass/base-drafts",
       "headRefName": "caw/token-key-in-config",
       "headRefOid": "5be0451d8ffa5421f4efcc081eb70cd1e59d6ac8",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2022-06-20T12:10:03Z",
+      "mergedAt": "2022-06-20T12:10:03Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "734961fe5ec2baf9eb8b12c37b01b5f2897c149f"
+      },
       "comments": [
         {
           "author": "jfoote",
