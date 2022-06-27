@@ -5,10 +5,10 @@
 Network Working Group                                        A. Davidson
 Internet-Draft                                                       LIP
 Intended status: Informational                                J. Iyengar
-Expires: 23 December 2022                                         Fastly
+Expires: 29 December 2022                                         Fastly
                                                               C. A. Wood
                                                               Cloudflare
-                                                            21 June 2022
+                                                            27 June 2022
 
 
                   Privacy Pass Architectural Framework
@@ -37,7 +37,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 December 2022.
+   This Internet-Draft will expire on 29 December 2022.
 
 Copyright Notice
 
@@ -280,7 +280,8 @@ Table of Contents
 
    2.  One-more forgery security.  The issuance protocol MUST NOT allow
        malicious Clients or Attesters (acting as Clients) to forge
-       tokens without interacting with the Issuer directly.
+       tokens offline or otherwise without interacting with the Issuer
+       directly.
 
    3.  Concurrent security.  The issuance protocol MUST be safe to run
        concurrently with arbitrarily many Clients.
