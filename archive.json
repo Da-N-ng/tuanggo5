@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-06-23T01:25:32.424460+00:00",
+  "timestamp": "2022-06-28T01:45:19.698702+00:00",
   "repo": "ietf-wg-privacypass/base-drafts",
   "labels": [
     {
@@ -635,7 +635,7 @@
       "id": "MDU6SXNzdWU2NTQ5NjgyOTY=",
       "title": "Define extension for private metadata bit variant",
       "url": "https://github.com/ietf-wg-privacypass/base-drafts/issues/42",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "chris-wood",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
@@ -645,8 +645,8 @@
       ],
       "body": "We say it's possible, but let's be a bit more concrete.",
       "createdAt": "2020-07-10T18:41:47Z",
-      "updatedAt": "2021-09-14T01:18:41Z",
-      "closedAt": null,
+      "updatedAt": "2022-06-27T19:12:50Z",
+      "closedAt": "2022-06-27T19:12:49Z",
       "comments": [
         {
           "author": "alxdavids",
@@ -661,6 +661,13 @@
           "body": "Just so this is on the record somewhere: https://eprint.iacr.org/2020/072  (which is one possible version of the crypto for this).",
           "createdAt": "2021-09-14T01:18:41Z",
           "updatedAt": "2021-09-14T01:18:41Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Now that the protocol and architecture are configured to allow extensibility by new token types, I'm going to close this issue for now. When the time comes that we feel we want to introduce an issuance protocol with private metadata, one can cut an individual draft that defines it without any changes to the architecture, protocol, or auth-scheme docs. ",
+          "createdAt": "2022-06-27T19:12:49Z",
+          "updatedAt": "2022-06-27T19:12:49Z"
         }
       ]
     },
@@ -1066,15 +1073,25 @@
       "state": "OPEN",
       "author": "dvorak42",
       "authorAssociation": "COLLABORATOR",
-      "assignees": [],
+      "assignees": [
+        "chris-wood"
+      ],
       "labels": [
         "architecture"
       ],
       "body": "The privacy calculations should be updated to take into account metadata more explicitly, and take into account the cost of the number of redemptions, rather than the global issuer count.\r\n\r\nIf used in a multiple disjoint architecture ecosystem, then the math should also be taken in terms of a specific 'context' rather than treating the whole PrivacyPass ecosystem as a single global system (allowing for more nuanced requirements/limitations on issuer counts).",
       "createdAt": "2021-03-09T15:59:47Z",
-      "updatedAt": "2022-02-09T22:58:48Z",
+      "updatedAt": "2022-06-27T19:10:44Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "On reflection, we may be better off deleting the text entirely and making sure the justification for the parameterization is adequately covered in the security and privacy considerations elsewhere in the document. ",
+          "createdAt": "2022-06-27T19:10:43Z",
+          "updatedAt": "2022-06-27T19:10:43Z"
+        }
+      ]
     },
     {
       "number": 66,
@@ -1576,7 +1593,7 @@
       "id": "I_kwDODeTEy85HjP_Z",
       "title": "Explain consequences of using publicly verifiable token",
       "url": "https://github.com/ietf-wg-privacypass/base-drafts/issues/118",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "tfpauly",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -1587,8 +1604,8 @@
       ],
       "body": "The publicly verifiable basic token issuance protocol doesn't include an origin name that the issuer can see, so it does allow origins to be able to use that issuer (as long as the know the key) without explicit coordination or permission from the issuer. This isn't necessarily a problem, but we should likely mention it.",
       "createdAt": "2022-04-11T19:16:46Z",
-      "updatedAt": "2022-06-13T19:09:12Z",
-      "closedAt": null,
+      "updatedAt": "2022-06-27T21:16:45Z",
+      "closedAt": "2022-06-27T21:16:45Z",
       "comments": []
     },
     {
@@ -1596,7 +1613,7 @@
       "id": "I_kwDODeTEy85IDmIs",
       "title": "Forgery definition",
       "url": "https://github.com/ietf-wg-privacypass/base-drafts/issues/119",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "chris-wood",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -1607,8 +1624,8 @@
       ],
       "body": "We current state this as the requirement:\r\n\r\n> One-more forgery security. The issuance protocol MUST NOT allow malicious Clients or Attesters (acting as Clients) to forge tokens without interacting with the Issuer directly.\r\n\r\nThis could be misread in that we do allow forgeries when interacting with the Issuer directly. Clearly that's not the intent, so let's fix this.",
       "createdAt": "2022-04-19T22:01:29Z",
-      "updatedAt": "2022-06-13T19:07:51Z",
-      "closedAt": null,
+      "updatedAt": "2022-06-27T21:16:16Z",
+      "closedAt": "2022-06-27T21:16:16Z",
       "comments": []
     },
     {
@@ -8678,6 +8695,326 @@
               "updatedAt": "2022-06-16T21:34:27Z"
             }
           ]
+        }
+      ]
+    },
+    {
+      "number": 128,
+      "id": "PR_kwDODeTEy846cMXn",
+      "title": "Update text around Issuer public key discovery and consistency checks",
+      "url": "https://github.com/ietf-wg-privacypass/base-drafts/pull/128",
+      "state": "OPEN",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #124.\r\n\r\ncc @janaiyengar ",
+      "createdAt": "2022-06-27T19:53:28Z",
+      "updatedAt": "2022-06-27T20:07:45Z",
+      "baseRepository": "ietf-wg-privacypass/base-drafts",
+      "baseRefName": "main",
+      "baseRefOid": "6bc0b20975edef1da84eec1827dd47ef8299c780",
+      "headRepository": "ietf-wg-privacypass/base-drafts",
+      "headRefName": "caw/issuer-public-key-discovery-and-check",
+      "headRefOid": "7fd7d5671fc6a611002763862f1103f2e8b154c9",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDODeTEy8481t3h",
+          "commit": {
+            "abbreviatedOid": "7fd7d56"
+          },
+          "author": "dvorak42",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-06-27T20:01:33Z",
+          "updatedAt": "2022-06-27T20:01:33Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDODeTEy8481veX",
+          "commit": {
+            "abbreviatedOid": "7fd7d56"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-06-27T20:07:45Z",
+          "updatedAt": "2022-06-27T20:07:45Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 129,
+      "id": "PR_kwDODeTEy846cMuD",
+      "title": "Offline forgeries are bad",
+      "url": "https://github.com/ietf-wg-privacypass/base-drafts/pull/129",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #119.",
+      "createdAt": "2022-06-27T19:55:06Z",
+      "updatedAt": "2022-06-27T21:16:17Z",
+      "baseRepository": "ietf-wg-privacypass/base-drafts",
+      "baseRefName": "main",
+      "baseRefOid": "6bc0b20975edef1da84eec1827dd47ef8299c780",
+      "headRepository": "ietf-wg-privacypass/base-drafts",
+      "headRefName": "caw/forgery-defn",
+      "headRefOid": "cebad8de0c1cb3f4598b0b078fb65be395e3a2de",
+      "closedAt": "2022-06-27T21:16:17Z",
+      "mergedAt": "2022-06-27T21:16:16Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "dcd68d68bdea761f6e96cd90eac83ad353a91505"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDODeTEy8481twL",
+          "commit": {
+            "abbreviatedOid": "cebad8d"
+          },
+          "author": "dvorak42",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-06-27T20:01:06Z",
+          "updatedAt": "2022-06-27T20:01:06Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDODeTEy8481vUA",
+          "commit": {
+            "abbreviatedOid": "cebad8d"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-06-27T20:07:07Z",
+          "updatedAt": "2022-06-27T20:07:07Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 130,
+      "id": "PR_kwDODeTEy846cQFD",
+      "title": "Shared context and double spend state",
+      "url": "https://github.com/ietf-wg-privacypass/base-drafts/pull/130",
+      "state": "OPEN",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #104.",
+      "createdAt": "2022-06-27T20:06:57Z",
+      "updatedAt": "2022-06-27T20:34:18Z",
+      "baseRepository": "ietf-wg-privacypass/base-drafts",
+      "baseRefName": "main",
+      "baseRefOid": "6bc0b20975edef1da84eec1827dd47ef8299c780",
+      "headRepository": "ietf-wg-privacypass/base-drafts",
+      "headRefName": "caw/shared-context-and-state",
+      "headRefOid": "1a67706edb274e7e2a83d5955f534cc5e31c7f41",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "The section references seem to be breaking the build, so I'll fix that later before we land this.",
+          "createdAt": "2022-06-27T20:19:19Z",
+          "updatedAt": "2022-06-27T20:19:19Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDODeTEy8481wT4",
+          "commit": {
+            "abbreviatedOid": "1a67706"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-06-27T20:11:11Z",
+          "updatedAt": "2022-06-27T20:11:11Z",
+          "comments": [
+            {
+              "originalPosition": 10,
+              "body": "There's a type of context in between that doesn't necessarily make things interactive \u2014 I could have a redemption context I reuse for a period of time or from a particular server, etc \u2014 and clients _can_ cache in that case.",
+              "createdAt": "2022-06-27T20:11:11Z",
+              "updatedAt": "2022-06-27T20:11:11Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDODeTEy8481wjU",
+          "commit": {
+            "abbreviatedOid": "1a67706"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-06-27T20:12:09Z",
+          "updatedAt": "2022-06-27T20:12:09Z",
+          "comments": [
+            {
+              "originalPosition": 10,
+              "body": "True, but I didn't want to enumerate all different options here. We do that in the auth-scheme draft already. ",
+              "createdAt": "2022-06-27T20:12:09Z",
+              "updatedAt": "2022-06-27T20:12:09Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDODeTEy8481yxW",
+          "commit": {
+            "abbreviatedOid": "1a67706"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-06-27T20:19:57Z",
+          "updatedAt": "2022-06-27T20:19:58Z",
+          "comments": [
+            {
+              "originalPosition": 10,
+              "body": "I agree that we shouldn't enumerate all cases, but I'd like to still clarify that there isn't a strict binary. Let me suggest some text.",
+              "createdAt": "2022-06-27T20:19:57Z",
+              "updatedAt": "2022-06-27T20:19:58Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDODeTEy84812P4",
+          "commit": {
+            "abbreviatedOid": "1a67706"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-06-27T20:33:49Z",
+          "updatedAt": "2022-06-27T20:34:18Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "```suggestion\r\n- Redemption context. Tokens can be bound to a given redemption context, which influences a client's ability to pre-fetch and cache\r\ntokens. For example, an empty redemption context always allows\r\ntokens to be issued and redeemed non-interactively, whereas a\r\na fresh and random redemption context means that the redeemed\r\ntoken must be issued only after the client receives the challenge.\r\nSee {{Section 2.1.1 of HTTP-Authentication}} for more details.\r\n```",
+              "createdAt": "2022-06-27T20:33:49Z",
+              "updatedAt": "2022-06-27T20:34:18Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 131,
+      "id": "PR_kwDODeTEy846cROn",
+      "title": "Public means public after all",
+      "url": "https://github.com/ietf-wg-privacypass/base-drafts/pull/131",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #118.",
+      "createdAt": "2022-06-27T20:11:30Z",
+      "updatedAt": "2022-06-27T21:16:45Z",
+      "baseRepository": "ietf-wg-privacypass/base-drafts",
+      "baseRefName": "main",
+      "baseRefOid": "6bc0b20975edef1da84eec1827dd47ef8299c780",
+      "headRepository": "ietf-wg-privacypass/base-drafts",
+      "headRefName": "caw/note-public-property",
+      "headRefOid": "4d9e7761122d362b25962f24059016f03c294f5f",
+      "closedAt": "2022-06-27T21:16:45Z",
+      "mergedAt": "2022-06-27T21:16:45Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "e4b88a1edd19d67d9defa4902e178b70f640566f"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDODeTEy848103c",
+          "commit": {
+            "abbreviatedOid": "a40d960"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-06-27T20:28:14Z",
+          "updatedAt": "2022-06-27T20:28:26Z",
+          "comments": [
+            {
+              "originalPosition": 15,
+              "body": "```suggestion\r\nThe first property means that any Origin can select a given Issuer to produce tokens, as long\r\nas the Origin has the Issuer public key, without explicit coordination or permission\r\nfrom the Issuer. This is because the Issuer does not learn the Origin that requested\r\nthe token during the issuance protocol.\r\n```",
+              "createdAt": "2022-06-27T20:28:14Z",
+              "updatedAt": "2022-06-27T20:28:26Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 132,
+      "id": "PR_kwDODeTEy846cShz",
+      "title": "Remove parameterization section as it's redundant with other consideration sections",
+      "url": "https://github.com/ietf-wg-privacypass/base-drafts/pull/132",
+      "state": "OPEN",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #65.\r\n\r\nAfter quickly skimming the parameterization section, it became clear that we already discuss these things in various consideration sections throughout the document, so this was just redundant. Moreover, it's very use-case and deployment specific that once had value in the joint deployment model, so it doesn't seem like particularly helpful now that we've generalized things a bit. Removing and avoiding confusion seems like the best path forward.",
+      "createdAt": "2022-06-27T20:16:10Z",
+      "updatedAt": "2022-06-27T20:25:01Z",
+      "baseRepository": "ietf-wg-privacypass/base-drafts",
+      "baseRefName": "main",
+      "baseRefOid": "6bc0b20975edef1da84eec1827dd47ef8299c780",
+      "headRepository": "ietf-wg-privacypass/base-drafts",
+      "headRefName": "caw/remove-parameterization",
+      "headRefOid": "023b786add68cc792f9a6b16bc7f20196c5bce83",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I'll take this one to the list before merging.",
+          "createdAt": "2022-06-27T20:19:35Z",
+          "updatedAt": "2022-06-27T20:19:35Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDODeTEy84810D8",
+          "commit": {
+            "abbreviatedOid": "023b786"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-06-27T20:25:01Z",
+          "updatedAt": "2022-06-27T20:25:01Z",
+          "comments": []
         }
       ]
     }
