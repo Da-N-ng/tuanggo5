@@ -5,10 +5,10 @@
 Network Working Group                                        A. Davidson
 Internet-Draft                                                       LIP
 Intended status: Informational                                J. Iyengar
-Expires: 30 December 2022                                         Fastly
+Expires: 1 January 2023                                           Fastly
                                                               C. A. Wood
                                                               Cloudflare
-                                                            28 June 2022
+                                                            30 June 2022
 
 
                   Privacy Pass Architectural Framework
@@ -37,7 +37,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 30 December 2022.
+   This Internet-Draft will expire on 1 January 2023.
 
 Copyright Notice
 
@@ -213,7 +213,7 @@ Table of Contents
       context, which influences a client's ability to pre-fetch and
       cache tokens.  For example, an empty redemption context always
       allows tokens to be issued and redeemed non-interactively, whereas
-      a a fresh and random redemption context means that the redeeme
+      a fresh and random redemption context means that the redeemed
       token must be issued only after the client receives the challenge.
       See Section 2.1.1 of [HTTP-Authentication] for more details.
 
