@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-06-28T01:45:19.698702+00:00",
+  "timestamp": "2022-06-30T01:43:12.029748+00:00",
   "repo": "ietf-wg-privacypass/base-drafts",
   "labels": [
     {
@@ -65,7 +65,7 @@
       "id": "MDU6SXNzdWU1NzQ2OTIyODg=",
       "title": "Effective mechanism for identifying malicious servers",
       "url": "https://github.com/ietf-wg-privacypass/base-drafts/issues/2",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "alxdavids",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
@@ -75,8 +75,8 @@
       ],
       "body": "Need to provide recommendations for section {{recs-srvr}} in the pp-architecture draft. It seems to me that it is easy for individual clients to identify and react to servers that seem to be acting maliciously. For example, the client can monitor and reject key material from servers where the configuration was last modified very recently and how often the rotations seem to be occurring. However, I'm not exactly sure what the reporting mechanism should be to alert other clients to this behavior.",
       "createdAt": "2020-03-03T14:06:06Z",
-      "updatedAt": "2022-02-09T22:59:48Z",
-      "closedAt": null,
+      "updatedAt": "2022-06-28T10:59:41Z",
+      "closedAt": "2022-06-28T10:59:41Z",
       "comments": [
         {
           "author": "claucece",
@@ -91,6 +91,13 @@
           "body": "(Deleted spam comment)",
           "createdAt": "2022-02-09T22:59:47Z",
           "updatedAt": "2022-02-09T22:59:47Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "This has sort of been overcome by events. The architecture draft now states that clients can apply consistency checks, referencing another draft for ways that can be addressed. Closing as a result.",
+          "createdAt": "2022-06-28T10:59:41Z",
+          "updatedAt": "2022-06-28T10:59:41Z"
         }
       ]
     },
@@ -8818,13 +8825,13 @@
       "labels": [],
       "body": "Closes #104.",
       "createdAt": "2022-06-27T20:06:57Z",
-      "updatedAt": "2022-06-27T20:34:18Z",
+      "updatedAt": "2022-06-28T10:43:24Z",
       "baseRepository": "ietf-wg-privacypass/base-drafts",
       "baseRefName": "main",
       "baseRefOid": "6bc0b20975edef1da84eec1827dd47ef8299c780",
       "headRepository": "ietf-wg-privacypass/base-drafts",
       "headRefName": "caw/shared-context-and-state",
-      "headRefOid": "1a67706edb274e7e2a83d5955f534cc5e31c7f41",
+      "headRefOid": "ced5d1fd20d9761da1a7bd260f26af8fbab49809",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -8916,6 +8923,46 @@
               "body": "```suggestion\r\n- Redemption context. Tokens can be bound to a given redemption context, which influences a client's ability to pre-fetch and cache\r\ntokens. For example, an empty redemption context always allows\r\ntokens to be issued and redeemed non-interactively, whereas a\r\na fresh and random redemption context means that the redeemed\r\ntoken must be issued only after the client receives the challenge.\r\nSee {{Section 2.1.1 of HTTP-Authentication}} for more details.\r\n```",
               "createdAt": "2022-06-27T20:33:49Z",
               "updatedAt": "2022-06-27T20:34:18Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDODeTEy8484w5J",
+          "commit": {
+            "abbreviatedOid": "1a67706"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-06-28T10:40:06Z",
+          "updatedAt": "2022-06-28T10:40:07Z",
+          "comments": [
+            {
+              "originalPosition": 11,
+              "body": "```suggestion\r\n  the redeemed token must be issued interactively. See 2.1.1 of {{HTTP-Authentication}}\r\n```",
+              "createdAt": "2022-06-28T10:40:06Z",
+              "updatedAt": "2022-06-28T10:40:07Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDODeTEy8484xY4",
+          "commit": {
+            "abbreviatedOid": "1a67706"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-06-28T10:41:49Z",
+          "updatedAt": "2022-06-28T10:41:49Z",
+          "comments": [
+            {
+              "originalPosition": 10,
+              "body": "Looks good!",
+              "createdAt": "2022-06-28T10:41:49Z",
+              "updatedAt": "2022-06-28T10:41:49Z"
             }
           ]
         }
