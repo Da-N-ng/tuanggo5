@@ -5,10 +5,10 @@
 Network Working Group                                           T. Pauly
 Internet-Draft                                                Apple Inc.
 Intended status: Standards Track                               S. Valdez
-Expires: 29 December 2022                                     Google LLC
+Expires: 2 January 2023                                       Google LLC
                                                               C. A. Wood
                                                               Cloudflare
-                                                            27 June 2022
+                                                             1 July 2022
 
 
               The Privacy Pass HTTP Authentication Scheme
@@ -36,7 +36,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 29 December 2022.
+   This Internet-Draft will expire on 2 January 2023.
 
 Copyright Notice
 

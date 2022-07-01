@@ -5,10 +5,10 @@
 Network Working Group                                        A. Davidson
 Internet-Draft                                                       LIP
 Intended status: Informational                                J. Iyengar
-Expires: 29 December 2022                                         Fastly
+Expires: 2 January 2023                                           Fastly
                                                               C. A. Wood
                                                               Cloudflare
-                                                            27 June 2022
+                                                             1 July 2022
 
 
                   Privacy Pass Architectural Framework
@@ -37,7 +37,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 29 December 2022.
+   This Internet-Draft will expire on 2 January 2023.
 
 Copyright Notice
 
@@ -74,6 +74,7 @@ Table of Contents
      5.2.  Issuer Key Rotation
      5.3.  Large Number of Issuers
        5.3.1.  Allowing More Issuers
+     5.4.  Centralization
    6.  Security Considerations
      6.1.  Double-spend Protection
      6.2.  Token Exhaustion
@@ -817,6 +818,25 @@ Table of Contents
                            <------------------
      Output resp
 
+5.4.  Centralization
+
+   A consequence of limiting the number of participants (Attesters or
+   Issuers) in Privacy Pass deployments for meaningful privacy is that
+   it forces concentrated centralization amongst those participants.
+   [CENTRALIZATION] discusses several ways in which this might be
+   mitigated.  For example, a multi-stakeholder governance model could
+   be established to determine what participants are fit to operate as
+   participants in a Privacy Pass deployment.  This is precisely the
+   model used to control the Web's trust model.
+
+   Alternatively, Privacy Pass deployments might mitigate this problem
+   through implementation.  For example, rather than centralize the role
+   of attestation in one or few entities, attestation could be a
+   distributed function performed by a quorum of many parties, provided
+   that neither Issuers nor Origins learn which attester implementations
+   were chosen.  As a result, clients could have more opportunities to
+   switch between attestation participants.
+
 6.  Security Considerations
 
    We present a number of security considerations that prevent malicious
@@ -977,6 +997,13 @@ Table of Contents
               <https://www.rfc-editor.org/rfc/rfc8446>.
 
 8.2.  Informative References
+
+   [CENTRALIZATION]
+              Nottingham, M., "Centralization, Decentralization, and
+              Internet Standards", Work in Progress, Internet-Draft,
+              draft-nottingham-avoiding-internet-centralization-04, 26
+              June 2022, <https://datatracker.ietf.org/doc/html/draft-
+              nottingham-avoiding-internet-centralization-04>.
 
    [CONSISTENCY]
               Davidson, A., Finkel, M., Thomson, M., and C. A. Wood,

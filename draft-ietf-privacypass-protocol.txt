@@ -5,14 +5,14 @@
 Network Working Group                                            S. Celi
 Internet-Draft                                                Cloudflare
 Intended status: Informational                               A. Davidson
-Expires: 29 December 2022                                 Brave Software
+Expires: 2 January 2023                                   Brave Software
                                                         A. Faz-Hernandez
                                                               Cloudflare
                                                                S. Valdez
                                                               Google LLC
                                                               C. A. Wood
                                                               Cloudflare
-                                                            27 June 2022
+                                                             1 July 2022
 
 
                      Privacy Pass Issuance Protocol
@@ -41,7 +41,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 29 December 2022.
+   This Internet-Draft will expire on 2 January 2023.
 
 Copyright Notice
 
@@ -398,15 +398,23 @@ authenticator = client_context.Finalize(token_input, blind, evaluated_element, b
    the previous variant in two important ways:
 
    1.  The output tokens are publicly verifiable by anyone with the
-       Issuer public key; and
+       Issuer public key.
 
    2.  The issuance protocol does not admit public or private metadata
        to bind additional context to tokens.
 
-   Otherwise, this variant is nearly identical.  In particular, Issuers
-   provide a Private and Public Key, denoted skI and pkI, respectively,
-   used to produce tokens as input to the protocol.  See Section 6.4 for
-   how this key pair is generated.
+   The first property means that any Origin can select a given Issuer to
+   produce tokens, as long as the Origin has the Issuer public key,
+   without explicit coordination or permission from the Issuer.  This is
+   because the Issuer does not learn the Origin that requested the token
+   during the issuance protocol.
+
+   Beyond these differences, the publicly verifiable issuance protocol
+   variant is nearly identical to the privately verifiable issuance
+   protocol variant.  In particular, Issuers provide a Private and
+   Public Key, denoted skI and pkI, respectively, used to produce tokens
+   as input to the protocol.  See Section 6.4 for how this key pair is
+   generated.
 
    Clients provide the following as input to the issuance protocol:
 
@@ -699,9 +707,9 @@ authenticator = client_context.Finalize(token_input, blind, evaluated_element, b
    [OPRF]     Davidson, A., Faz-Hernandez, A., Sullivan, N., and C. A.
               Wood, "Oblivious Pseudorandom Functions (OPRFs) using
               Prime-Order Groups", Work in Progress, Internet-Draft,
-              draft-irtf-cfrg-voprf-09, 8 February 2022,
+              draft-irtf-cfrg-voprf-10, 30 June 2022,
               <https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-
-              voprf-09>.
+              voprf-10>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
