@@ -76,8 +76,7 @@ Table of Contents
        5.3.1.  Allowing More Issuers
      5.4.  Centralization
    6.  Security Considerations
-     6.1.  Double-spend Protection
-     6.2.  Token Exhaustion
+     6.1.  Token Exhaustion
    7.  Protocol Parameterization
      7.1.  Justification
      7.2.  Example parameterization
@@ -211,21 +210,25 @@ Table of Contents
    *  Issuer identity.  Tokens identify which issuers are trusted for a
       given issuance protocol.
 
-   *  Interactive or non-interactive.  Tokens can either be interactive
-      or not.  An interactive token is one which requires a freshly
-      issued token based on the challenge, whereas a non-interactive
-      token can be issued proactively and cached for future use.
+   *  Redemption context.  Tokens can be bound to a given redemption
+      context, which influences a client's ability to pre-fetch and
+      cache tokens.  For example, an empty redemption context always
+      allows tokens to be issued and redeemed non-interactively, whereas
+      a fresh and random redemption context means that the redeemed
+      token must be issued only after the client receives the challenge.
+      See Section 2.1.1 of [HTTP-Authentication] for more details.
 
    *  Per-origin or cross-origin.  Tokens can be constrained to the
       Origin for which the challenge originated, or can be used across
       Origins.
 
    Depending on the use case, Origins may need to maintain state to
-   track redeemed tokens.  For example, Origins that accept non-
-   interactive, cross-origin tokens SHOULD track which tokens have been
-   redeemed already, since these tokens can be issued and then spent
-   multiple times in response to any such challenge.  See Section 6.1
-   for discussion.
+   track redeemed tokens.  For example, Origins that accept cross-origin
+   across shared redemption contexts tokens SHOULD track which tokens
+   have been redeemed already in those redemption contexts, since these
+   tokens can be issued and then spent multiple times in response to any
+   such challenge.  See Section 2.1.1 of [HTTP-Authentication] for
+   discussion.
 
    Origins that admit cross-origin tokens bear some risk of allowing
    tokens issued for one Origin to be spent in an interaction with
@@ -291,9 +294,13 @@ Table of Contents
    privacy impacts of the protocol, why these impacts are justified, and
    guidelines on changes to the parametrization in Section 7.
 
-   The mechanism by which clients obtain the Issuer public key is not
-   specified.  Clients may be configured with this key or they may
-   discover it via some other form.  See [CONSISTENCY].
+   Clients obtain the Issuer public key directly from the Origin using
+   the process described in [HTTP-Authentication].  Clients MAY apply
+   some form of key consistency check to determine if this public key is
+   consistency and correct for the specified Issuer.  See [CONSISTENCY]
+   for example mechanisms.  Depending on the deployment, the Attester
+   may be able to assist the Client in applying these consistency checks
+   across clients.
 
    Depending on the use case, issuance may require some form of Client
    anonymization service similar to an IP-hiding proxy so that Issuers
@@ -506,10 +513,9 @@ Table of Contents
    reconstruct a Client's browsing history.
 
    Attestation and redemption context unlinkability requires that these
-   events be separated over time, e.g., through the use of non-
-   interactive tokens that can be issued without a fresh Origin
-   challenge, or over space, e.g., through the use of an anonymizing
-   proxy when connecting to the Origin.
+   events be separated over time, e.g., through the use of tokens with
+   an empty redemption context, or over space, e.g., through the use of
+   an anonymizing proxy when connecting to the Origin.
 
 4.2.  Joint Attester and Issuer
 
@@ -548,7 +554,7 @@ Table of Contents
    For certain types of issuance protocols, this model separates
    attestation and redemption contexts.  However, Issuance protocols
    that require the Issuer to learn information about the Origin, such
-   as that which is described in [rate-limited], are not appropriate
+   as that which is described in [RATE-LIMITED], are not appropriate
    since they could link attestation and redemption contexts through the
    Origin name.
 
@@ -631,7 +637,7 @@ Table of Contents
 
    This is the most general deployment model, and is necessary for some
    types of issuance protocols where the Attester plays a role in token
-   issuance; see [rate-limited] for one such type of issuance protocol.
+   issuance; see [RATE-LIMITED] for one such type of issuance protocol.
    In this model, the Attester, Issuer, and Origin have a separate view
    of the Client: the Attester sees potentially sensitive Client
    identifying information, such as account identifiers or IP addresses,
@@ -842,19 +848,7 @@ Table of Contents
    We present a number of security considerations that prevent malicious
    Clients from abusing the protocol.
 
-6.1.  Double-spend Protection
-
-   When applicable for non-interactive tokens, all Origins SHOULD
-   implement a robust storage-query mechanism for checking that tokens
-   sent by clients have not been spent before.  Such tokens only need to
-   be checked for each Origin individually.  But all Origins must
-   perform global double-spend checks to avoid clients from exploiting
-   the possibility of spending tokens more than once against distributed
-   token checking systems.  For the same reason, the global data storage
-   must have quick update times.  While an update is occurring it may be
-   possible for a malicious client to spend a token more than once.
-
-6.2.  Token Exhaustion
+6.1.  Token Exhaustion
 
    When a Client holds tokens for an Issuer, it is possible for any
    verifier to invoke that client to redeem tokens for that Issuer.
@@ -978,11 +972,6 @@ Table of Contents
 
 8.1.  Normative References
 
-   [HTTP-Authentication]
-              "The Privacy Pass HTTP Authentication Scheme", n.d.,
-              <https://datatracker.ietf.org/doc/html/draft-pauly-
-              privacypass-auth-scheme-00>.
-
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
@@ -1020,6 +1009,13 @@ Table of Contents
               PrivateStats-De-Identified-Authenticated-Logging-at-
               Scale_final.pdf>.
 
+   [HTTP-Authentication]
+              Pauly, T., Valdez, S., and C. A. Wood, "The Privacy Pass
+              HTTP Authentication Scheme", Work in Progress, Internet-
+              Draft, draft-ietf-privacypass-auth-scheme-02, 4 April
+              2022, <https://datatracker.ietf.org/doc/html/draft-ietf-
+              privacypass-auth-scheme-02>.
+
    [I-D.ietf-privacypass-protocol]
               Celi, S., Davidson, A., Faz-Hernandez, A., Valdez, S., and
               C. A. Wood, "Privacy Pass Issuance Protocol", Work in
@@ -1040,6 +1036,14 @@ Table of Contents
    [PPSRV]    Sullivan, N., "Cloudflare Supports Privacy Pass", n.d.,
               <https://blog.cloudflare.com/cloudflare-supports-privacy-
               pass/>.
+
+   [RATE-LIMITED]
+              Hendrickson, S., Iyengar, J., Pauly, T., Valdez, S., and
+              C. A. Wood, "Rate-Limited Token Issuance Protocol", Work
+              in Progress, Internet-Draft, draft-privacypass-rate-limit-
+              tokens-02, 2 May 2022,
+              <https://datatracker.ietf.org/doc/html/draft-privacypass-
+              rate-limit-tokens-02>.
 
    [RFC6962]  Laurie, B., Langley, A., and E. Kasper, "Certificate
               Transparency", RFC 6962, DOI 10.17487/RFC6962, June 2013,
