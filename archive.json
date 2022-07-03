@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-06-30T01:43:12.029748+00:00",
+  "timestamp": "2022-07-03T01:52:02.086473+00:00",
   "repo": "ietf-wg-privacypass/base-drafts",
   "labels": [
     {
@@ -739,7 +739,7 @@
       "id": "MDU6SXNzdWU2OTY2NzI0MjA=",
       "title": "Improve documentation on centralization",
       "url": "https://github.com/ietf-wg-privacypass/base-drafts/issues/45",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "alxdavids",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
@@ -748,8 +748,8 @@
       ],
       "body": "There should be documentation that addresses the risks of the centralization in the current Privacy Pass architecture with potential solutions. This was raised in the previous WG meeting: https://codimd.ietf.org/notes-ietf-108-privacypass.\r\n\r\nThis documentation should either be incorporated into the architecture document as a section when discussing the shape of the ecosystem, and/or security considerations. There is also the option of declaring a separate document for addressing this.",
       "createdAt": "2020-09-09T09:58:04Z",
-      "updatedAt": "2021-02-19T14:55:11Z",
-      "closedAt": null,
+      "updatedAt": "2022-07-01T18:45:31Z",
+      "closedAt": "2022-07-01T18:45:31Z",
       "comments": [
         {
           "author": "alxdavids",
@@ -1077,7 +1077,7 @@
       "id": "MDU6SXNzdWU4MjYxNTE5ODE=",
       "title": "Update Privacy Calculations in Architecture Document",
       "url": "https://github.com/ietf-wg-privacypass/base-drafts/issues/65",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "dvorak42",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -1088,8 +1088,8 @@
       ],
       "body": "The privacy calculations should be updated to take into account metadata more explicitly, and take into account the cost of the number of redemptions, rather than the global issuer count.\r\n\r\nIf used in a multiple disjoint architecture ecosystem, then the math should also be taken in terms of a specific 'context' rather than treating the whole PrivacyPass ecosystem as a single global system (allowing for more nuanced requirements/limitations on issuer counts).",
       "createdAt": "2021-03-09T15:59:47Z",
-      "updatedAt": "2022-06-27T19:10:44Z",
-      "closedAt": null,
+      "updatedAt": "2022-07-01T18:46:09Z",
+      "closedAt": "2022-07-01T18:46:09Z",
       "comments": [
         {
           "author": "chris-wood",
@@ -1428,7 +1428,7 @@
       "id": "I_kwDODeTEy85FjZAX",
       "title": "Per-origin and cross-origin implications on double spend state",
       "url": "https://github.com/ietf-wg-privacypass/base-drafts/issues/104",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "chris-wood",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -1440,8 +1440,8 @@
       ],
       "body": "Origins currently choose whether their challenges are per-origin or cross-origin. For cross-origin, double-spend prevention is only as good as the coordination between origins and the Issuer. Per-origin allows double-spend prevention to be isolated to a single origin; also prevents the cache of tokens being take up by some other origin.",
       "createdAt": "2022-03-11T21:44:52Z",
-      "updatedAt": "2022-06-13T19:12:54Z",
-      "closedAt": null,
+      "updatedAt": "2022-07-01T18:45:52Z",
+      "closedAt": "2022-07-01T18:45:52Z",
       "comments": [
         {
           "author": "chris-wood",
@@ -1689,7 +1689,7 @@
       "id": "I_kwDODeTEy85LjASQ",
       "title": "Question on issuer public key retrieval ",
       "url": "https://github.com/ietf-wg-privacypass/base-drafts/issues/124",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "mirjak",
       "authorAssociation": "NONE",
       "assignees": [
@@ -1700,8 +1700,8 @@
       ],
       "body": "draft-ietf-privacypass-architecture says in section 3.2:\r\n\r\n> The mechanism by which clients obtain the Issuer public key is not specified.\r\n\r\nIs that correct? Isn't the 'token-key' in draft-ietf-privacypass-auth-scheme providing the pub key? Or do I misunderstand something here?",
       "createdAt": "2022-06-10T12:18:45Z",
-      "updatedAt": "2022-06-13T19:07:27Z",
-      "closedAt": null,
+      "updatedAt": "2022-07-01T18:45:40Z",
+      "closedAt": "2022-07-01T18:45:40Z",
       "comments": [
         {
           "author": "chris-wood",
@@ -8710,24 +8710,26 @@
       "id": "PR_kwDODeTEy846cMXn",
       "title": "Update text around Issuer public key discovery and consistency checks",
       "url": "https://github.com/ietf-wg-privacypass/base-drafts/pull/128",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "chris-wood",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Closes #124.\r\n\r\ncc @janaiyengar ",
       "createdAt": "2022-06-27T19:53:28Z",
-      "updatedAt": "2022-06-27T20:07:45Z",
+      "updatedAt": "2022-07-01T18:45:41Z",
       "baseRepository": "ietf-wg-privacypass/base-drafts",
       "baseRefName": "main",
       "baseRefOid": "6bc0b20975edef1da84eec1827dd47ef8299c780",
       "headRepository": "ietf-wg-privacypass/base-drafts",
       "headRefName": "caw/issuer-public-key-discovery-and-check",
       "headRefOid": "7fd7d5671fc6a611002763862f1103f2e8b154c9",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2022-07-01T18:45:41Z",
+      "mergedAt": "2022-07-01T18:45:40Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "e852ed80dc5bc5df38241f3c922d9d8e8e099ce7"
+      },
       "comments": [],
       "reviews": [
         {
@@ -8818,24 +8820,26 @@
       "id": "PR_kwDODeTEy846cQFD",
       "title": "Shared context and double spend state",
       "url": "https://github.com/ietf-wg-privacypass/base-drafts/pull/130",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "chris-wood",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Closes #104.",
       "createdAt": "2022-06-27T20:06:57Z",
-      "updatedAt": "2022-06-28T10:43:24Z",
+      "updatedAt": "2022-07-01T18:45:53Z",
       "baseRepository": "ietf-wg-privacypass/base-drafts",
       "baseRefName": "main",
       "baseRefOid": "6bc0b20975edef1da84eec1827dd47ef8299c780",
       "headRepository": "ietf-wg-privacypass/base-drafts",
       "headRefName": "caw/shared-context-and-state",
-      "headRefOid": "ced5d1fd20d9761da1a7bd260f26af8fbab49809",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "39ce5e1fbb9c6d3bc5a8201eb926d2e131ca0355",
+      "closedAt": "2022-07-01T18:45:52Z",
+      "mergedAt": "2022-07-01T18:45:52Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "582701bcb4c539a3a7f13ead78869e67fb8b7244"
+      },
       "comments": [
         {
           "author": "chris-wood",
@@ -8965,6 +8969,32 @@
               "updatedAt": "2022-06-28T10:41:49Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDODeTEy849HBqY",
+          "commit": {
+            "abbreviatedOid": "ced5d1f"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-06-30T17:25:04Z",
+          "updatedAt": "2022-06-30T17:25:47Z",
+          "comments": [
+            {
+              "originalPosition": 11,
+              "body": "```suggestion\r\n  non-interactively, whereas a fresh and random redemption context means\r\n```",
+              "createdAt": "2022-06-30T17:25:04Z",
+              "updatedAt": "2022-06-30T17:25:47Z"
+            },
+            {
+              "originalPosition": 12,
+              "body": "```suggestion\r\n  that the redeemed token must be issued only after the client receives the challenge.\r\n```",
+              "createdAt": "2022-06-30T17:25:30Z",
+              "updatedAt": "2022-06-30T17:25:47Z"
+            }
+          ]
         }
       ]
     },
@@ -9022,24 +9052,26 @@
       "id": "PR_kwDODeTEy846cShz",
       "title": "Remove parameterization section as it's redundant with other consideration sections",
       "url": "https://github.com/ietf-wg-privacypass/base-drafts/pull/132",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "chris-wood",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Closes #65.\r\n\r\nAfter quickly skimming the parameterization section, it became clear that we already discuss these things in various consideration sections throughout the document, so this was just redundant. Moreover, it's very use-case and deployment specific that once had value in the joint deployment model, so it doesn't seem like particularly helpful now that we've generalized things a bit. Removing and avoiding confusion seems like the best path forward.",
       "createdAt": "2022-06-27T20:16:10Z",
-      "updatedAt": "2022-06-27T20:25:01Z",
+      "updatedAt": "2022-07-01T18:46:09Z",
       "baseRepository": "ietf-wg-privacypass/base-drafts",
       "baseRefName": "main",
       "baseRefOid": "6bc0b20975edef1da84eec1827dd47ef8299c780",
       "headRepository": "ietf-wg-privacypass/base-drafts",
       "headRefName": "caw/remove-parameterization",
       "headRefOid": "023b786add68cc792f9a6b16bc7f20196c5bce83",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2022-07-01T18:46:09Z",
+      "mergedAt": "2022-07-01T18:46:09Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "ad4b3f417d496a207a4d40f8f31201617e6949ed"
+      },
       "comments": [
         {
           "author": "chris-wood",
@@ -9061,6 +9093,48 @@
           "body": "",
           "createdAt": "2022-06-27T20:25:01Z",
           "updatedAt": "2022-06-27T20:25:01Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 133,
+      "id": "PR_kwDODeTEy846pGg2",
+      "title": "Add centralization commentary",
+      "url": "https://github.com/ietf-wg-privacypass/base-drafts/pull/133",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #45.\r\n\r\ncc @janaiyengar ",
+      "createdAt": "2022-06-30T13:34:51Z",
+      "updatedAt": "2022-07-01T18:45:32Z",
+      "baseRepository": "ietf-wg-privacypass/base-drafts",
+      "baseRefName": "main",
+      "baseRefOid": "e4b88a1edd19d67d9defa4902e178b70f640566f",
+      "headRepository": "ietf-wg-privacypass/base-drafts",
+      "headRefName": "caw/centralization",
+      "headRefOid": "21f0d7567b2019539c54392e603dcf2e9c6c4797",
+      "closedAt": "2022-07-01T18:45:32Z",
+      "mergedAt": "2022-07-01T18:45:31Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "bc56ce2c79b910333bc252614014596ca4d4cd9b"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDODeTEy849HCNp",
+          "commit": {
+            "abbreviatedOid": "21f0d75"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-06-30T17:27:03Z",
+          "updatedAt": "2022-06-30T17:27:03Z",
           "comments": []
         }
       ]
