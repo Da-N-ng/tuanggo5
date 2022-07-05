@@ -270,7 +270,7 @@ Table of Contents
    the resulting tokens during redemption.  Since clients are free to
    choose which challenge they want to consume when presented with
    options, mixing multiple challenges with different functional
-   properties for one use case is non-sensical.
+   properties for one use case is nonsensical.
 
 2.1.1.  Redemption Context Construction
 
