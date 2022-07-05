@@ -5,10 +5,10 @@
 Network Working Group                                           T. Pauly
 Internet-Draft                                                Apple Inc.
 Intended status: Standards Track                               S. Valdez
-Expires: 2 January 2023                                       Google LLC
+Expires: 6 January 2023                                       Google LLC
                                                               C. A. Wood
                                                               Cloudflare
-                                                             1 July 2022
+                                                             5 July 2022
 
 
               The Privacy Pass HTTP Authentication Scheme
@@ -36,7 +36,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 2 January 2023.
+   This Internet-Draft will expire on 6 January 2023.
 
 Copyright Notice
 
@@ -632,9 +632,9 @@ Table of Contents
    [ARCHITECTURE]
               Davidson, A., Iyengar, J., and C. A. Wood, "Privacy Pass
               Architectural Framework", Work in Progress, Internet-
-              Draft, draft-ietf-privacypass-architecture-03, 7 March
+              Draft, draft-ietf-privacypass-architecture-04, 1 July
               2022, <https://datatracker.ietf.org/doc/html/draft-ietf-
-              privacypass-architecture-03>.
+              privacypass-architecture-04>.
 
    [COOKIES]  Chen, L., Englehardt, S., West, M., and J. Wilander,
               "Cookies: HTTP State Management Mechanism", Work in
@@ -645,15 +645,15 @@ Table of Contents
    [I-D.ietf-privacypass-architecture]
               Davidson, A., Iyengar, J., and C. A. Wood, "Privacy Pass
               Architectural Framework", Work in Progress, Internet-
-              Draft, draft-ietf-privacypass-architecture-03, 7 March
+              Draft, draft-ietf-privacypass-architecture-04, 1 July
               2022, <https://datatracker.ietf.org/doc/html/draft-ietf-
-              privacypass-architecture-03>.
+              privacypass-architecture-04>.
 
    [ISSUANCE] Celi, S., Davidson, A., Faz-Hernandez, A., Valdez, S., and
               C. A. Wood, "Privacy Pass Issuance Protocol", Work in
               Progress, Internet-Draft, draft-ietf-privacypass-protocol-
-              04, 5 April 2022, <https://datatracker.ietf.org/doc/html/
-              draft-ietf-privacypass-protocol-04>.
+              05, 1 July 2022, <https://datatracker.ietf.org/doc/html/
+              draft-ietf-privacypass-protocol-05>.
 
    [RFC8701]  Benjamin, D., "Applying Generate Random Extensions And
               Sustain Extensibility (GREASE) to TLS Extensibility",

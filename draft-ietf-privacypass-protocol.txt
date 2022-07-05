@@ -5,14 +5,14 @@
 Network Working Group                                            S. Celi
 Internet-Draft                                                Cloudflare
 Intended status: Informational                               A. Davidson
-Expires: 2 January 2023                                   Brave Software
+Expires: 6 January 2023                                   Brave Software
                                                         A. Faz-Hernandez
                                                               Cloudflare
                                                                S. Valdez
                                                               Google LLC
                                                               C. A. Wood
                                                               Cloudflare
-                                                             1 July 2022
+                                                             5 July 2022
 
 
                      Privacy Pass Issuance Protocol
@@ -41,7 +41,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 2 January 2023.
+   This Internet-Draft will expire on 6 January 2023.
 
 Copyright Notice
 
@@ -700,9 +700,9 @@ authenticator = client_context.Finalize(token_input, blind, evaluated_element, b
    [I-D.ietf-privacypass-architecture]
               Davidson, A., Iyengar, J., and C. A. Wood, "Privacy Pass
               Architectural Framework", Work in Progress, Internet-
-              Draft, draft-ietf-privacypass-architecture-03, 7 March
+              Draft, draft-ietf-privacypass-architecture-04, 1 July
               2022, <https://datatracker.ietf.org/doc/html/draft-ietf-
-              privacypass-architecture-03>.
+              privacypass-architecture-04>.
 
    [OPRF]     Davidson, A., Faz-Hernandez, A., Sullivan, N., and C. A.
               Wood, "Oblivious Pseudorandom Functions (OPRFs) using

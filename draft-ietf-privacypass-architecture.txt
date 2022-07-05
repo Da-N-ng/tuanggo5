@@ -5,10 +5,10 @@
 Network Working Group                                        A. Davidson
 Internet-Draft                                                       LIP
 Intended status: Informational                                J. Iyengar
-Expires: 2 January 2023                                           Fastly
+Expires: 6 January 2023                                           Fastly
                                                               C. A. Wood
                                                               Cloudflare
-                                                             1 July 2022
+                                                             5 July 2022
 
 
                   Privacy Pass Architectural Framework
@@ -37,7 +37,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 2 January 2023.
+   This Internet-Draft will expire on 6 January 2023.
 
 Copyright Notice
 
@@ -203,8 +203,13 @@ Table of Contents
       protocols may produce tokens that are publicly verifiable, whereas
       others may not have this property.
 
-   *  Issuer identity.  Tokens identify which issuers are trusted for a
-      given issuance protocol.
+   *  Issuer identity.  Tokens identify which Issuers are trusted for a
+      given issuance protocol.  The selected Issuer transitively
+      determines what types of attestation the Origin is willing to
+      accept.  For example, if a given Issuer issuer.example has two
+      trusted Attesters, then any Origin choosing issuer.example as its
+      Issuer is willing to accept attestation checks done by either of
+      these two Attesters.
 
    *  Redemption context.  Tokens can be bound to a given redemption
       context, which influences a client's ability to pre-fetch and
@@ -899,9 +904,9 @@ Table of Contents
    [HTTP-Authentication]
               Pauly, T., Valdez, S., and C. A. Wood, "The Privacy Pass
               HTTP Authentication Scheme", Work in Progress, Internet-
-              Draft, draft-ietf-privacypass-auth-scheme-02, 4 April
-              2022, <https://datatracker.ietf.org/doc/html/draft-ietf-
-              privacypass-auth-scheme-02>.
+              Draft, draft-ietf-privacypass-auth-scheme-03, 1 July 2022,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-
+              privacypass-auth-scheme-03>.
 
    [KLOR20]   Kreuter, B., Lepoint, T., Orrù, M., and M. Raykova,
               "Anonymous Tokens with Private Metadata Bit", Advances in
