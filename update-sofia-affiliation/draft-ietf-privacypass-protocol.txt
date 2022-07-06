@@ -3,10 +3,9 @@
 
 
 Network Working Group                                            S. Celi
-Internet-Draft                                                     Brave
-Intended status: Informational                               A. Davidson
-Expires: 7 January 2023                                   Brave Software
-                                                        A. Faz-Hernandez
+Internet-Draft                                               A. Davidson
+Intended status: Informational                            Brave Software
+Expires: 7 January 2023                                 A. Faz-Hernandez
                                                               Cloudflare
                                                                S. Valdez
                                                               Google LLC
@@ -707,9 +706,9 @@ authenticator = client_context.Finalize(token_input, blind, evaluated_element, b
    [OPRF]     Davidson, A., Faz-Hernandez, A., Sullivan, N., and C. A.
               Wood, "Oblivious Pseudorandom Functions (OPRFs) using
               Prime-Order Groups", Work in Progress, Internet-Draft,
-              draft-irtf-cfrg-voprf-10, 30 June 2022,
+              draft-irtf-cfrg-voprf-11, 6 July 2022,
               <https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-
-              voprf-10>.
+              voprf-11>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -932,7 +931,9 @@ cd79f7ea14df1ca9694320fc44ccbc7c5d90aeedc915af3ac11a3baf562d38c8213e39f6
 Authors' Addresses
 
    Sofía Celi
-   Brave
+   Brave Software
+   Lisbon
+   Portugal
    Email: cherenkov@riseup.net
 
 
