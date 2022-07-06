@@ -5,10 +5,10 @@
 Network Working Group                                           T. Pauly
 Internet-Draft                                                Apple Inc.
 Intended status: Standards Track                               S. Valdez
-Expires: 6 January 2023                                       Google LLC
+Expires: 7 January 2023                                       Google LLC
                                                               C. A. Wood
                                                               Cloudflare
-                                                             5 July 2022
+                                                             6 July 2022
 
 
               The Privacy Pass HTTP Authentication Scheme
@@ -36,7 +36,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 6 January 2023.
+   This Internet-Draft will expire on 7 January 2023.
 
 Copyright Notice
 
@@ -262,6 +262,15 @@ Table of Contents
 
    WWW-Authenticate: PrivateToken challenge=abc..., token-key=123...,
    PrivateToken challenge=def..., token-key=234...
+
+   Origins should only include challenges for different types of
+   issuance protocols with functionally equivalent properties.  For
+   instance, both issuance protocols in [ISSUANCE] have the same
+   functional properties, albeit with different mechanisms for verifying
+   the resulting tokens during redemption.  Since clients are free to
+   choose which challenge they want to consume when presented with
+   options, mixing multiple challenges with different functional
+   properties for one use case is nonsensical.
 
 2.1.1.  Redemption Context Construction
 

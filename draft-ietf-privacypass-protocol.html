@@ -1038,7 +1038,7 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Celi, et al.</td>
-<td class="center">Expires 6 January 2023</td>
+<td class="center">Expires 7 January 2023</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1051,17 +1051,17 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-privacypass-protocol-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2022-07-05" class="published">5 July 2022</time>
+<time datetime="2022-07-06" class="published">6 July 2022</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2023-01-06">6 January 2023</time></dd>
+<dd class="expires"><time datetime="2023-01-07">7 January 2023</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
       <div class="author-name">S. Celi</div>
-<div class="org">Cloudflare</div>
+<div class="org">Brave Software</div>
 </div>
 <div class="author">
       <div class="author-name">A. Davidson</div>
@@ -1110,7 +1110,7 @@ metadata during the issuance flow.<a href="#section-abstract-1" class="pilcrow">
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 6 January 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 7 January 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1414,7 +1414,7 @@ be provided by the redemption protocol in <span>[<a href="#HTTP-Authentication" 
       </ul>
 <p id="section-5-6">Given this configuration and these inputs, the two messages exchanged in
 this protocol are described below. This section uses notation described in
-<span>[<a href="#OPRF" class="xref">OPRF</a>], <a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-10#section-4" class="relref">Section 4</a></span>, including SerializeElement and DeserializeElement,
+<span>[<a href="#OPRF" class="xref">OPRF</a>], <a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-11#section-4" class="relref">Section 4</a></span>, including SerializeElement and DeserializeElement,
 SerializeScalar and DeserializeScalar, and DeriveKeyPair.<a href="#section-5-6" class="pilcrow">¶</a></p>
 <div id="private-request">
 <section id="section-5.1">
@@ -1429,7 +1429,7 @@ client_context = SetupVOPRFClient(0x0004, pkI)
 </div>
 <p id="section-5.1-3">Here, 0x0004 is the two-octet identifier corresponding to the
 OPRF(P-384, SHA-384) ciphersuite in <span>[<a href="#OPRF" class="xref">OPRF</a>]</span>. SetupVOPRFClient
-is defined in <span>[<a href="#OPRF" class="xref">OPRF</a>], <a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-10#section-3.2" class="relref">Section 3.2</a></span>.<a href="#section-5.1-3" class="pilcrow">¶</a></p>
+is defined in <span>[<a href="#OPRF" class="xref">OPRF</a>], <a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-11#section-3.2" class="relref">Section 3.2</a></span>.<a href="#section-5.1-3" class="pilcrow">¶</a></p>
 <p id="section-5.1-4">The Client then creates an issuance request message for a random value <code>nonce</code>
 using the input challenge and Issuer key identifier as follows:<a href="#section-5.1-4" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-5.1-5">
@@ -1440,7 +1440,7 @@ token_input = concat(0x0001, nonce, context, key_id)
 blind, blinded_element = client_context.Blind(token_input)
 </pre><a href="#section-5.1-5" class="pilcrow">¶</a>
 </div>
-<p id="section-5.1-6">The Blind function is defined in <span>[<a href="#OPRF" class="xref">OPRF</a>], <a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-10#section-3.3.2" class="relref">Section 3.3.2</a></span>.
+<p id="section-5.1-6">The Blind function is defined in <span>[<a href="#OPRF" class="xref">OPRF</a>], <a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-11#section-3.3.2" class="relref">Section 3.3.2</a></span>.
 If the Blind function fails, the Client aborts the protocol. Otherwise,
 the Client then creates a TokenRequest structured as follows:<a href="#section-5.1-6" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-5.1-7">
@@ -1459,7 +1459,7 @@ struct {
           <li class="normal" id="section-5.1-9.2">"token_key_id" is the least significant byte of the <code>key_id</code> in network byte order (in other words, the last 8 bits of <code>key_id</code>).<a href="#section-5.1-9.2" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="section-5.1-9.3">"blinded_msg" is the Ne-octet blinded message defined above, computed as
-<code>SerializeElement(blinded_element)</code>. Ne is as defined in <span>[<a href="#OPRF" class="xref">OPRF</a>], <a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-10#section-4" class="relref">Section 4</a></span>.<a href="#section-5.1-9.3" class="pilcrow">¶</a>
+<code>SerializeElement(blinded_element)</code>. Ne is as defined in <span>[<a href="#OPRF" class="xref">OPRF</a>], <a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-11#section-4" class="relref">Section 4</a></span>.<a href="#section-5.1-9.3" class="pilcrow">¶</a>
 </li>
         </ul>
 <p id="section-5.1-10">The values <code>token_input</code> and <code>blinded_element</code> are stored locally and used later
@@ -1499,7 +1499,7 @@ to the client.<a href="#section-5.1-14" class="pilcrow">¶</a></p>
 <a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-issuer-to-client-response" class="section-name selfRef">Issuer-to-Client Response</a>
         </h3>
 <p id="section-5.2-1">Upon receipt of a TokenRequest, the Issuer tries to deseralize TokenRequest.blinded_msg
-using DeserializeElement from <span><a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-10#section-2.1" class="relref">Section 2.1</a> of [<a href="#OPRF" class="xref">OPRF</a>]</span>, yielding <code>blinded_element</code>.
+using DeserializeElement from <span><a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-11#section-2.1" class="relref">Section 2.1</a> of [<a href="#OPRF" class="xref">OPRF</a>]</span>, yielding <code>blinded_element</code>.
 If this fails, the Issuer MUST return an HTTP 400 error to the client. Otherwise, if the
 Issuer is willing to produce a token token to the Client, the Issuer completes the issuance
 flow by computing a blinded response as follows:<a href="#section-5.2-1" class="pilcrow">¶</a></p>
@@ -1509,8 +1509,8 @@ server_context = SetupVOPRFServer(0x0004, skI, pkI)
 evaluate_element, proof = server_context.Evaluate(skI, blinded_element)
 </pre><a href="#section-5.2-2" class="pilcrow">¶</a>
 </div>
-<p id="section-5.2-3">SetupVOPRFServer is in <span>[<a href="#OPRF" class="xref">OPRF</a>], <a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-10#section-3.2" class="relref">Section 3.2</a></span> and Evaluate is defined in
-<span>[<a href="#OPRF" class="xref">OPRF</a>], <a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-10#section-3.3.2" class="relref">Section 3.3.2</a></span>. The Issuer then creates a TokenResponse structured
+<p id="section-5.2-3">SetupVOPRFServer is in <span>[<a href="#OPRF" class="xref">OPRF</a>], <a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-11#section-3.2" class="relref">Section 3.2</a></span> and Evaluate is defined in
+<span>[<a href="#OPRF" class="xref">OPRF</a>], <a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-11#section-3.3.2" class="relref">Section 3.3.2</a></span>. The Issuer then creates a TokenResponse structured
 as follows:<a href="#section-5.2-3" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-5.2-4">
 <pre>
@@ -1527,7 +1527,7 @@ struct {
 </li>
           <li class="normal" id="section-5.2-6.2">"evaluate_proof" is the (Ns+Ns)-octet serialized proof, which is a pair of Scalar values,
 computed as <code>concat(SerializeScalar(proof[0]), SerializeScalar(proof[1]))</code>,
-where Ns is as defined in <span>[<a href="#OPRF" class="xref">OPRF</a>], <a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-10#section-4" class="relref">Section 4</a></span>.<a href="#section-5.2-6.2" class="pilcrow">¶</a>
+where Ns is as defined in <span>[<a href="#OPRF" class="xref">OPRF</a>], <a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-11#section-4" class="relref">Section 4</a></span>.<a href="#section-5.2-6.2" class="pilcrow">¶</a>
 </li>
         </ul>
 <p id="section-5.2-7">The Issuer generates an HTTP response with status code 200 whose body consists
@@ -1558,7 +1558,7 @@ follows:<a href="#section-5.3-1" class="pilcrow">¶</a></p>
 authenticator = client_context.Finalize(token_input, blind, evaluated_element, blinded_element, proof)
 </pre><a href="#section-5.3-2" class="pilcrow">¶</a>
 </div>
-<p id="section-5.3-3">The Finalize function is defined in <span>[<a href="#OPRF" class="xref">OPRF</a>], <a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-10#section-3.3.2" class="relref">Section 3.3.2</a></span>. If this
+<p id="section-5.3-3">The Finalize function is defined in <span>[<a href="#OPRF" class="xref">OPRF</a>], <a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-11#section-3.3.2" class="relref">Section 3.3.2</a></span>. If this
 succeeds, the Client then constructs a Token as follows:<a href="#section-5.3-3" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-5.3-4">
 <pre>
@@ -2110,7 +2110,7 @@ corresponding media types:<a href="#section-8.2-1" class="pilcrow">¶</a></p>
 <dd class="break"></dd>
 <dt id="OPRF">[OPRF]</dt>
         <dd>
-<span class="refAuthor">Davidson, A.</span>, <span class="refAuthor">Faz-Hernandez, A.</span>, <span class="refAuthor">Sullivan, N.</span>, and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"Oblivious Pseudorandom Functions (OPRFs) using Prime-Order Groups"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-irtf-cfrg-voprf-10</span>, <time datetime="2022-06-30" class="refDate">30 June 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-10">https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-10</a>&gt;</span>. </dd>
+<span class="refAuthor">Davidson, A.</span>, <span class="refAuthor">Faz-Hernandez, A.</span>, <span class="refAuthor">Sullivan, N.</span>, and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"Oblivious Pseudorandom Functions (OPRFs) using Prime-Order Groups"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-irtf-cfrg-voprf-11</span>, <time datetime="2022-07-06" class="refDate">6 July 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-11">https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-11</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
         <dd>
@@ -2164,10 +2164,10 @@ test vectors for token issuance protocol 2 (0x0002).<a href="#appendix-B-1" clas
         </h3>
 <p id="appendix-B.1-1">The test vector below lists the following values:<a href="#appendix-B.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-B.1-2.1">skS: The encoded OPRF private key, serialized using SerializeScalar from <span><a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-10#section-2.1" class="relref">Section 2.1</a> of [<a href="#OPRF" class="xref">OPRF</a>]</span> and
+<li class="normal" id="appendix-B.1-2.1">skS: The encoded OPRF private key, serialized using SerializeScalar from <span><a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-11#section-2.1" class="relref">Section 2.1</a> of [<a href="#OPRF" class="xref">OPRF</a>]</span> and
 represented as a hexadecimal string.<a href="#appendix-B.1-2.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.1-2.2">pkS: The encoded OPRF public key, serialized using SerializeElement from <span><a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-10#section-2.1" class="relref">Section 2.1</a> of [<a href="#OPRF" class="xref">OPRF</a>]</span> and
+          <li class="normal" id="appendix-B.1-2.2">pkS: The encoded OPRF public key, serialized using SerializeElement from <span><a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-11#section-2.1" class="relref">Section 2.1</a> of [<a href="#OPRF" class="xref">OPRF</a>]</span> and
 represented as a hexadecimal string.<a href="#appendix-B.1-2.2" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="appendix-B.1-2.3">challenge: A random challenge digest, represented as a hexadecimal string.<a href="#appendix-B.1-2.3" class="pilcrow">¶</a>
@@ -2176,7 +2176,7 @@ represented as a hexadecimal string.<a href="#appendix-B.1-2.2" class="pilcrow">
 hexadecimal string.<a href="#appendix-B.1-2.4" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="appendix-B.1-2.5">blind: The blind used when computing the OPRF blinded message, serialized using SerializeScalar
-from <span><a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-10#section-2.1" class="relref">Section 2.1</a> of [<a href="#OPRF" class="xref">OPRF</a>]</span> and represented as a hexadecimal string.<a href="#appendix-B.1-2.5" class="pilcrow">¶</a>
+from <span><a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-voprf-11#section-2.1" class="relref">Section 2.1</a> of [<a href="#OPRF" class="xref">OPRF</a>]</span> and represented as a hexadecimal string.<a href="#appendix-B.1-2.5" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="appendix-B.1-2.6">token_request: The TokenRequest message constructed according to <a href="#private-request" class="xref">Section 5.1</a>, represented
 as a hexadecimal string.<a href="#appendix-B.1-2.6" class="pilcrow">¶</a>
@@ -2358,12 +2358,12 @@ cd79f7ea14df1ca9694320fc44ccbc7c5d90aeedc915af3ac11a3baf562d38c8213e39f6
       </h2>
 <address class="vcard">
         <div dir="auto" class="left"><span class="fn nameRole">Sofía Celi</span></div>
-<div dir="auto" class="left"><span class="org">Cloudflare</span></div>
+<div dir="auto" class="left"><span class="org">Brave Software</span></div>
 <div dir="auto" class="left"><span class="locality">Lisbon</span></div>
 <div dir="auto" class="left"><span class="country-name">Portugal</span></div>
 <div class="email">
 <span>Email:</span>
-<a href="mailto:sceli@cloudflare.com" class="email">sceli@cloudflare.com</a>
+<a href="mailto:cherenkov@riseup.net" class="email">cherenkov@riseup.net</a>
 </div>
 </address>
 <address class="vcard">
