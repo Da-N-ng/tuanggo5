@@ -66,12 +66,14 @@ Table of Contents
      5.1.  Client-to-Issuer Request
      5.2.  Issuer-to-Client Response
      5.3.  Finalization
-     5.4.  Issuer Configuration
+     5.4.  Token Verification
+     5.5.  Issuer Configuration
    6.  Issuance Protocol for Publicly Verifiable Tokens
      6.1.  Client-to-Issuer Request
      6.2.  Issuer-to-Client Response
      6.3.  Finalization
-     6.4.  Issuer Configuration
+     6.4.  Token Verification
+     6.5.  Issuer Configuration
    7.  Security considerations
    8.  IANA considerations
      8.1.  Token Type
@@ -221,7 +223,7 @@ Table of Contents
 
    Issuers provide a Private and Public Key, denoted skI and pkI,
    respectively, used to produce tokens as input to the protocol.  See
-   Section 5.4 for how this key pair is generated.
+   Section 5.5 for how this key pair is generated.
 
    Clients provide the following as input to the issuance protocol:
 
@@ -229,7 +231,7 @@ Table of Contents
       name that can be used to construct HTTP requests to the Issuer.
 
    *  Issuer Public Key pkI, with a key identifier key_id computed as
-      described in Section 5.4.
+      described in Section 5.5.
 
    *  Challenge value challenge, an opaque byte string.  For example,
       this might be provided by the redemption protocol in
@@ -376,7 +378,22 @@ authenticator = client_context.Finalize(token_input, blind, evaluated_element, b
 
    Otherwise, the Client aborts the protocol.
 
-5.4.  Issuer Configuration
+5.4.  Token Verification
+
+   To verify a token, a verifier creates a VOPRF context, evaluates the
+   token contents, and compares the result against the token
+   authenticator value, as follows:
+
+server_context = SetupVOPRFServer(0x0004, skI, pkI)
+token_authenticator_input =
+  concat(Token.token_type,
+         Token.nonce,
+         Token.challenge_digest,
+         Token.token_key_id)
+token_authenticator = server_context.Evaluate(token_authenticator_input)
+valid = (token_authenticator == Token.authenticator)
+
+5.5.  Issuer Configuration
 
    Issuers are configured with Private and Public Key pairs, each
    denoted skI and pkI, respectively, used to produce tokens.  Each key
@@ -388,7 +405,7 @@ authenticator = client_context.Finalize(token_input, blind, evaluated_element, b
    The key identifier for this specific key pair, denoted key_id, is
    computed as follows:
 
-   key_id = SHA256(0x0001 || SerializeElement(pkI))
+   key_id = SHA256(concat(0x0001, SerializeElement(pkI)))
 
 6.  Issuance Protocol for Publicly Verifiable Tokens
 
@@ -412,7 +429,7 @@ authenticator = client_context.Finalize(token_input, blind, evaluated_element, b
    variant is nearly identical to the privately verifiable issuance
    protocol variant.  In particular, Issuers provide a Private and
    Public Key, denoted skI and pkI, respectively, used to produce tokens
-   as input to the protocol.  See Section 6.4 for how this key pair is
+   as input to the protocol.  See Section 6.5 for how this key pair is
    generated.
 
    Clients provide the following as input to the issuance protocol:
@@ -421,7 +438,7 @@ authenticator = client_context.Finalize(token_input, blind, evaluated_element, b
       name that can be used to construct HTTP requests to the Issuer.
 
    *  Issuer Public Key pkI, with a key identifier key_id computed as
-      described in Section 6.4.
+      described in Section 6.5.
 
    *  Challenge value challenge, an opaque byte string.  For example,
       this might be provided by the redemption protocol in
@@ -536,7 +553,22 @@ authenticator = client_context.Finalize(token_input, blind, evaluated_element, b
 
    Otherwise, the Client aborts the protocol.
 
-6.4.  Issuer Configuration
+6.4.  Token Verification
+
+   To verify a token, a verifier checks that Token.authenticator is a
+   valid signature over the remainder of the token input as described
+   below.  The function RSA-Verify(msg, pk, sig) is a procedure to
+   verify a signature sig over message msg using the public key pk.  Its
+   implementation is not specified in this document.
+
+ token_authenticator_input =
+   concat(Token.token_type,
+          Token.nonce,
+          Token.challenge_digest,
+          Token.token_key_id)
+ valid = RSA-Verify(token_authenticator_input, pkI, Token.authenticator)
+
+6.5.  Issuer Configuration
 
    Issuers are configured with Private and Public Key pairs, each
    denoted skI and pkI, respectively, used to produce tokens.  Each key
@@ -805,7 +837,7 @@ B.2.  Issuance Protocol 2 - Blind RSA, 4096
       tokens, represented as a hexadecimal string.
 
    *  pkS: The DER-encoded SubjectPublicKeyInfo object carrying the
-      public key corresponding to skS, as described in Section 6.4,
+      public key corresponding to skS, as described in Section 6.5,
       represented as a hexadecimal string.
 
    *  challenge: A random challenge digest, represented as a hexadecimal

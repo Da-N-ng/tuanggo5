@@ -1164,7 +1164,10 @@ metadata during the issuance flow.<a href="#section-abstract-1" class="pilcrow">
                 <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="xref">5.3</a>.  <a href="#name-finalization" class="xref">Finalization</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.4">
-                <p id="section-toc.1-1.5.2.4.1"><a href="#section-5.4" class="xref">5.4</a>.  <a href="#name-issuer-configuration" class="xref">Issuer Configuration</a></p>
+                <p id="section-toc.1-1.5.2.4.1"><a href="#section-5.4" class="xref">5.4</a>.  <a href="#name-token-verification" class="xref">Token Verification</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.5">
+                <p id="section-toc.1-1.5.2.5.1"><a href="#section-5.5" class="xref">5.5</a>.  <a href="#name-issuer-configuration" class="xref">Issuer Configuration</a></p>
 </li>
             </ul>
 </li>
@@ -1181,7 +1184,10 @@ metadata during the issuance flow.<a href="#section-abstract-1" class="pilcrow">
                 <p id="section-toc.1-1.6.2.3.1"><a href="#section-6.3" class="xref">6.3</a>.  <a href="#name-finalization-2" class="xref">Finalization</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.4">
-                <p id="section-toc.1-1.6.2.4.1"><a href="#section-6.4" class="xref">6.4</a>.  <a href="#name-issuer-configuration-2" class="xref">Issuer Configuration</a></p>
+                <p id="section-toc.1-1.6.2.4.1"><a href="#section-6.4" class="xref">6.4</a>.  <a href="#name-token-verification-2" class="xref">Token Verification</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.5">
+                <p id="section-toc.1-1.6.2.5.1"><a href="#section-6.5" class="xref">6.5</a>.  <a href="#name-issuer-configuration-2" class="xref">Issuer Configuration</a></p>
 </li>
             </ul>
 </li>
@@ -1398,7 +1404,7 @@ as shown in the figure below.<a href="#section-5-1" class="pilcrow">¶</a></p>
 </pre><a href="#section-5-2" class="pilcrow">¶</a>
 </div>
 <p id="section-5-3">Issuers provide a Private and Public Key, denoted skI and pkI, respectively,
-used to produce tokens as input to the protocol. See <a href="#issuer-configuration" class="xref">Section 5.4</a>
+used to produce tokens as input to the protocol. See <a href="#issuer-configuration" class="xref">Section 5.5</a>
 for how this key pair is generated.<a href="#section-5-3" class="pilcrow">¶</a></p>
 <p id="section-5-4">Clients provide the following as input to the issuance protocol:<a href="#section-5-4" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -1406,7 +1412,7 @@ for how this key pair is generated.<a href="#section-5-3" class="pilcrow">¶</a>
 can be used to construct HTTP requests to the Issuer.<a href="#section-5-5.1" class="pilcrow">¶</a>
 </li>
         <li class="normal" id="section-5-5.2">Issuer Public Key pkI, with a key identifier <code>key_id</code> computed as
-described in <a href="#issuer-configuration" class="xref">Section 5.4</a>.<a href="#section-5-5.2" class="pilcrow">¶</a>
+described in <a href="#issuer-configuration" class="xref">Section 5.5</a>.<a href="#section-5-5.2" class="pilcrow">¶</a>
 </li>
         <li class="normal" id="section-5-5.3">Challenge value <code>challenge</code>, an opaque byte string. For example, this might
 be provided by the redemption protocol in <span>[<a href="#HTTP-Authentication" class="xref">HTTP-Authentication</a>]</span>.<a href="#section-5-5.3" class="pilcrow">¶</a>
@@ -1574,26 +1580,47 @@ struct {
 <p id="section-5.3-5">Otherwise, the Client aborts the protocol.<a href="#section-5.3-5" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="issuer-configuration">
+<div id="token-verification">
 <section id="section-5.4">
-        <h3 id="name-issuer-configuration">
-<a href="#section-5.4" class="section-number selfRef">5.4. </a><a href="#name-issuer-configuration" class="section-name selfRef">Issuer Configuration</a>
+        <h3 id="name-token-verification">
+<a href="#section-5.4" class="section-number selfRef">5.4. </a><a href="#name-token-verification" class="section-name selfRef">Token Verification</a>
         </h3>
-<p id="section-5.4-1">Issuers are configured with Private and Public Key pairs, each denoted skI and
-pkI, respectively, used to produce tokens. Each key pair MUST be generated as
-follows:<a href="#section-5.4-1" class="pilcrow">¶</a></p>
+<p id="section-5.4-1">To verify a token, a verifier creates a VOPRF context, evaluates the token contents,
+and compares the result against the token authenticator value, as follows:<a href="#section-5.4-1" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-5.4-2">
+<pre>
+server_context = SetupVOPRFServer(0x0004, skI, pkI)
+token_authenticator_input =
+  concat(Token.token_type,
+         Token.nonce,
+         Token.challenge_digest,
+         Token.token_key_id)
+token_authenticator = server_context.Evaluate(token_authenticator_input)
+valid = (token_authenticator == Token.authenticator)
+</pre><a href="#section-5.4-2" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="issuer-configuration">
+<section id="section-5.5">
+        <h3 id="name-issuer-configuration">
+<a href="#section-5.5" class="section-number selfRef">5.5. </a><a href="#name-issuer-configuration" class="section-name selfRef">Issuer Configuration</a>
+        </h3>
+<p id="section-5.5-1">Issuers are configured with Private and Public Key pairs, each denoted skI and
+pkI, respectively, used to produce tokens. Each key pair MUST be generated as
+follows:<a href="#section-5.5-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.5-2">
 <pre>
 seed = random(Ns)
 (skI, pkI) = DeriveKeyPair(seed, "PrivacyPass")
-</pre><a href="#section-5.4-2" class="pilcrow">¶</a>
+</pre><a href="#section-5.5-2" class="pilcrow">¶</a>
 </div>
-<p id="section-5.4-3">The key identifier for this specific key pair, denoted <code>key_id</code>, is computed
-as follows:<a href="#section-5.4-3" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-5.4-4">
+<p id="section-5.5-3">The key identifier for this specific key pair, denoted <code>key_id</code>, is computed
+as follows:<a href="#section-5.5-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.5-4">
 <pre>
-key_id = SHA256(0x0001 || SerializeElement(pkI))
-</pre><a href="#section-5.4-4" class="pilcrow">¶</a>
+key_id = SHA256(concat(0x0001, SerializeElement(pkI)))
+</pre><a href="#section-5.5-4" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
@@ -1622,7 +1649,7 @@ the token during the issuance protocol.<a href="#section-6-3" class="pilcrow">¶
 <p id="section-6-4">Beyond these differences, the publicly verifiable issuance protocol variant is nearly
 identical to the privately verifiable issuance protocol variant. In particular, Issuers
 provide a Private and Public Key, denoted skI and pkI, respectively, used to produce
-tokens as input to the protocol. See <a href="#public-issuer-configuration" class="xref">Section 6.4</a> for how this key
+tokens as input to the protocol. See <a href="#public-issuer-configuration" class="xref">Section 6.5</a> for how this key
 pair is generated.<a href="#section-6-4" class="pilcrow">¶</a></p>
 <p id="section-6-5">Clients provide the following as input to the issuance protocol:<a href="#section-6-5" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -1630,7 +1657,7 @@ pair is generated.<a href="#section-6-4" class="pilcrow">¶</a></p>
 can be used to construct HTTP requests to the Issuer.<a href="#section-6-6.1" class="pilcrow">¶</a>
 </li>
         <li class="normal" id="section-6-6.2">Issuer Public Key pkI, with a key identifier <code>key_id</code> computed as
-described in <a href="#public-issuer-configuration" class="xref">Section 6.4</a>.<a href="#section-6-6.2" class="pilcrow">¶</a>
+described in <a href="#public-issuer-configuration" class="xref">Section 6.5</a>.<a href="#section-6-6.2" class="pilcrow">¶</a>
 </li>
         <li class="normal" id="section-6-6.3">Challenge value <code>challenge</code>, an opaque byte string. For example, this might
 be provided by the redemption protocol in <span>[<a href="#HTTP-Authentication" class="xref">HTTP-Authentication</a>]</span>.<a href="#section-6-6.3" class="pilcrow">¶</a>
@@ -1767,19 +1794,41 @@ struct {
 <p id="section-6.3-5">Otherwise, the Client aborts the protocol.<a href="#section-6.3-5" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="public-issuer-configuration">
+<div id="token-verification-1">
 <section id="section-6.4">
-        <h3 id="name-issuer-configuration-2">
-<a href="#section-6.4" class="section-number selfRef">6.4. </a><a href="#name-issuer-configuration-2" class="section-name selfRef">Issuer Configuration</a>
+        <h3 id="name-token-verification-2">
+<a href="#section-6.4" class="section-number selfRef">6.4. </a><a href="#name-token-verification-2" class="section-name selfRef">Token Verification</a>
         </h3>
-<p id="section-6.4-1">Issuers are configured with Private and Public Key pairs, each denoted skI and
+<p id="section-6.4-1">To verify a token, a verifier checks that Token.authenticator is a valid
+signature over the remainder of the token input as described below. The
+function <code>RSA-Verify(msg, pk, sig)</code> is a procedure to verify a signature <code>sig</code>
+over message <code>msg</code> using the public key <code>pk</code>. Its implementation is not
+specified in this document.<a href="#section-6.4-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-6.4-2">
+<pre>
+token_authenticator_input =
+  concat(Token.token_type,
+         Token.nonce,
+         Token.challenge_digest,
+         Token.token_key_id)
+valid = RSA-Verify(token_authenticator_input, pkI, Token.authenticator)
+</pre><a href="#section-6.4-2" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="public-issuer-configuration">
+<section id="section-6.5">
+        <h3 id="name-issuer-configuration-2">
+<a href="#section-6.5" class="section-number selfRef">6.5. </a><a href="#name-issuer-configuration-2" class="section-name selfRef">Issuer Configuration</a>
+        </h3>
+<p id="section-6.5-1">Issuers are configured with Private and Public Key pairs, each denoted skI and
 pkI, respectively, used to produce tokens. Each key pair SHALL be generated as
-as specified in FIPS 186-4 <span>[<a href="#DSS" class="xref">DSS</a>]</span>.<a href="#section-6.4-1" class="pilcrow">¶</a></p>
-<p id="section-6.4-2">The key identifier for a keypair (skI, pkI), denoted <code>key_id</code>, is computed as
+as specified in FIPS 186-4 <span>[<a href="#DSS" class="xref">DSS</a>]</span>.<a href="#section-6.5-1" class="pilcrow">¶</a></p>
+<p id="section-6.5-2">The key identifier for a keypair (skI, pkI), denoted <code>key_id</code>, is computed as
 SHA256(encoded_key), where encoded_key is a DER-encoded SubjectPublicKeyInfo
 (SPKI) object carrying pkI. The SPKI object MUST use the RSASSA-PSS OID <span>[<a href="#RFC5756" class="xref">RFC5756</a>]</span>,
 which specifies the hash algorithm and salt size. The salt size MUST match the
-output size of the hash function associated with the public key and token type.<a href="#section-6.4-2" class="pilcrow">¶</a></p>
+output size of the hash function associated with the public key and token type.<a href="#section-6.5-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2225,7 +2274,7 @@ d698ea7ab843b8e8a71ed9b2fffa70457a43a8fc687939424b29a7554b40fde130ab7a82
 as a hexadecimal string.<a href="#appendix-B.2-2.1" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="appendix-B.2-2.2">pkS: The DER-encoded SubjectPublicKeyInfo object carrying the public key corresponding
-to skS, as described in <a href="#public-issuer-configuration" class="xref">Section 6.4</a>, represented as a hexadecimal string.<a href="#appendix-B.2-2.2" class="pilcrow">¶</a>
+to skS, as described in <a href="#public-issuer-configuration" class="xref">Section 6.5</a>, represented as a hexadecimal string.<a href="#appendix-B.2-2.2" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="appendix-B.2-2.3">challenge: A random challenge digest, represented as a hexadecimal string.<a href="#appendix-B.2-2.3" class="pilcrow">¶</a>
 </li>
