@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-07-03T01:52:02.086473+00:00",
+  "timestamp": "2022-07-07T01:49:57.080112+00:00",
   "repo": "ietf-wg-privacypass/base-drafts",
   "labels": [
     {
@@ -1711,6 +1711,38 @@
           "updatedAt": "2022-06-13T19:06:59Z"
         }
       ]
+    },
+    {
+      "number": 134,
+      "id": "I_kwDODeTEy85NLPuD",
+      "title": "Add text describing composition of multiple token types ",
+      "url": "https://github.com/ietf-wg-privacypass/base-drafts/issues/134",
+      "state": "CLOSED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "See [this issue](https://github.com/tfpauly/privacy-proxy/issues/145).",
+      "createdAt": "2022-07-05T21:33:47Z",
+      "updatedAt": "2022-07-05T21:54:55Z",
+      "closedAt": "2022-07-05T21:54:55Z",
+      "comments": []
+    },
+    {
+      "number": 135,
+      "id": "I_kwDODeTEy85NLQAv",
+      "title": "Add text describing origin issuer selection",
+      "url": "https://github.com/ietf-wg-privacypass/base-drafts/issues/135",
+      "state": "CLOSED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "See [this issue](https://github.com/tfpauly/privacy-proxy/issues/146).",
+      "createdAt": "2022-07-05T21:34:24Z",
+      "updatedAt": "2022-07-05T21:54:10Z",
+      "closedAt": "2022-07-05T21:54:10Z",
+      "comments": []
     }
   ],
   "pulls": [
@@ -9135,6 +9167,230 @@
           "body": "",
           "createdAt": "2022-06-30T17:27:03Z",
           "updatedAt": "2022-06-30T17:27:03Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 136,
+      "id": "PR_kwDODeTEy8464cFm",
+      "title": "Issuers determine attesters",
+      "url": "https://github.com/ietf-wg-privacypass/base-drafts/pull/136",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #135.",
+      "createdAt": "2022-07-05T21:40:14Z",
+      "updatedAt": "2022-07-05T21:54:10Z",
+      "baseRepository": "ietf-wg-privacypass/base-drafts",
+      "baseRefName": "main",
+      "baseRefOid": "ad4b3f417d496a207a4d40f8f31201617e6949ed",
+      "headRepository": "ietf-wg-privacypass/base-drafts",
+      "headRefName": "caw/issuer-attester-combos",
+      "headRefOid": "a422dc0621a5f02b94642f30eca8f1dee6502e85",
+      "closedAt": "2022-07-05T21:54:10Z",
+      "mergedAt": "2022-07-05T21:54:10Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "4e790d9b10af4e06d4219f7ff32618e846dcc289"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDODeTEy849WSFE",
+          "commit": {
+            "abbreviatedOid": "a422dc0"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-07-05T21:52:13Z",
+          "updatedAt": "2022-07-05T21:52:13Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 137,
+      "id": "PR_kwDODeTEy8464dh-",
+      "title": "Don't mix different token functions in the same challenge set",
+      "url": "https://github.com/ietf-wg-privacypass/base-drafts/pull/137",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #134.",
+      "createdAt": "2022-07-05T21:46:36Z",
+      "updatedAt": "2022-07-05T21:54:55Z",
+      "baseRepository": "ietf-wg-privacypass/base-drafts",
+      "baseRefName": "main",
+      "baseRefOid": "ad4b3f417d496a207a4d40f8f31201617e6949ed",
+      "headRepository": "ietf-wg-privacypass/base-drafts",
+      "headRefName": "caw/dont-mix",
+      "headRefOid": "0d2f799538deae213a84d2bee600e016278888fd",
+      "closedAt": "2022-07-05T21:54:55Z",
+      "mergedAt": "2022-07-05T21:54:55Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "308236ec0669ea143ab47dd5d624d50270048396"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDODeTEy849WSJ6",
+          "commit": {
+            "abbreviatedOid": "a55e1f9"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-07-05T21:52:43Z",
+          "updatedAt": "2022-07-05T21:52:43Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDODeTEy849WSfd",
+          "commit": {
+            "abbreviatedOid": "a55e1f9"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-07-05T21:54:46Z",
+          "updatedAt": "2022-07-05T21:54:46Z",
+          "comments": [
+            {
+              "originalPosition": 9,
+              "body": "```suggestion\r\nproperties for one use case is nonsensical.\r\n```",
+              "createdAt": "2022-07-05T21:54:46Z",
+              "updatedAt": "2022-07-05T21:54:46Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 138,
+      "id": "PR_kwDODeTEy8468J31",
+      "title": "Specify token verification",
+      "url": "https://github.com/ietf-wg-privacypass/base-drafts/pull/138",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This was previously underspecified, so hopefully this makes things clear.\r\n\r\ncc @raphaelrobert",
+      "createdAt": "2022-07-06T13:58:37Z",
+      "updatedAt": "2022-07-06T19:06:33Z",
+      "baseRepository": "ietf-wg-privacypass/base-drafts",
+      "baseRefName": "main",
+      "baseRefOid": "308236ec0669ea143ab47dd5d624d50270048396",
+      "headRepository": "ietf-wg-privacypass/base-drafts",
+      "headRefName": "caw/specify-verification",
+      "headRefOid": "a7eb05b0315f0f205ba43d0f18f45603f38dd1a8",
+      "closedAt": "2022-07-06T19:06:33Z",
+      "mergedAt": "2022-07-06T19:06:33Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "216782fdb95b9c2a9b6e2ea8cb89e87172080bda"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDODeTEy849Zz6x",
+          "commit": {
+            "abbreviatedOid": "a7eb05b"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-07-06T14:15:24Z",
+          "updatedAt": "2022-07-06T14:15:24Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 139,
+      "id": "PR_kwDODeTEy8469Awx",
+      "title": "Update affiliation",
+      "url": "https://github.com/ietf-wg-privacypass/base-drafts/pull/139",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "@claucece, can you please confirm that this is correct?",
+      "createdAt": "2022-07-06T17:05:59Z",
+      "updatedAt": "2022-07-06T18:48:48Z",
+      "baseRepository": "ietf-wg-privacypass/base-drafts",
+      "baseRefName": "main",
+      "baseRefOid": "308236ec0669ea143ab47dd5d624d50270048396",
+      "headRepository": "ietf-wg-privacypass/base-drafts",
+      "headRefName": "update-sofia-affiliation",
+      "headRefOid": "a09b217e4c2b867c964a15ee9468a470a85c6a51",
+      "closedAt": "2022-07-06T18:48:48Z",
+      "mergedAt": "2022-07-06T18:48:48Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "43c8aa054521d1ab79d09dea33f09ec7d25392f3"
+      },
+      "comments": [
+        {
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Updated to the branch in another PR: https://github.com/ietf-wg-privacypass/base-drafts/pull/140\r\n\r\nThanks!",
+          "createdAt": "2022-07-06T18:47:55Z",
+          "updatedAt": "2022-07-06T18:47:55Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 140,
+      "id": "PR_kwDODeTEy8469VAG",
+      "title": "Update affiliation",
+      "url": "https://github.com/ietf-wg-privacypass/base-drafts/pull/140",
+      "state": "MERGED",
+      "author": "claucece",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This one @chris-wood ",
+      "createdAt": "2022-07-06T18:47:25Z",
+      "updatedAt": "2022-07-06T18:48:40Z",
+      "baseRepository": "ietf-wg-privacypass/base-drafts",
+      "baseRefName": "update-sofia-affiliation",
+      "baseRefOid": "fa0887a76e5f976ecbf5db22bbd05c60e3967699",
+      "headRepository": "claucece/privacy-pass-ietf",
+      "headRefName": "update-sofia-affiliation",
+      "headRefOid": "caecf87fa2d6733892172edad23442de7fbff05c",
+      "closedAt": "2022-07-06T18:48:40Z",
+      "mergedAt": "2022-07-06T18:48:40Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "a09b217e4c2b867c964a15ee9468a470a85c6a51"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDODeTEy849bQLm",
+          "commit": {
+            "abbreviatedOid": "caecf87"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-07-06T18:48:36Z",
+          "updatedAt": "2022-07-06T18:48:36Z",
           "comments": []
         }
       ]
